@@ -3,440 +3,2988 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meechto - Coming Soon</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Meechto Jobs - Find Your Dream Career</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Firebase App (core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <!-- Firebase Authentication -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <!-- Firebase Firestore -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --text: #34495e;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --gradient: linear-gradient(135deg, #3498db, #2c3e50);
         }
 
         body {
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            color: white;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            font-family: 'Poppins', sans-serif;
+            color: var(--text);
+            background-color: #f9fafb;
             overflow-x: hidden;
-            padding: 20px;
+            line-height: 1.6;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 20px;
-            text-align: center;
+            padding: 0 20px;
         }
 
-        /* Enhanced Logo Animation */
-        .logo {
-            font-size: 5.5rem;
-            font-weight: 800;
-            margin-bottom: 30px;
-            background: linear-gradient(45deg, #ff8a00, #e52e71, #ff0050, #ff8a00);
-            background-size: 300% 300%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            animation: gradientShift 3s ease infinite, pulse 2s ease-in-out infinite;
-            letter-spacing: 2px;
-            position: relative;
-            display: inline-block;
-        }
-
-        .logo::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 0;
+        /* Header Styles */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: var(--shadow);
+            position: fixed;
             width: 100%;
-            height: 4px;
-            background: linear-gradient(45deg, #ff8a00, #e52e71, #ff0050, #ff8a00);
-            background-size: 300% 300%;
-            border-radius: 10px;
-            animation: gradientShift 3s ease infinite;
+            z-index: 1000;
+            padding: 15px 0;
         }
 
-        .slogan {
-            font-size: 2.2rem;
-            margin-bottom: 40px;
-            line-height: 1.4;
-            font-weight: 600;
-        }
-
-        .devanagari {
-            font-family: 'Mangal', 'Arial Unicode MS', 'Nirmala UI', sans-serif;
-            display: block;
-            font-weight: 700;
-            color: #ffcc00;
-            text-shadow: 0 2px 10px rgba(255, 204, 0, 0.3);
-        }
-
-        .countdown {
+        .header-container {
             display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .logo-symbol {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
             justify-content: center;
-            gap: 20px;
-            margin: 40px 0;
-        }
-
-        .countdown-item {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 20px;
-            min-width: 120px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s ease;
-        }
-
-        .countdown-item:hover {
-            transform: translateY(-5px);
-        }
-
-        .countdown-number {
-            font-size: 3rem;
+            color: white;
+            font-size: 24px;
             font-weight: 700;
-            background: linear-gradient(45deg, #ff8a00, #e52e71);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            margin-right: 12px;
+            box-shadow: var(--shadow);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .countdown-label {
-            font-size: 1rem;
-            color: #ddd;
-            margin-top: 10px;
+        .logo:hover .logo-symbol {
+            transform: rotate(15deg) scale(1.1);
         }
 
-        .notify-form {
-            max-width: 500px;
-            margin: 40px auto;
+        .logo-text {
             display: flex;
             flex-direction: column;
-            gap: 15px;
         }
 
-        .form-title {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-            color: #ffcc00;
+        .logo-main {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 24px;
+            color: var(--primary);
+            letter-spacing: 1px;
+            line-height: 1;
         }
 
-        .input-group {
+        .logo-sub {
+            font-size: 10px;
+            color: var(--secondary);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        nav ul {
             display: flex;
-            gap: 10px;
+            list-style: none;
+            gap: 30px;
         }
 
-        .email-input {
-            flex: 1;
-            padding: 15px 20px;
-            border: none;
-            border-radius: 50px;
-            background: rgba(255, 255, 255, 0.1);
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            font-size: 16px;
+        }
+
+        nav a:hover {
+            color: var(--secondary);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--secondary);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .header-cta {
+            background: var(--gradient);
             color: white;
-            font-size: 1rem;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .email-input:focus {
-            outline: none;
-            border-color: #ff8a00;
-        }
-
-        .notify-btn {
-            padding: 15px 30px;
             border: none;
+            padding: 12px 25px;
             border-radius: 50px;
-            background: linear-gradient(45deg, #ff8a00, #e52e71);
-            color: white;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 5px 15px rgba(255, 138, 0, 0.4);
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
         }
 
-        .notify-btn:hover {
+        .header-cta:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(255, 138, 0, 0.6);
+            box-shadow: 0 15px 25px rgba(52, 152, 219, 0.3);
         }
 
-        /* WhatsApp Button Styles */
-        .whatsapp-btn {
-            display: inline-flex;
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Dashboard Styles */
+        .dashboard {
+            padding: 120px 0 60px;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .dashboard-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.2rem;
+            color: var(--primary);
+        }
+
+        .search-container {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            display: flex;
+            background: white;
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            width: 400px;
+        }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            padding: 12px 20px;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .search-box button {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 0 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-box button:hover {
+            background: #2980b9;
+        }
+
+        /* Job Listings */
+        .job-listings {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 25px;
+        }
+
+        .job-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.4s ease;
+            animation: fadeIn 0.6s ease-out;
+            position: relative;
+        }
+
+        .job-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .job-card-header {
+            padding: 25px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+
+        .company-logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: var(--gradient);
+            display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            margin: 30px auto;
-            padding: 16px 32px;
-            background: linear-gradient(45deg, #25D366, #128C7E);
             color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 1.2rem;
-            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
-            transition: all 0.3s ease;
-            animation: pulseWhatsApp 2s infinite;
-            position: relative;
-            overflow: hidden;
+            font-size: 24px;
+            margin-right: 15px;
+            flex-shrink: 0;
         }
 
-        .whatsapp-btn::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: rgba(255, 255, 255, 0.1);
-            transform: rotate(45deg);
-            transition: all 0.5s ease;
-            opacity: 0;
+        .job-info {
+            flex-grow: 1;
         }
 
-        .whatsapp-btn:hover::before {
-            opacity: 1;
-            animation: shine 1.5s forwards;
+        .job-info h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+            color: var(--dark);
         }
 
-        .whatsapp-btn:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.6);
-        }
-
-        .whatsapp-icon {
-            font-size: 1.6rem;
-        }
-
-        /* Instagram Button Styles */
-        .instagram-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin: 20px auto;
-            padding: 16px 32px;
-            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-            color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 1.2rem;
-            box-shadow: 0 5px 15px rgba(220, 39, 67, 0.4);
-            transition: all 0.3s ease;
-            animation: pulseInstagram 2s infinite;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .instagram-btn::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: rgba(255, 255, 255, 0.1);
-            transform: rotate(45deg);
-            transition: all 0.5s ease;
-            opacity: 0;
-        }
-
-        .instagram-btn:hover::before {
-            opacity: 1;
-            animation: shine 1.5s forwards;
-        }
-
-        .instagram-btn:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 10px 25px rgba(220, 39, 67, 0.6);
-        }
-
-        .instagram-icon {
-            font-size: 1.6rem;
-        }
-
-        .footer {
-            margin-top: 60px;
-            color: #aaa;
+        .job-info p {
+            color: #666;
             font-size: 0.9rem;
         }
 
+        .job-type {
+            position: absolute;
+            top: 25px;
+            right: 60px;
+            background: rgba(46, 204, 113, 0.2);
+            color: var(--success);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .job-details {
+            padding: 25px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            color: #555;
+        }
+
+        .detail-item i {
+            margin-right: 10px;
+            color: var(--secondary);
+        }
+
+        .salary {
+            font-weight: 700;
+            color: var(--success);
+            font-size: 1.1rem;
+        }
+
+        .job-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .job-tag {
+            background: rgba(52, 152, 219, 0.1);
+            color: var(--secondary);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .job-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .call-btn {
+            background: var(--success);
+            color: white;
+        }
+
+        .call-btn:hover {
+            background: #27ae60;
+            transform: translateY(-2px);
+        }
+
+        .whatsapp-btn {
+            background: #25D366;
+            color: white;
+        }
+
+        .whatsapp-btn:hover {
+            background: #128C7E;
+            transform: translateY(-2px);
+        }
+
+        .apply-btn {
+            background: var(--accent);
+            color: white;
+        }
+
+        .apply-btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        .save-btn {
+            background: var(--warning);
+            color: white;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+
+        .save-btn:hover {
+            background: #e67e22;
+            transform: translateY(-2px);
+        }
+
+        .save-btn.saved {
+            background: var(--success);
+        }
+
+        .view-more {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .view-more-btn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .view-more-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(52, 152, 219, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--primary);
+            color: white;
+            padding: 80px 0 30px;
+            margin-top: 60px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .footer-col h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .footer-col h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--secondary);
+        }
+
+        .footer-col p {
+            opacity: 0.8;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        .footer-links {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .footer-links li {
+            margin-bottom: 15px;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-links a:hover {
+            opacity: 1;
+            transform: translateX(5px);
+        }
+
+        .footer-links i {
+            margin-right: 10px;
+            font-size: 14px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        /* Auth Pages */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 120px 0 60px;
+        }
+
+        .auth-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 500px;
+            overflow: hidden;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .auth-header {
+            background: var(--gradient);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .auth-header h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .auth-header p {
+            opacity: 0.9;
+        }
+
+        .auth-body {
+            padding: 30px;
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: relative;
+        }
+
+        .form-group label {
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .form-control {
+            padding: 15px 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            outline: none;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 42px;
+            background: none;
+            border: none;
+            color: #777;
+            cursor: pointer;
+        }
+
+        .user-type-selector {
+            display: flex;
+            gap: 15px;
+            margin: 10px 0;
+        }
+
+        .user-type-btn {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .user-type-btn:hover {
+            border-color: var(--secondary);
+        }
+
+        .user-type-btn.selected {
+            border-color: var(--secondary);
+            background: rgba(52, 152, 219, 0.1);
+        }
+
+        .user-type-btn i {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: var(--secondary);
+        }
+
+        .auth-submit {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .auth-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3);
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            font-size: 0.9rem;
+        }
+
+        .auth-footer a {
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* User Menu */
+        .user-menu {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            display: none;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .user-dropdown {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            width: 200px;
+            overflow: hidden;
+            display: none;
+            z-index: 100;
+        }
+
+        .user-dropdown.active {
+            display: block;
+        }
+
+        .user-dropdown a {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            color: var(--text);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid #eee;
+        }
+
+        .user-dropdown a:hover {
+            background: #f9f9f9;
+            color: var(--secondary);
+        }
+
+        .user-dropdown a i {
+            margin-right: 10px;
+            font-size: 14px;
+        }
+
+        /* Page Navigation */
+        .page-navigation {
+            display: none;
+        }
+
+        /* My Jobs Page */
+        .my-jobs {
+            padding: 120px 0 60px;
+        }
+
+        .my-jobs-header {
+            margin-bottom: 40px;
+        }
+
+        .my-jobs-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .my-jobs-title .user-email {
+            font-size: 1rem;
+            color: var(--secondary);
+            background: rgba(52, 152, 219, 0.1);
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+
+        .jobs-tabs {
+            display: flex;
+            gap: 20px;
+            border-bottom: 2px solid #eee;
+            margin-bottom: 30px;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            font-weight: 600;
+            color: var(--text);
+            cursor: pointer;
+            position: relative;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            opacity: 1;
+            color: var(--secondary);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--secondary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-state i {
+            font-size: 60px;
+            margin-bottom: 20px;
+            color: #ddd;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #777;
+        }
+
+        .empty-state p {
+            margin-bottom: 20px;
+        }
+
+        /* Settings Page */
+        .settings {
+            padding: 120px 0 60px;
+        }
+
+        .settings-header {
+            margin-bottom: 40px;
+        }
+
+        .settings-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .settings-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .settings-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .settings-card-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .settings-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .settings-form .form-group {
+            grid-column: span 1;
+        }
+
+        .settings-form .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .save-btn-settings {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        .save-btn-settings:hover {
+            background: #27ae60;
+            transform: translateY(-2px);
+        }
+
+        /* Job Post Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            display: none;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .job-post-modal {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 30px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .modal-header h2 {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--primary);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text);
+        }
+
+        .modal-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Role-based elements */
+        .employer-only {
+            display: none;
+        }
+
+        .jobseeker-welcome {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .jobseeker-welcome h2 {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        /* Companies Page */
+        .companies-page {
+            padding: 120px 0 60px;
+        }
+
+        .companies-header {
+            margin-bottom: 40px;
+        }
+
+        .companies-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .companies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .company-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.4s ease;
+            animation: fadeIn 0.6s ease-out;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .company-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .company-logo-large {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            margin: 0 auto 20px;
+        }
+
+        .company-info h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .company-info p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .company-jobs {
+            color: var(--secondary);
+            font-weight: 500;
+        }
+
+        /* Applications Modal */
+        .applications-modal {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            width: 90%;
+            max-width: 700px;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 30px;
+        }
+
+        .applications-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .application-item {
+            background: #f9f9f9;
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .application-details h4 {
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+
+        .application-details p {
+            color: #666;
+            margin-bottom: 3px;
+            font-size: 0.9rem;
+        }
+
+        .application-actions {
+            display: flex;
+            gap: 10px;
+        }
+
         /* Animations */
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes pulseWhatsApp {
-            0%, 100% { box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4); }
-            50% { box-shadow: 0 5px 20px rgba(37, 211, 102, 0.7), 0 0 20px rgba(37, 211, 102, 0.4); }
-        }
-
-        @keyframes pulseInstagram {
-            0%, 100% { box-shadow: 0 5px 15px rgba(220, 39, 67, 0.4); }
-            50% { box-shadow: 0 5px 20px rgba(220, 39, 67, 0.7), 0 0 20px rgba(220, 39, 67, 0.4); }
-        }
-
-        @keyframes shine {
-            0% { transform: translateX(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) rotate(45deg); }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
         }
 
         /* Responsive Design */
+        @media (max-width: 992px) {
+            .job-listings {
+                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            }
+            
+            .settings-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .settings-form .form-group.full-width {
+                grid-column: span 1;
+            }
+            
+            .companies-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+
         @media (max-width: 768px) {
-            .logo {
-                font-size: 3.8rem;
+            header {
+                padding: 15px 0;
             }
             
-            .slogan {
-                font-size: 1.5rem;
-            }
-            
-            .countdown {
+            .header-container {
                 flex-wrap: wrap;
             }
             
-            .countdown-item {
-                min-width: 100px;
+            nav {
+                width: 100%;
+                margin-top: 20px;
+                display: none;
             }
             
-            .input-group {
+            nav.active {
+                display: block;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .dashboard, .my-jobs, .settings, .companies-page {
+                padding: 100px 0 40px;
+            }
+            
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .search-container {
+                width: 100%;
+            }
+            
+            .search-box {
+                width: 100%;
+            }
+            
+            .job-listings {
+                grid-template-columns: 1fr;
+            }
+            
+            .job-actions {
                 flex-direction: column;
             }
             
-            .whatsapp-btn, .instagram-btn {
-                font-size: 1rem;
-                padding: 14px 28px;
+            .user-type-selector {
+                flex-direction: column;
+            }
+            
+            .user-dropdown {
+                right: -50px;
+            }
+            
+            .jobs-tabs {
+                overflow-x: auto;
+                padding-bottom: 10px;
+            }
+            
+            .companies-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .application-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .application-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .job-card-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .company-logo {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            
+            .job-type {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin-top: 10px;
+                display: inline-block;
+            }
+            
+            .detail-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .auth-card {
+                margin: 0 15px;
+            }
+            
+            .job-post-modal {
+                padding: 20px;
+            }
+            
+            .settings-card {
+                padding: 20px;
+            }
+            
+            .settings-card-header {
+                flex-direction: column;
+                align-items: flex-start;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="logo">Meechto</div>
-        
-        <div class="slogan">
-            <span class="devanagari">नोकरी हवी? थांबू नको, Meechto – नोकरी देणारं ठिकाण!</span>
-        </div>
-        
-        <div class="countdown">
-            <div class="countdown-item">
-                <div class="countdown-number" id="days">00</div>
-                <div class="countdown-label">Days</div>
+    <header>
+        <div class="container header-container">
+            <a href="#" class="logo" onclick="showPage('dashboard')">
+                <div class="logo-symbol">M</div>
+                <div class="logo-text">
+                    <div class="logo-main">MECHTO</div>
+                    <div class="logo-sub">JOB PORTAL</div>
+                </div>
+            </a>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <nav id="mainNav">
+                <ul id="navList">
+                    <li><a href="#" onclick="showPage('dashboard')">Home</a></li>
+                    <li><a href="#" onclick="showPage('companies')">Companies</a></li>
+                    <li><a href="#">Career Tips</a></li>
+                    <li><a href="#" onclick="showPage('login')">Login</a></li>
+                    <li><a href="#" onclick="showPage('register')">Register</a></li>
+                </ul>
+            </nav>
+            
+            <div id="headerCtaContainer" style="display: none;">
+                <button class="header-cta employer-only" onclick="openJobPostModal()">Post a Job <i class="fas fa-arrow-right"></i></button>
             </div>
-            <div class="countdown-item">
-                <div class="countdown-number" id="hours">00</div>
-                <div class="countdown-label">Hours</div>
-            </div>
-            <div class="countdown-item">
-                <div class="countdown-number" id="minutes">00</div>
-                <div class="countdown-label">Minutes</div>
-            </div>
-            <div class="countdown-item">
-                <div class="countdown-number" id="seconds">00</div>
-                <div class="countdown-label">Seconds</div>
-            </div>
-        </div>
-        
-        <!-- WhatsApp Button -->
-        <a href="https://chat.whatsapp.com/CzjOg0JrrOU7Br95SPQYQ7?mode=ac_t" target="_blank" class="whatsapp-btn">
-            <i class="fab fa-whatsapp whatsapp-icon"></i>
-            Join Our WhatsApp Group
-        </a>
-        
-        <br>
-        
-        <!-- Instagram Button -->
-        <a href="https://www.instagram.com/meechto?igsh=MW94NWUzb3FiZTRueQ==" target="_blank" class="instagram-btn">
-            <i class="fab fa-instagram instagram-icon"></i>
-            Follow Us on Instagram
-        </a>
-        
-        <div class="notify-form">
-            <div class="form-title">Notify me when we launch</div>
-            <div class="input-group">
-                <input type="email" class="email-input" placeholder="Enter your email address">
-                <button class="notify-btn">Notify Me</button>
+
+            <div class="user-menu" id="userMenu">
+                <div class="user-avatar" id="userAvatar">JD</div>
+                <span id="userName">John Doe</span>
+                <i class="fas fa-chevron-down"></i>
+                <div class="user-dropdown" id="userDropdown">
+                    <a href="#" onclick="showPage('dashboard')"><i class="fas fa-home"></i> Dashboard</a>
+                    <a href="#" class="employer-only" onclick="showPage('my-jobs')"><i class="fas fa-briefcase"></i> My Jobs</a>
+                    <a href="#" onclick="showPage('settings')"><i class="fas fa-cog"></i> Settings</a>
+                    <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
             </div>
         </div>
-        
-        <div class="footer">
-            © 2023 Meechto. All rights reserved. | Coming Soon
+    </header>
+
+    <!-- Dashboard Page -->
+    <section class="dashboard page-navigation" id="dashboard-page">
+        <div class="container">
+            <div class="dashboard-header">
+                <h2 class="dashboard-title">Find Your Dream Job</h2>
+                <div class="search-container">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Search jobs by title, company, or keywords">
+                        <button id="searchButton"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Job Seeker Welcome Section -->
+            <div class="jobseeker-welcome" id="jobseekerWelcome" style="display: none;">
+                <h2>Welcome to Your Job Search, <span id="welcomeUserName">John</span>!</h2>
+                <p>We've found some great opportunities that match your profile. Start applying today!</p>
+            </div>
+            
+            <div class="job-listings" id="jobListingsContainer">
+                <!-- Job cards will be loaded here -->
+            </div>
+            
+            <div class="view-more">
+                <button class="view-more-btn" id="loadMoreBtn">Load More Jobs</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Companies Page -->
+    <section class="companies-page page-navigation" id="companies-page">
+        <div class="container">
+            <div class="companies-header">
+                <h2 class="companies-title">Top Companies</h2>
+                <p>Discover companies that are hiring right now</p>
+            </div>
+            
+            <div class="companies-grid" id="companiesGrid">
+                <!-- Company cards will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Page -->
+    <section class="auth-container page-navigation" id="login-page">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h2>Welcome Back</h2>
+                <p>Sign in to access your account</p>
+            </div>
+            <div class="auth-body">
+                <form class="auth-form" id="login-form">
+                    <div class="form-group">
+                        <label for="login-email">Email Address</label>
+                        <input type="email" id="login-email" class="form-control" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" class="form-control" placeholder="Enter your password" required>
+                        <button type="button" class="password-toggle" id="login-password-toggle">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <a href="#" style="text-align: right; font-size: 0.9rem;">Forgot Password?</a>
+                    </div>
+                    <button type="submit" class="auth-submit">Sign In</button>
+                </form>
+                <div class="auth-footer">
+                    <p>Don't have an account? <a href="#" onclick="showPage('register')">Register Now</a></p>
+                </div>
+            </div>
+            <div class="auth-footer">
+                <p>Logged in as: <span id="login-email-display">Not logged in</span></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Register Page -->
+    <section class="auth-container page-navigation" id="register-page">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h2>Create Account</h2>
+                <p>Join thousands of professionals finding their dream jobs</p>
+            </div>
+            <div class="auth-body">
+                <form class="auth-form" id="register-form">
+                    <div class="form-group">
+                        <label>I am a</label>
+                        <div class="user-type-selector">
+                            <div class="user-type-btn" data-type="jobseeker">
+                                <i class="fas fa-user-tie"></i>
+                                <div>Job Seeker</div>
+                            </div>
+                            <div class="user-type-btn" data-type="employer">
+                                <i class="fas fa-building"></i>
+                                <div>Employer</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-name">Full Name</label>
+                        <input type="text" id="register-name" class="form-control" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-email">Email Address</label>
+                        <input type="email" id="register-email" class="form-control" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">Password</label>
+                        <input type="password" id="register-password" class="form-control" placeholder="Create a password" required>
+                        <button type="button" class="password-toggle" id="register-password-toggle">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-confirm">Confirm Password</label>
+                        <input type="password" id="register-confirm" class="form-control" placeholder="Confirm your password" required>
+                        <button type="button" class="password-toggle" id="register-confirm-toggle">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox" id="terms" required>
+                        <label for="terms" style="display: inline; font-size: 0.9rem;">I agree to the <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a></label>
+                    </div>
+                    <button type="submit" class="auth-submit">Create Account</button>
+                </form>
+                <div class="auth-footer">
+                    <p>Already have an account? <a href="#" onclick="showPage('login')">Sign In</a></p>
+                </div>
+            </div>
+            <div class="auth-footer">
+                <p>Your email: <span id="register-email-display">Not provided yet</span></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- My Jobs Page -->
+    <section class="my-jobs page-navigation" id="my-jobs-page">
+        <div class="container">
+            <div class="my-jobs-header">
+                <h2 class="my-jobs-title">My Jobs <span class="user-email" id="profile-email-display">user@example.com</span></h2>
+                <div class="jobs-tabs">
+                    <button class="tab-btn active" data-tab="posted">Posted Jobs</button>
+                    <button class="tab-btn" data-tab="applications">Applications</button>
+                    <button class="tab-btn" data-tab="saved">Saved Jobs</button>
+                </div>
+            </div>
+            
+            <div class="tab-content active" id="posted-tab">
+                <div class="job-listings" id="postedJobsContainer">
+                    <!-- Posted jobs will be loaded here -->
+                </div>
+                <div class="view-more">
+                    <button class="view-more-btn" onclick="openJobPostModal()">Post a New Job</button>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="applications-tab">
+                <div class="empty-state">
+                    <i class="fas fa-file-alt"></i>
+                    <h3>No applications yet</h3>
+                    <p>You haven't applied to any jobs yet. Start browsing jobs to apply!</p>
+                    <button class="view-more-btn" onclick="showPage('dashboard')">Browse Jobs</button>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="saved-tab">
+                <div class="empty-state">
+                    <i class="fas fa-bookmark"></i>
+                    <h3>No saved jobs</h3>
+                    <p>You haven't saved any jobs yet. Start browsing jobs to save them for later!</p>
+                    <button class="view-more-btn" onclick="showPage('dashboard')">Browse Jobs</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Settings Page -->
+    <section class="settings page-navigation" id="settings-page">
+        <div class="container">
+            <div class="settings-header">
+                <h2 class="settings-title">Account Settings</h2>
+            </div>
+            
+            <div class="settings-card">
+                <div class="settings-card-header">
+                    <h3 class="settings-card-title">Profile Information</h3>
+                </div>
+                <form class="settings-form" id="profile-form">
+                    <div class="form-group">
+                        <label for="profile-name">Full Name</label>
+                        <input type="text" id="profile-name" class="form-control" value="John Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="profile-email">Email Address</label>
+                        <input type="email" id="profile-email" class="form-control" value="john.doe@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="profile-phone">Phone Number</label>
+                        <input type="tel" id="profile-phone" class="form-control" value="+91 98765 43210">
+                    </div>
+                    <div class="form-group">
+                        <label for="profile-location">Location</label>
+                        <input type="text" id="profile-location" class="form-control" value="Mumbai, Maharashtra">
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="profile-bio">Bio</label>
+                        <textarea id="profile-bio" class="form-control" rows="4" placeholder="Tell us about yourself">Experienced software developer with a passion for creating innovative web applications. Specialized in JavaScript frameworks and cloud technologies.</textarea>
+                    </div>
+                    <div class="form-group full-width">
+                        <button type="submit" class="save-btn-settings">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="settings-card">
+                <div class="settings-card-header">
+                    <h3 class="settings-card-title">Language Preferences</h3>
+                </div>
+                <form class="settings-form" id="language-form">
+                    <div class="form-group full-width">
+                        <label for="language-select">Preferred Language</label>
+                        <select id="language-select" class="form-control">
+                            <option value="english">English</option>
+                            <option value="marathi">Marathi</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <button type="submit" class="save-btn-settings">Save Language</button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="settings-card">
+                <div class="settings-card-header">
+                    <h3 class="settings-card-title">Security Settings</h3>
+                </div>
+                <form class="settings-form" id="security-form">
+                    <div class="form-group">
+                        <label for="current-password">Current Password</label>
+                        <input type="password" id="current-password" class="form-control" placeholder="Enter current password">
+                        <button type="button" class="password-toggle" id="current-password-toggle">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-password">New Password</label>
+                        <input type="password" id="new-password" class="form-control" placeholder="Enter new password">
+                        <button type="button" class="password-toggle" id="new-password-toggle">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-password">Confirm New Password</label>
+                        <input type="password" id="confirm-password" class="form-control" placeholder="Confirm new password">
+                        <button type="button" class="password-toggle" id="confirm-password-toggle">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="form-group full-width">
+                        <button type="submit" class="save-btn-settings">Update Password</button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="settings-card">
+                <div class="settings-card-header">
+                    <h3 class="settings-card-title">Notification Preferences</h3>
+                </div>
+                <form class="settings-form" id="notifications-form">
+                    <div class="form-group full-width">
+                        <label style="font-weight: normal;">
+                            <input type="checkbox" checked> Email notifications
+                        </label>
+                    </div>
+                    <div class="form-group full-width">
+                        <label style="font-weight: normal;">
+                            <input type="checkbox" checked> Job alerts
+                        </label>
+                    </div>
+                    <div class="form-group full-width">
+                        <label style="font-weight: normal;">
+                            <input type="checkbox" checked> Application updates
+                        </label>
+                    </div>
+                    <div class="form-group full-width">
+                        <label style="font-weight: normal;">
+                            <input type="checkbox"> Newsletter
+                        </label>
+                    </div>
+                    <div class="form-group full-width">
+                        <button type="submit" class="save-btn-settings">Save Preferences</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Job Post Modal -->
+    <div class="modal-overlay" id="jobPostModal">
+        <div class="job-post-modal">
+            <div class="modal-header">
+                <h2>Post a New Job</h2>
+                <button class="close-modal" onclick="closeJobPostModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form class="modal-form" id="job-post-form">
+                <div class="form-group">
+                    <label for="job-title">Job Title</label>
+                    <input type="text" id="job-title" class="form-control" placeholder="e.g. Senior Web Developer" required>
+                </div>
+                <div class="form-group">
+                    <label for="company-name">Company Name</label>
+                    <input type="text" id="company-name" class="form-control" placeholder="Enter company name" required>
+                </div>
+                <div class="form-group">
+                    <label for="job-location">Location</label>
+                    <input type="text" id="job-location" class="form-control" placeholder="e.g. Mumbai, Maharashtra or Remote" required>
+                </div>
+                <div class="form-group">
+                    <label for="job-type">Job Type</label>
+                    <select id="job-type" class="form-control" required>
+                        <option value="">Select job type</option>
+                        <option value="Full-time">Full-time</option>
+                        <option value="Part-time">Part-time</option>
+                        <option value="Contract">Contract</option>
+                        <option value="NAPS">NAPS</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="job-salary">Salary Range (₹)</label>
+                    <input type="text" id="job-salary" class="form-control" placeholder="e.g. ₹8,00,000 - ₹10,00,000" required>
+                </div>
+                <div class="form-group">
+                    <label for="job-contact">Contact Number</label>
+                    <input type="text" id="job-contact" class="form-control" placeholder="e.g. +91 98765 43210" required>
+                </div>
+                <div class="form-group">
+                    <label for="job-description">Job Description</label>
+                    <textarea id="job-description" class="form-control" rows="5" placeholder="Describe the job responsibilities and requirements" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="job-requirements">Skills</label>
+                    <textarea id="job-requirements" class="form-control" rows="3" placeholder="List the required skills" required></textarea>
+                </div>
+                <button type="submit" class="auth-submit">Post Job</button>
+            </form>
         </div>
     </div>
 
+    <!-- Applications Modal -->
+    <div class="modal-overlay" id="applicationsModal">
+        <div class="applications-modal">
+            <div class="modal-header">
+                <h2>Job Applications</h2>
+                <button class="close-modal" onclick="closeApplicationsModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="applications-list" id="applicationsList">
+                <!-- Applications will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Job Modal -->
+    <div class="modal-overlay" id="editJobModal">
+        <div class="job-post-modal">
+            <div class="modal-header">
+                <h2>Edit Job Posting</h2>
+                <button class="close-modal" onclick="closeEditJobModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form class="modal-form" id="edit-job-form">
+                <input type="hidden" id="edit-job-id">
+                <div class="form-group">
+                    <label for="edit-job-title">Job Title</label>
+                    <input type="text" id="edit-job-title" class="form-control" placeholder="e.g. Senior Web Developer" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-company-name">Company Name</label>
+                    <input type="text" id="edit-company-name" class="form-control" placeholder="Enter company name" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-job-location">Location</label>
+                    <input type="text" id="edit-job-location" class="form-control" placeholder="e.g. Mumbai, Maharashtra or Remote" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-job-type">Job Type</label>
+                    <select id="edit-job-type" class="form-control" required>
+                        <option value="">Select job type</option>
+                        <option value="Full-time">Full-time</option>
+                        <option value="Part-time">Part-time</option>
+                        <option value="Contract">Contract</option>
+                        <option value="NAPS">NAPS</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="edit-job-salary">Salary Range (₹)</label>
+                    <input type="text" id="edit-job-salary" class="form-control" placeholder="e.g. ₹8,00,000 - ₹10,00,000" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-job-contact">Contact Number</label>
+                    <input type="text" id="edit-job-contact" class="form-control" placeholder="e.g. +91 98765 43210" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-job-description">Job Description</label>
+                    <textarea id="edit-job-description" class="form-control" rows="5" placeholder="Describe the job responsibilities and requirements" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="edit-job-requirements">Skills</label>
+                    <textarea id="edit-job-requirements" class="form-control" rows="3" placeholder="List the required skills" required></textarea>
+                </div>
+                <button type="submit" class="auth-submit">Update Job</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <a href="#" class="logo" style="margin-bottom: 20px; display: inline-block;">
+                        <div class="logo-symbol">M</div>
+                        <div class="logo-text">
+                            <div class="logo-main">MECHTO</div>
+                            <div class="logo-sub">JOB PORTAL</div>
+                        </div>
+                    </a>
+                    <p>Connecting talented professionals with top companies across India. Find your dream job today!</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>For Job Seekers</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" onclick="showPage('dashboard')"><i class="fas fa-chevron-right"></i> Browse Jobs</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Create Profile</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Job Alerts</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Career Advice</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>For Employers</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" onclick="openJobPostModal()"><i class="fas fa-chevron-right"></i> Post a Job</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Browse Candidates</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Recruiting Solutions</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Pricing Plans</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Contact Us</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-map-marker-alt"></i> 1234 Job Street, Mumbai, Maharashtra</a></li>
+                        <li><a href="#"><i class="fas fa-phone"></i> +91 98765 43210</a></li>
+                        <li><a href="#"><i class="fas fa-envelope"></i> info@meechtojobs.com</a></li>
+                        <li><a href="#"><i class="fas fa-clock"></i> Mon-Fri: 9AM-6PM</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>© 2023 Meechto Job Portal. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
     <script>
-        // Set the launch date (5 days from now)
-        const launchDate = new Date();
-        launchDate.setDate(launchDate.getDate() + 5);
+        // Firebase configuration - Replace with your own config
+        const firebaseConfig = {
+  apiKey: "AIzaSyCrJ6Ur1HLGX97ggVfeFQc65l16oq8k9kg",
+  authDomain: "webar-c2cf1.firebaseapp.com",
+  databaseURL: "https://webar-c2cf1-default-rtdb.firebaseio.com",
+  projectId: "webar-c2cf1",
+  storageBucket: "webar-c2cf1.firebasestorage.app",
+  messagingSenderId: "1019363026928",
+  appId: "1:1019363026928:web:9d25a79d8052527c02df35",
+  measurementId: "G-7JYSEJDPRP"
+};
 
-        // Update countdown every second
-        const countdown = setInterval(function() {
-            const now = new Date().getTime();
-            const distance = launchDate - now;
-            
-            // Calculate days, hours, minutes, seconds
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            
-            // Display the results
-            document.getElementById("days").innerText = days.toString().padStart(2, '0');
-            document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
-            document.getElementById("minutes").innerText = minutes.toString().padStart(2, '0');
-            document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
-            
-            // If the countdown is over
-            if (distance < 0) {
-                clearInterval(countdown);
-                document.getElementById("days").innerText = "00";
-                document.getElementById("hours").innerText = "00";
-                document.getElementById("minutes").innerText = "00";
-                document.getElementById("seconds").innerText = "00";
-            }
-        }, 1000);
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
 
-        // Email notification form
-        document.querySelector('.notify-btn').addEventListener('click', function() {
-            const emailInput = document.querySelector('.email-input');
-            const email = emailInput.value.trim();
-            
-            if (email) {
-                if (validateEmail(email)) {
-                    alert('Thank you! We will notify you when we launch.');
-                    emailInput.value = '';
-                } else {
-                    alert('Please enter a valid email address.');
-                }
+        // Track authentication state
+        let isLoggedIn = false;
+        let userType = null;
+        let currentUser = null;
+        let jobListings = [];
+        let myPostedJobs = [];
+        let savedJobs = [];
+        let appliedJobs = [];
+        let companies = [];
+        let jobApplications = {};
+
+        // Listen for auth state changes
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // User is signed in
+                isLoggedIn = true;
+                
+                // Get user data from Firestore
+                db.collection("users").doc(user.uid).get().then((doc) => {
+                    if (doc.exists) {
+                        currentUser = {
+                            uid: user.uid,
+                            email: user.email,
+                            ...doc.data()
+                        };
+                        updateNavigation();
+                        showPage('dashboard');
+                        loadJobs();
+                    } else {
+                        console.log("No user data found!");
+                    }
+                }).catch((error) => {
+                    console.log("Error getting user data:", error);
+                });
             } else {
-                alert('Please enter your email address.');
+                // User is signed out
+                isLoggedIn = false;
+                currentUser = null;
+                updateNavigation();
+                showPage('dashboard');
             }
         });
 
-        // Email validation
-        function validateEmail(email) {
-            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return re.test(email);
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mainNav = document.getElementById('mainNav');
+            
+            // Mobile menu toggle
+            mobileMenuBtn.addEventListener('click', function() {
+                mainNav.classList.toggle('active');
+                
+                if (mainNav.classList.contains('active')) {
+                    mobileMenuBtn.innerHTML = '<i class="fas fa-times"></i>';
+                } else {
+                    mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+            });
+            
+            // Load sample companies
+            companies = [...sampleCompanies];
+            renderCompanies();
+            
+            // Password toggle functionality
+            setupPasswordToggle('login-password', 'login-password-toggle');
+            setupPasswordToggle('register-password', 'register-password-toggle');
+            setupPasswordToggle('register-confirm', 'register-confirm-toggle');
+            setupPasswordToggle('current-password', 'current-password-toggle');
+            setupPasswordToggle('new-password', 'new-password-toggle');
+            setupPasswordToggle('confirm-password', 'confirm-password-toggle');
+            
+            // Email display functionality
+            document.getElementById('login-email').addEventListener('input', function() {
+                document.getElementById('login-email-display').textContent = this.value || 'Not logged in';
+            });
+            
+            document.getElementById('register-email').addEventListener('input', function() {
+                document.getElementById('register-email-display').textContent = this.value || 'Not provided yet';
+            });
+            
+            // Search functionality
+            const searchBox = document.getElementById('searchInput');
+            const searchBtn = document.getElementById('searchButton');
+            
+            searchBtn.addEventListener('click', function() {
+                performSearch();
+            });
+            
+            searchBox.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+            
+            // Simulate loading more jobs
+            const loadMoreBtn = document.getElementById('loadMoreBtn');
+            loadMoreBtn.addEventListener('click', function() {
+                loadMoreBtn.textContent = 'Loading...';
+                setTimeout(() => {
+                    loadMoreJobs();
+                    loadMoreBtn.textContent = 'Load More Jobs';
+                }, 1500);
+            });
+            
+            // User type selection
+            const userTypeBtns = document.querySelectorAll('.user-type-btn');
+            userTypeBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    userTypeBtns.forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    userType = this.getAttribute('data-type');
+                });
+            });
+            
+            // Tab functionality for My Jobs page
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Hide all tab content
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    // Show the selected tab content
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                    
+                    // Load content for the selected tab
+                    if (tabId === 'posted') {
+                        loadMyPostedJobs();
+                    } else if (tabId === 'saved') {
+                        loadSavedJobs();
+                    } else if (tabId === 'applications') {
+                        loadAppliedJobs();
+                    }
+                });
+            });
+            
+            // Form submissions
+            document.getElementById('login-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+                
+                // Firebase authentication
+                auth.signInWithEmailAndPassword(email, password)
+                    .then((userCredential) => {
+                        // Signed in 
+                        console.log("User logged in:", userCredential.user);
+                    })
+                    .catch((error) => {
+                        alert('Error: ' + error.message);
+                    });
+            });
+            
+            document.getElementById('register-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = document.getElementById('register-name').value;
+                const email = document.getElementById('register-email').value;
+                const password = document.getElementById('register-password').value;
+                const confirm = document.getElementById('register-confirm').value;
+                
+                if (password !== confirm) {
+                    alert('Passwords do not match!');
+                    return;
+                }
+                
+                if (!userType) {
+                    alert('Please select a user type');
+                    return;
+                }
+                
+                // Firebase registration
+                auth.createUserWithEmailAndPassword(email, password)
+                    .then((userCredential) => {
+                        // Signed up 
+                        const user = userCredential.user;
+                        
+                        // Save user data to Firestore
+                        return db.collection("users").doc(user.uid).set({
+                            name: name,
+                            email: email,
+                            type: userType,
+                            phone: "+91 00000 00000",
+                            location: "India",
+                            bio: "",
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+                    })
+                    .then(() => {
+                        console.log("User registered successfully!");
+                    })
+                    .catch((error) => {
+                        alert('Error: ' + error.message);
+                    });
+            });
+            
+            // Job post form submission
+            document.getElementById('job-post-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                if (!currentUser || currentUser.type !== 'employer') {
+                    alert('Only employers can post jobs');
+                    return;
+                }
+                
+                const title = document.getElementById('job-title').value;
+                const company = document.getElementById('company-name').value;
+                const location = document.getElementById('job-location').value;
+                const type = document.getElementById('job-type').value;
+                const salary = document.getElementById('job-salary').value;
+                const contact = document.getElementById('job-contact').value;
+                const description = document.getElementById('job-description').value;
+                const requirements = document.getElementById('job-requirements').value;
+                
+                // Add new job to Firestore
+                db.collection("jobs").add({
+                    title: title,
+                    company: company,
+                    location: location,
+                    type: type,
+                    salary: salary,
+                    contact: contact,
+                    description: description,
+                    requirements: requirements,
+                    postedBy: currentUser.uid,
+                    postedDate: firebase.firestore.FieldValue.serverTimestamp(),
+                    tags: requirements.split(',').map(tag => tag.trim()),
+                    logo: "building",
+                    openings: 1
+                })
+                .then((docRef) => {
+                    console.log("Job posted with ID: ", docRef.id);
+                    
+                    // Close modal and reset form
+                    closeJobPostModal();
+                    document.getElementById('job-post-form').reset();
+                    
+                    alert('Job posted successfully!');
+                    loadMyPostedJobs();
+                })
+                .catch((error) => {
+                    alert('Error posting job: ' + error.message);
+                });
+            });
+            
+            // Edit job form submission
+            document.getElementById('edit-job-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const jobId = document.getElementById('edit-job-id').value;
+                const title = document.getElementById('edit-job-title').value;
+                const company = document.getElementById('edit-company-name').value;
+                const location = document.getElementById('edit-job-location').value;
+                const type = document.getElementById('edit-job-type').value;
+                const salary = document.getElementById('edit-job-salary').value;
+                const contact = document.getElementById('edit-job-contact').value;
+                const description = document.getElementById('edit-job-description').value;
+                const requirements = document.getElementById('edit-job-requirements').value;
+                
+                // Update job in Firestore
+                db.collection("jobs").doc(jobId).update({
+                    title: title,
+                    company: company,
+                    location: location,
+                    type: type,
+                    salary: salary,
+                    contact: contact,
+                    description: description,
+                    requirements: requirements,
+                    tags: requirements.split(',').map(tag => tag.trim())
+                })
+                .then(() => {
+                    console.log("Job updated successfully");
+                    
+                    // Close modal
+                    closeEditJobModal();
+                    
+                    alert('Job updated successfully!');
+                    loadMyPostedJobs();
+                    loadJobs();
+                })
+                .catch((error) => {
+                    alert('Error updating job: ' + error.message);
+                });
+            });
+            
+            // Settings form submissions
+            document.getElementById('profile-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                if (!currentUser) return;
+                
+                const name = document.getElementById('profile-name').value;
+                const email = document.getElementById('profile-email').value;
+                const phone = document.getElementById('profile-phone').value;
+                const location = document.getElementById('profile-location').value;
+                const bio = document.getElementById('profile-bio').value;
+                
+                // Update user data in Firestore
+                db.collection("users").doc(currentUser.uid).update({
+                    name: name,
+                    email: email,
+                    phone: phone,
+                    location: location,
+                    bio: bio
+                })
+                .then(() => {
+                    // Update local user data
+                    currentUser.name = name;
+                    currentUser.email = email;
+                    currentUser.phone = phone;
+                    currentUser.location = location;
+                    currentUser.bio = bio;
+                    
+                    updateNavigation();
+                    
+                    // Update email display on My Jobs page
+                    document.getElementById('profile-email-display').textContent = email;
+                    
+                    alert('Profile updated successfully!');
+                })
+                .catch((error) => {
+                    alert('Error updating profile: ' + error.message);
+                });
+            });
+            
+            document.getElementById('language-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const language = document.getElementById('language-select').value;
+                if (language === 'marathi') {
+                    alert('Marathi language support will be available soon!');
+                } else {
+                    alert('Language preference set to English');
+                }
+            });
+            
+            document.getElementById('security-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const currentPassword = document.getElementById('current-password').value;
+                const newPassword = document.getElementById('new-password').value;
+                const confirmPassword = document.getElementById('confirm-password').value;
+                
+                if (newPassword !== confirmPassword) {
+                    alert('New passwords do not match!');
+                    return;
+                }
+                
+                // Firebase password update
+                const user = auth.currentUser;
+                const credential = firebase.auth.EmailAuthProvider.credential(
+                    user.email, 
+                    currentPassword
+                );
+                
+                // Reauthenticate user
+                user.reauthenticateWithCredential(credential)
+                    .then(() => {
+                        // Update password
+                        return user.updatePassword(newPassword);
+                    })
+                    .then(() => {
+                        document.getElementById('security-form').reset();
+                        alert('Password updated successfully!');
+                    })
+                    .catch((error) => {
+                        alert('Error updating password: ' + error.message);
+                    });
+            });
+            
+            document.getElementById('notifications-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Notification preferences saved!');
+            });
+            
+            // User dropdown toggle
+            const userMenu = document.getElementById('userMenu');
+            const userDropdown = document.getElementById('userDropdown');
+            
+            if (userMenu) {
+                userMenu.addEventListener('click', function(e) {
+                    userDropdown.classList.toggle('active');
+                    e.stopPropagation();
+                });
+            }
+            
+            // Close dropdown when clicking elsewhere
+            document.addEventListener('click', function() {
+                if (userDropdown) userDropdown.classList.remove('active');
+            });
+            
+            // Show the dashboard page by default
+            showPage('dashboard');
+            updateNavigation();
+        });
+        
+        // Load jobs from Firestore
+        function loadJobs() {
+            db.collection("jobs").orderBy("postedDate", "desc").get()
+                .then((querySnapshot) => {
+                    jobListings = [];
+                    querySnapshot.forEach((doc) => {
+                        const job = {
+                            id: doc.id,
+                            ...doc.data(),
+                            posted: formatFirestoreDate(doc.data().postedDate)
+                        };
+                        jobListings.push(job);
+                    });
+                    renderJobListings();
+                })
+                .catch((error) => {
+                    console.log("Error getting jobs: ", error);
+                });
         }
+        
+        // Load more jobs (for pagination)
+        function loadMoreJobs() {
+            // This would be implemented with proper pagination in a real app
+            loadJobs();
+        }
+        
+        // Load my posted jobs from Firestore
+        function loadMyPostedJobs() {
+            if (!currentUser || currentUser.type !== 'employer') return;
+            
+            db.collection("jobs").where("postedBy", "==", currentUser.uid).orderBy("postedDate", "desc").get()
+                .then((querySnapshot) => {
+                    myPostedJobs = [];
+                    querySnapshot.forEach((doc) => {
+                        const job = {
+                            id: doc.id,
+                            ...doc.data(),
+                            posted: formatFirestoreDate(doc.data().postedDate)
+                        };
+                        myPostedJobs.push(job);
+                    });
+                    renderMyPostedJobs();
+                })
+                .catch((error) => {
+                    console.log("Error getting my jobs: ", error);
+                });
+        }
+        
+        // Load saved jobs
+        function loadSavedJobs() {
+            if (!currentUser) return;
+            
+            db.collection("users").doc(currentUser.uid).get()
+                .then((doc) => {
+                    if (doc.exists) {
+                        const userData = doc.data();
+                        savedJobs = userData.savedJobs || [];
+                        renderSavedJobs();
+                    }
+                })
+                .catch((error) => {
+                    console.log("Error getting saved jobs: ", error);
+                });
+        }
+        
+        // Load applied jobs
+        function loadAppliedJobs() {
+            if (!currentUser) return;
+            
+            db.collection("users").doc(currentUser.uid).get()
+                .then((doc) => {
+                    if (doc.exists) {
+                        const userData = doc.data();
+                        appliedJobs = userData.appliedJobs || [];
+                        renderAppliedJobs();
+                    }
+                })
+                .catch((error) => {
+                    console.log("Error getting applied jobs: ", error);
+                });
+        }
+        
+        // Format Firestore timestamp to relative time
+        function formatFirestoreDate(timestamp) {
+            if (!timestamp) return "Recently";
+            
+            const date = timestamp.toDate();
+            const now = new Date();
+            const diffMs = now - date;
+            const diffSecs = Math.floor(diffMs / 1000);
+            const diffMins = Math.floor(diffSecs / 60);
+            const diffHours = Math.floor(diffMins / 60);
+            const diffDays = Math.floor(diffHours / 24);
+            
+            if (diffSecs < 60) {
+                return "Just now";
+            } else if (diffMins < 60) {
+                return `${diffMins} minutes ago`;
+            } else if (diffHours < 24) {
+                return `${diffHours} hours ago`;
+            } else if (diffDays === 1) {
+                return "1 day ago";
+            } else {
+                return `${diffDays} days ago`;
+            }
+        }
+        
+        // Setup password toggle functionality
+        function setupPasswordToggle(inputId, toggleId) {
+            const passwordInput = document.getElementById(inputId);
+            const toggleButton = document.getElementById(toggleId);
+            
+            if (passwordInput && toggleButton) {
+                toggleButton.addEventListener('click', function() {
+                    if (passwordInput.type === 'password') {
+                        passwordInput.type = 'text';
+                        toggleButton.innerHTML = '<i class="fas fa-eye-slash"></i>';
+                    } else {
+                        passwordInput.type = 'password';
+                        toggleButton.innerHTML = '<i class="fas fa-eye"></i>';
+                    }
+                });
+            }
+        }
+        
+        // Perform search functionality
+        function performSearch() {
+            const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+            
+            if (searchTerm === '') {
+                renderJobListings();
+                return;
+            }
+            
+            const filteredJobs = jobListings.filter(job => 
+                job.title.toLowerCase().includes(searchTerm) ||
+                job.company.toLowerCase().includes(searchTerm) ||
+                job.location.toLowerCase().includes(searchTerm) ||
+                (job.tags && job.tags.some(tag => tag.toLowerCase().includes(searchTerm))) ||
+                job.description.toLowerCase().includes(searchTerm)
+            );
+            
+            renderFilteredJobListings(filteredJobs);
+        }
+        
+        // Render filtered job listings
+        function renderFilteredJobListings(filteredJobs) {
+            const listingsContainer = document.getElementById('jobListingsContainer');
+            
+            if (!listingsContainer) return;
+            
+            listingsContainer.innerHTML = '';
+            
+            if (filteredJobs.length === 0) {
+                listingsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-search"></i>
+                        <h3>No jobs found</h3>
+                        <p>Try different search terms or browse all jobs</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            filteredJobs.forEach(job => {
+                createJobCard(job, listingsContainer);
+            });
+        }
+        
+        // Render job listings
+        function renderJobListings() {
+            const listingsContainer = document.getElementById('jobListingsContainer');
+            
+            if (!listingsContainer) return;
+            
+            listingsContainer.innerHTML = '';
+            
+            jobListings.forEach(job => {
+                createJobCard(job, listingsContainer);
+            });
+        }
+        
+        // Create job card element
+        function createJobCard(job, container) {
+            const jobCard = document.createElement('div');
+            jobCard.className = 'job-card';
+            jobCard.dataset.id = job.id;
+            
+            // Get logo class based on company
+            let logoClass = 'fas fa-building';
+            if (job.logo === 'tech') logoClass = 'fas fa-laptop-code';
+            if (job.logo === 'digital') logoClass = 'fas fa-digital-tachograph';
+            if (job.logo === 'appcreators') logoClass = 'fas fa-mobile-alt';
+            
+            // Check if job is saved
+            const isSaved = savedJobs.some(savedJob => savedJob.id === job.id);
+            const isApplied = appliedJobs.some(appliedJob => appliedJob.id === job.id);
+            
+            jobCard.innerHTML = `
+                <div class="job-card-header">
+                    <div class="company-logo">
+                        <i class="${logoClass}"></i>
+                    </div>
+                    <div class="job-info">
+                        <h3>${job.title}</h3>
+                        <p>${job.company} • ${job.location}</p>
+                    </div>
+                    <span class="job-type">${job.type}</span>
+                    <button class="save-btn ${isSaved ? 'saved' : ''}" onclick="toggleSaveJob('${job.id}')">
+                        <i class="fas ${isSaved ? 'fa-bookmark' : 'fa-bookmark'}"></i>
+                    </button>
+                </div>
+                <div class="job-details">
+                    <div class="detail-row">
+                        <div class="detail-item">
+                            <i class="fas fa-rupee-sign"></i>
+                            <span class="salary">${job.salary}</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-clock"></i>
+                            <span>${job.posted}</span>
+                        </div>
+                    </div>
+                    <div class="job-tags">
+                        ${job.tags ? job.tags.map(tag => `<span class="job-tag">${tag}</span>`).join('') : ''}
+                    </div>
+                    <p>${job.description}</p>
+                    <div class="job-actions">
+                        <a href="tel:${job.contact}" class="action-btn call-btn">
+                            <i class="fas fa-phone"></i> Call
+                        </a>
+                        <a href="https://wa.me/${job.contact.replace(/\D/g, '')}" target="_blank" class="action-btn whatsapp-btn">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </a>
+                        <button class="action-btn apply-btn ${isApplied ? 'applied' : ''}" onclick="handleApply('${job.id}')">
+                            <i class="fas fa-paper-plane"></i> ${isApplied ? 'Applied' : 'Apply'}
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            container.appendChild(jobCard);
+        }
+        
+        // Render companies
+        function renderCompanies() {
+            const companiesContainer = document.getElementById('companiesGrid');
+            if (!companiesContainer) return;
+            
+            companiesContainer.innerHTML = '';
+            
+            companies.forEach(company => {
+                const companyCard = document.createElement('div');
+                companyCard.className = 'company-card';
+                companyCard.dataset.id = company.id;
+                
+                // Get logo class based on company
+                let logoClass = 'fas fa-building';
+                if (company.logo === 'tech') logoClass = 'fas fa-laptop-code';
+                if (company.logo === 'digital') logoClass = 'fas fa-digital-tachograph';
+                if (company.logo === 'appcreators') logoClass = 'fas fa-mobile-alt';
+                if (company.logo === 'softtech') logoClass = 'fas fa-code';
+                if (company.logo === 'dataminds') logoClass = 'fas fa-chart-line';
+                if (company.logo === 'cloudnova') logoClass = 'fas fa-cloud';
+                
+                companyCard.innerHTML = `
+                    <div class="company-logo-large">
+                        <i class="${logoClass}"></i>
+                    </div>
+                    <div class="company-info">
+                        <h3>${company.name}</h3>
+                        <p>${company.description}</p>
+                        <div class="company-jobs">${company.jobs} open positions</div>
+                    </div>
+                `;
+                
+                companiesContainer.appendChild(companyCard);
+            });
+        }
+        
+        // Render my posted jobs
+        function renderMyPostedJobs() {
+            const listingsContainer = document.getElementById('postedJobsContainer');
+            if (!listingsContainer) return;
+            
+            if (myPostedJobs.length === 0) {
+                listingsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-briefcase"></i>
+                        <h3>No jobs posted yet</h3>
+                        <p>You haven't posted any jobs yet. Get started by posting your first job!</p>
+                        <button class="view-more-btn" onclick="openJobPostModal()">Post a Job</button>
+                    </div>
+                `;
+                return;
+            }
+            
+            listingsContainer.innerHTML = '';
+            
+            myPostedJobs.forEach(job => {
+                const jobCard = document.createElement('div');
+                jobCard.className = 'job-card';
+                jobCard.dataset.id = job.id;
+                
+                // Get logo class based on company
+                let logoClass = 'fas fa-building';
+                if (job.logo === 'tech') logoClass = 'fas fa-laptop-code';
+                if (job.logo === 'digital') logoClass = 'fas fa-digital-tachograph';
+                if (job.logo === 'appcreators') logoClass = 'fas fa-mobile-alt';
+                
+                const applications = jobApplications[job.id] || [];
+                
+                jobCard.innerHTML = `
+                    <div class="job-card-header">
+                        <div class="company-logo">
+                            <i class="${logoClass}"></i>
+                        </div>
+                        <div class="job-info">
+                            <h3>${job.title}</h3>
+                            <p>${job.company} • ${job.location}</p>
+                        </div>
+                        <span class="job-type">${job.type}</span>
+                    </div>
+                    <div class="job-details">
+                        <div class="detail-row">
+                            <div class="detail-item">
+                                <i class="fas fa-rupee-sign"></i>
+                                <span class="salary">${job.salary}</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-clock"></i>
+                                <span>${job.posted}</span>
+                            </div>
+                        </div>
+                        <div class="job-tags">
+                            ${job.tags ? job.tags.map(tag => `<span class="job-tag">${tag}</span>`).join('') : ''}
+                        </div>
+                        <p>${job.description}</p>
+                        <div class="job-actions">
+                            <button class="action-btn apply-btn" onclick="viewApplications('${job.id}')">
+                                <i class="fas fa-eye"></i> View Applications (${applications.length})
+                            </button>
+                            <button class="action-btn call-btn" onclick="editJob('${job.id}')">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="action-btn whatsapp-btn" onclick="handleDeleteJob('${job.id}')">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                listingsContainer.appendChild(jobCard);
+            });
+        }
+        
+        // Render saved jobs
+        function renderSavedJobs() {
+            const listingsContainer = document.querySelector('#saved-tab .job-listings');
+            if (!listingsContainer) return;
+            
+            if (savedJobs.length === 0) {
+                listingsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-bookmark"></i>
+                        <h3>No saved jobs</h3>
+                        <p>You haven't saved any jobs yet. Start browsing jobs to save them for later!</p>
+                        <button class="view-more-btn" onclick="showPage('dashboard')">Browse Jobs</button>
+                    </div>
+                `;
+                return;
+            }
+            
+            listingsContainer.innerHTML = '';
+            
+            // We need to get the full job details for saved jobs
+            savedJobs.forEach(savedJobId => {
+                const job = jobListings.find(j => j.id === savedJobId);
+                if (job) {
+                    createJobCard(job, listingsContainer);
+                }
+            });
+        }
+        
+        // Render applied jobs
+        function renderAppliedJobs() {
+            const listingsContainer = document.querySelector('#applications-tab .job-listings');
+            if (!listingsContainer) return;
+            
+            if (appliedJobs.length === 0) {
+                listingsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-file-alt"></i>
+                        <h3>No applications yet</h3>
+                        <p>You haven't applied to any jobs yet. Start browsing jobs to apply!</p>
+                        <button class="view-more-btn" onclick="showPage('dashboard')">Browse Jobs</button>
+                    </div>
+                `;
+                return;
+            }
+            
+            listingsContainer.innerHTML = '';
+            
+            // We need to get the full job details for applied jobs
+            appliedJobs.forEach(appliedJobId => {
+                const job = jobListings.find(j => j.id === appliedJobId);
+                if (job) {
+                    createJobCard(job, listingsContainer);
+                }
+            });
+        }
+        
+        // Render applications for a job
+        function renderApplications(jobId) {
+            const applicationsContainer = document.getElementById('applicationsList');
+            if (!applicationsContainer) return;
+            
+            applicationsContainer.innerHTML = '';
+            
+            const applications = jobApplications[jobId] || [];
+            
+            if (applications.length === 0) {
+                applicationsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-user-times"></i>
+                        <h3>No applications yet</h3>
+                        <p>No one has applied to this job yet.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            applications.forEach((application, index) => {
+                const applicationItem = document.createElement('div');
+                applicationItem.className = 'application-item';
+                
+                applicationItem.innerHTML = `
+                    <div class="application-details">
+                        <h4>${application.name}</h4>
+                        <p><i class="fas fa-envelope"></i> ${application.email}</p>
+                        <p><i class="fas fa-phone"></i> ${application.phone}</p>
+                        <p><i class="fas fa-calendar"></i> Applied on: ${application.appliedDate}</p>
+                        <p><strong>Cover Letter:</strong> ${application.coverLetter}</p>
+                    </div>
+                    <div class="application-actions">
+                        <a href="tel:${application.phone}" class="action-btn call-btn">
+                            <i class="fas fa-phone"></i> Call
+                        </a>
+                        <a href="https://wa.me/${application.phone.replace(/\D/g, '')}" target="_blank" class="action-btn whatsapp-btn">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </a>
+                        <a href="#" class="action-btn apply-btn">
+                            <i class="fas fa-download"></i> Resume
+                        </a>
+                    </div>
+                `;
+                
+                applicationsContainer.appendChild(applicationItem);
+            });
+        }
+        
+        // Handle apply action
+        function handleApply(jobId) {
+            if (!isLoggedIn) {
+                alert('Please login to apply for jobs');
+                showPage('login');
+                return;
+            }
+            
+            const job = jobListings.find(j => j.id === jobId);
+            if (job && !appliedJobs.includes(jobId)) {
+                // Add to applied jobs in Firestore
+                db.collection("users").doc(currentUser.uid).update({
+                    appliedJobs: firebase.firestore.FieldValue.arrayUnion(jobId)
+                })
+                .then(() => {
+                    appliedJobs.push(jobId);
+                    
+                    // Add sample application
+                    if (!jobApplications[jobId]) {
+                        jobApplications[jobId] = [];
+                    }
+                    
+                    jobApplications[jobId].push({
+                        name: currentUser.name,
+                        email: currentUser.email,
+                        phone: currentUser.phone,
+                        appliedDate: new Date().toISOString().split('T')[0],
+                        resume: "my_resume.pdf",
+                        coverLetter: `I am interested in the ${job.title} position at ${job.company} and believe my skills are a good match for this role.`
+                    });
+                    
+                    alert(`Successfully applied for ${job.title} at ${job.company}!`);
+                    renderJobListings();
+                    
+                    // If we're on the applications tab, refresh it
+                    if (document.getElementById('applications-tab').classList.contains('active')) {
+                        renderAppliedJobs();
+                    }
+                })
+                .catch((error) => {
+                    alert('Error applying for job: ' + error.message);
+                });
+            } else {
+                alert('You have already applied for this job');
+            }
+        }
+        
+        // Toggle save job action
+        function toggleSaveJob(jobId) {
+            if (!isLoggedIn) {
+                alert('Please login to save jobs');
+                showPage('login');
+                return;
+            }
+            
+            const job = jobListings.find(j => j.id === jobId);
+            const savedJobIndex = savedJobs.indexOf(jobId);
+            
+            if (savedJobIndex !== -1) {
+                // Already saved, so remove it
+                db.collection("users").doc(currentUser.uid).update({
+                    savedJobs: firebase.firestore.FieldValue.arrayRemove(jobId)
+                })
+                .then(() => {
+                    savedJobs.splice(savedJobIndex, 1);
+                    alert(`Removed ${job.title} at ${job.company} from your saved jobs`);
+                    renderJobListings();
+                    
+                    // Refresh the appropriate view
+                    if (document.getElementById('saved-tab').classList.contains('active')) {
+                        renderSavedJobs();
+                    }
+                })
+                .catch((error) => {
+                    alert('Error removing saved job: ' + error.message);
+                });
+            } else {
+                // Not saved, so add it
+                db.collection("users").doc(currentUser.uid).update({
+                    savedJobs: firebase.firestore.FieldValue.arrayUnion(jobId)
+                })
+                .then(() => {
+                    savedJobs.push(jobId);
+                    alert(`Saved ${job.title} at ${job.company} to your saved jobs!`);
+                    renderJobListings();
+                    
+                    // Refresh the appropriate view
+                    if (document.getElementById('saved-tab').classList.contains('active')) {
+                        renderSavedJobs();
+                    }
+                })
+                .catch((error) => {
+                    alert('Error saving job: ' + error.message);
+                });
+            }
+        }
+        
+        // View applications for a job
+        function viewApplications(jobId) {
+            const job = myPostedJobs.find(j => j.id === jobId);
+            if (job) {
+                document.getElementById('applicationsModal').classList.add('active');
+                renderApplications(jobId);
+            }
+        }
+        
+        // Edit job action
+        function editJob(jobId) {
+            const job = myPostedJobs.find(j => j.id === jobId);
+            if (job) {
+                document.getElementById('edit-job-id').value = job.id;
+                document.getElementById('edit-job-title').value = job.title;
+                document.getElementById('edit-company-name').value = job.company;
+                document.getElementById('edit-job-location').value = job.location;
+                document.getElementById('edit-job-type').value = job.type;
+                document.getElementById('edit-job-salary').value = job.salary;
+                document.getElementById('edit-job-contact').value = job.contact;
+                document.getElementById('edit-job-description').value = job.description;
+                document.getElementById('edit-job-requirements').value = job.requirements;
+                
+                document.getElementById('editJobModal').classList.add('active');
+            }
+        }
+        
+        // Handle delete job action
+        function handleDeleteJob(jobId) {
+            if (confirm('Are you sure you want to delete this job posting?')) {
+                db.collection("jobs").doc(jobId).delete()
+                    .then(() => {
+                        alert('Job deleted successfully');
+                        loadMyPostedJobs();
+                        loadJobs();
+                    })
+                    .catch((error) => {
+                        alert('Error deleting job: ' + error.message);
+                    });
+            }
+        }
+        
+        // Close applications modal
+        function closeApplicationsModal() {
+            document.getElementById('applicationsModal').classList.remove('active');
+        }
+        
+        // Close edit job modal
+        function closeEditJobModal() {
+            document.getElementById('editJobModal').classList.remove('active');
+        }
+        
+        // Page navigation function
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page-navigation').forEach(page => {
+                page.style.display = 'none';
+            });
+            
+            // Show the requested page
+            const pageElement = document.getElementById(`${pageId}-page`);
+            if (pageElement) {
+                pageElement.style.display = 'block';
+                
+                // Load content for specific pages
+                if (pageId === 'my-jobs') {
+                    loadMyPostedJobs();
+                    // Update email display
+                    if (currentUser) {
+                        document.getElementById('profile-email-display').textContent = currentUser.email;
+                    }
+                } else if (pageId === 'companies') {
+                    renderCompanies();
+                } else if (pageId === 'dashboard') {
+                    loadJobs();
+                }
+            }
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+            
+            // Close mobile menu if open
+            const mainNav = document.getElementById('mainNav');
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            if (mainNav.classList.contains('active')) {
+                mainNav.classList.remove('active');
+                mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+            }
+        }
+        
+        // Update navigation based on auth state and user type
+        function updateNavigation() {
+            const navList = document.getElementById('navList');
+            const headerCtaContainer = document.getElementById('headerCtaContainer');
+            const userMenu = document.getElementById('userMenu');
+            const userName = document.getElementById('userName');
+            const userAvatar = document.getElementById('userAvatar');
+            const jobseekerWelcome = document.getElementById('jobseekerWelcome');
+            const welcomeUserName = document.getElementById('welcomeUserName');
+            const employerElements = document.querySelectorAll('.employer-only');
+            
+            if (isLoggedIn && currentUser) {
+                // Remove Login/Register links
+                const authLinks = navList.querySelectorAll('li:nth-last-child(-n+2)');
+                authLinks.forEach(li => li.style.display = 'none');
+                
+                // Show user menu
+                userMenu.style.display = 'flex';
+                
+                // Update user info
+                userName.textContent = currentUser.name;
+                userAvatar.textContent = currentUser.name.split(' ').map(n => n[0]).join('');
+                
+                // Show/hide elements based on user type
+                if (currentUser.type === 'employer') {
+                    // Show employer-specific elements
+                    employerElements.forEach(el => el.style.display = 'block');
+                    headerCtaContainer.style.display = 'block';
+                    if (jobseekerWelcome) jobseekerWelcome.style.display = 'none';
+                } else {
+                    // Hide employer-specific elements
+                    employerElements.forEach(el => el.style.display = 'none');
+                    headerCtaContainer.style.display = 'none';
+                    if (jobseekerWelcome) {
+                        jobseekerWelcome.style.display = 'block';
+                        welcomeUserName.textContent = currentUser.name.split(' ')[0];
+                    }
+                }
+            } else {
+                // Show Login/Register links
+                const authLinks = navList.querySelectorAll('li:nth-last-child(-n+2)');
+                authLinks.forEach(li => li.style.display = 'list-item');
+                
+                // Hide user menu and employer elements
+                userMenu.style.display = 'none';
+                headerCtaContainer.style.display = 'none';
+                employerElements.forEach(el => el.style.display = 'none');
+                if (jobseekerWelcome) jobseekerWelcome.style.display = 'none';
+            }
+        }
+        
+        // Open job post modal
+        function openJobPostModal() {
+            if (!isLoggedIn) {
+                showPage('login');
+                return;
+            }
+            
+            if (currentUser.type !== 'employer') {
+                alert('Only employers can post jobs');
+                return;
+            }
+            
+            document.getElementById('jobPostModal').classList.add('active');
+        }
+        
+        // Close job post modal
+        function closeJobPostModal() {
+            document.getElementById('jobPostModal').classList.remove('active');
+        }
+        
+        // Logout function
+        function logout() {
+            auth.signOut().then(() => {
+                console.log("User signed out");
+            }).catch((error) => {
+                console.log("Error signing out: ", error);
+            });
+        }
+
+        // Sample data (for companies and initial display)
+        const sampleCompanies = [
+            {
+                id: 1,
+                name: "Tech Solutions India",
+                description: "A leading technology company specializing in IT services and digital solutions.",
+                jobs: 15,
+                logo: "tech"
+            },
+            {
+                id: 2,
+                name: "Digital Innovations Pvt Ltd",
+                description: "A digital transformation company helping businesses evolve with technology.",
+                jobs: 12,
+                logo: "digital"
+            },
+            {
+                id: 3,
+                name: "AppCreators India",
+                description: "Mobile app development company creating innovative solutions for businesses.",
+                jobs: 8,
+                logo: "appcreators"
+            },
+            {
+                id: 4,
+                name: "SoftTech Systems",
+                description: "Enterprise software solutions provider with a focus on innovation.",
+                jobs: 10,
+                logo: "softtech"
+            },
+            {
+                id: 5,
+                name: "DataMinds Analytics",
+                description: "Data analytics and business intelligence solutions company.",
+                jobs: 7,
+                logo: "dataminds"
+            },
+            {
+                id: 6,
+                name: "CloudNova Technologies",
+                description: "Cloud computing and infrastructure solutions provider.",
+                jobs: 9,
+                logo: "cloudnova"
+            }
+        ];
     </script>
 </body>
 </html>
