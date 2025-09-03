@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meechto Jobs and Business Ideas </title>
+    <title>Meechto Jobs - Find Your Dream Career</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
@@ -341,6 +341,30 @@
             font-size: 0.8rem;
         }
 
+        .job-description-text {
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            margin-bottom: 15px;
+        }
+
+        .job-description-text.expanded {
+            -webkit-line-clamp: unset;
+        }
+
+        .read-more-btn {
+            background: none;
+            border: none;
+            color: var(--secondary);
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+
         .job-actions {
             display: flex;
             gap: 10px;
@@ -479,6 +503,7 @@
         .footer-links {
             list-style: none;
             margin-top: 20px;
+            padding: 0;
         }
 
         .footer-links li {
@@ -858,6 +883,7 @@
             font-size: 2.2rem;
             color: var(--primary);
             margin-bottom: 20px;
+            text-align: center;
         }
 
         .settings-card {
@@ -1009,6 +1035,7 @@
             font-size: 2.2rem;
             color: var(--primary);
             margin-bottom: 20px;
+            text-align: center;
         }
 
         .companies-grid {
@@ -1107,6 +1134,213 @@
             gap: 10px;
         }
 
+        /* Success Animation */
+        .success-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .success-animation.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .success-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            animation: scaleIn 0.5s ease-out;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--success);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 40px;
+            animation: bounce 1s ease;
+        }
+
+        .success-content h3 {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+        }
+
+        .success-content p {
+            margin-bottom: 25px;
+            color: #666;
+            line-height: 1.6;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .success-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .success-btn {
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .success-primary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .success-primary:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .success-secondary {
+            background: #f1f1f1;
+            color: var(--text);
+        }
+
+        .success-secondary:hover {
+            background: #e1e1e1;
+            transform: translateY(-2px);
+        }
+
+        /* Share Modal */
+        .share-modal {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            width: 90%;
+            max-width: 500px;
+            padding: 30px;
+        }
+
+        .share-options {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 25px 0;
+        }
+
+        .share-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .share-option:hover {
+            transform: translateY(-5px);
+            opacity: 0.9;
+        }
+
+        .share-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .share-whatsapp {
+            background: #25D366;
+        }
+
+        .share-facebook {
+            background: #3b5998;
+        }
+
+        .share-linkedin {
+            background: #0077b5;
+        }
+
+        .share-twitter {
+            background: #1da1f2;
+        }
+
+        .share-link {
+            background: var(--secondary);
+        }
+
+        .share-input {
+            display: flex;
+            margin: 20px 0;
+        }
+
+        .share-input input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px 0 0 8px;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .share-input button {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 0 15px;
+            border-radius: 0 8px 8px 0;
+            cursor: pointer;
+        }
+
+        /* Language Selector */
+        .language-selector {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: white;
+            border-radius: 50px;
+            box-shadow: var(--shadow);
+            display: flex;
+            overflow: hidden;
+        }
+
+        .language-btn {
+            padding: 10px 15px;
+            border: none;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .language-btn.active {
+            background: var(--secondary);
+            color: white;
+        }
+
         /* Animations */
         @keyframes fadeIn {
             from {
@@ -1126,17 +1360,46 @@
             50% {
                 transform: scale(1.05);
             }
-            100% {
+            to {
                 transform: scale(1);
             }
         }
 
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, to {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+
         /* Responsive Design */
-        @media (max-width: 992px) {
+        @media (max-width: 1200px) {
+            .container {
+                padding: 0 15px;
+            }
+            
             .job-listings {
                 grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             }
-            
+        }
+
+        @media (max-width: 992px) {
             .settings-form {
                 grid-template-columns: 1fr;
             }
@@ -1214,6 +1477,12 @@
             .jobs-tabs {
                 overflow-x: auto;
                 padding-bottom: 10px;
+                white-space: nowrap;
+                display: flex;
+            }
+            
+            .tab-btn {
+                flex-shrink: 0;
             }
             
             .companies-grid {
@@ -1229,6 +1498,22 @@
             .application-actions {
                 width: 100%;
                 justify-content: space-between;
+            }
+            
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .success-actions {
+                flex-direction: column;
+            }
+            
+            .share-options {
+                flex-wrap: wrap;
+            }
+            
+            .settings-title, .companies-title {
+                font-size: 1.8rem;
             }
         }
 
@@ -1272,6 +1557,30 @@
                 flex-direction: column;
                 align-items: flex-start;
             }
+            
+            .logo-main {
+                font-size: 20px;
+            }
+            
+            .logo-symbol {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+            
+            .dashboard-title {
+                font-size: 1.8rem;
+            }
+            
+            .my-jobs-title {
+                font-size: 1.8rem;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .user-email {
+                margin-top: 10px;
+            }
         }
     </style>
 </head>
@@ -1281,7 +1590,7 @@
             <a href="#" class="logo" onclick="showPage('dashboard')">
                 <div class="logo-symbol">M</div>
                 <div class="logo-text">
-                    <div class="logo-main">MEECHTO</div>
+                    <div class="logo-main">MECHTO</div>
                     <div class="logo-sub">JOB PORTAL</div>
                 </div>
             </a>
@@ -1292,16 +1601,16 @@
             
             <nav id="mainNav">
                 <ul id="navList">
-                    <li><a href="#" onclick="showPage('dashboard')">Home</a></li>
-                    <li><a href="#" onclick="showPage('companies')">Companies</a></li>
-                    <li><a href="#">Career Tips</a></li>
-                    <li><a href="#" onclick="showPage('login')">Login</a></li>
-                    <li><a href="#" onclick="showPage('register')">Register</a></li>
+                    <li><a href="#" onclick="showPage('dashboard')" data-i18n="home">Home</a></li>
+                    <li><a href="#" onclick="showPage('companies')" data-i18n="companies">Companies</a></li>
+                    <li><a href="#" data-i18n="careerTips">Career Tips</a></li>
+                    <li><a href="#" onclick="showPage('login')" data-i18n="login">Login</a></li>
+                    <li><a href="#" onclick="showPage('register')" data-i18n="register">Register</a></li>
                 </ul>
             </nav>
             
             <div id="headerCtaContainer" style="display: none;">
-                <button class="header-cta employer-only" onclick="openJobPostModal()">Post a Job <i class="fas fa-arrow-right"></i></button>
+                <button class="header-cta employer-only" onclick="openJobPostModal()" data-i18n="postJob">Post a Job <i class="fas fa-arrow-right"></i></button>
             </div>
 
             <div class="user-menu" id="userMenu">
@@ -1309,10 +1618,10 @@
                 <span id="userName">John Doe</span>
                 <i class="fas fa-chevron-down"></i>
                 <div class="user-dropdown" id="userDropdown">
-                    <a href="#" onclick="showPage('dashboard')"><i class="fas fa-home"></i> Dashboard</a>
-                    <a href="#" class="employer-only" onclick="showPage('my-jobs')"><i class="fas fa-briefcase"></i> My Jobs</a>
-                    <a href="#" onclick="showPage('settings')"><i class="fas fa-cog"></i> Settings</a>
-                    <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    <a href="#" onclick="showPage('dashboard')"><i class="fas fa-home"></i> <span data-i18n="dashboard">Dashboard</span></a>
+                    <a href="#" class="employer-only" onclick="showPage('my-jobs')"><i class="fas fa-briefcase"></i> <span data-i18n="myJobs">My Jobs</span></a>
+                    <a href="#" onclick="showPage('settings')"><i class="fas fa-cog"></i> <span data-i18n="settings">Settings</span></a>
+                    <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> <span data-i18n="logout">Logout</span></a>
                 </div>
             </div>
         </div>
@@ -1322,10 +1631,10 @@
     <section class="dashboard page-navigation" id="dashboard-page">
         <div class="container">
             <div class="dashboard-header">
-                <h2 class="dashboard-title">Find Your Dream Job & Business Ideas</h2>
+                <h2 class="dashboard-title" data-i18n="findDreamJob">Find Your Dream Job</h2>
                 <div class="search-container">
                     <div class="search-box">
-                        <input type="text" id="searchInput" placeholder="Search jobs by title, company, or keywords">
+                        <input type="text" id="searchInput" placeholder="Search jobs by title, company, or keywords" data-i18n-ph="searchJobs">
                         <button id="searchButton"><i class="fas fa-search"></i></button>
                     </div>
                 </div>
@@ -1333,8 +1642,8 @@
             
             <!-- Job Seeker Welcome Section -->
             <div class="jobseeker-welcome" id="jobseekerWelcome" style="display: none;">
-                <h2>Welcome to Your Job Search, <span id="welcomeUserName">John</span>!</h2>
-                <p>We've found some great opportunities that match your profile. Start applying today!</p>
+                <h2 data-i18n="welcomeJobSearch">Welcome to Your Job Search, <span id="welcomeUserName">John</span>!</h2>
+                <p data-i18n="welcomeOpportunities">We've found some great opportunities that match your profile. Start applying today!</p>
             </div>
             
             <div class="job-listings" id="jobListingsContainer">
@@ -1342,7 +1651,7 @@
             </div>
             
             <div class="view-more">
-                <button class="view-more-btn" id="loadMoreBtn">Load More Jobs</button>
+                <button class="view-more-btn" id="loadMoreBtn" data-i18n="loadMoreJobs">Load More Jobs</button>
             </div>
         </div>
     </section>
@@ -1351,8 +1660,8 @@
     <section class="companies-page page-navigation" id="companies-page">
         <div class="container">
             <div class="companies-header">
-                <h2 class="companies-title">Top Companies</h2>
-                <p>Discover companies that are hiring right now</p>
+                <h2 class="companies-title" data-i18n="topCompanies">Top Companies</h2>
+                <p data-i18n="discoverCompanies">Discover companies that are hiring right now</p>
             </div>
             
             <div class="companies-grid" id="companiesGrid">
@@ -1365,33 +1674,30 @@
     <section class="auth-container page-navigation" id="login-page">
         <div class="auth-card">
             <div class="auth-header">
-                <h2>Welcome Back</h2>
-                <p>Sign in to access your account</p>
+                <h2 data-i18n="welcomeBack">Welcome Back</h2>
+                <p data-i18n="signInToAccess">Sign in to access your account</p>
             </div>
             <div class="auth-body">
                 <form class="auth-form" id="login-form">
                     <div class="form-group">
-                        <label for="login-email">Email Address</label>
-                        <input type="email" id="login-email" class="form-control" placeholder="Enter your email" required>
+                        <label for="login-email" data-i18n="emailAddress">Email Address</label>
+                        <input type="email" id="login-email" class="form-control" placeholder="Enter your email" data-i18n-ph="enterEmail" required>
                     </div>
                     <div class="form-group">
-                        <label for="login-password">Password</label>
-                        <input type="password" id="login-password" class="form-control" placeholder="Enter your password" required>
+                        <label for="login-password" data-i18n="password">Password</label>
+                        <input type="password" id="login-password" class="form-control" placeholder="Enter your password" data-i18n-ph="enterPassword" required>
                         <button type="button" class="password-toggle" id="login-password-toggle">
                             <i class="fas fa-eye"></i>
                         </button>
                     </div>
                     <div class="form-group">
-                        <a href="#" style="text-align: right; font-size: 0.9rem;">Forgot Password?</a>
+                        <a href="#" style="text-align: right; font-size: 0.9rem;" data-i18n="forgotPassword">Forgot Password?</a>
                     </div>
-                    <button type="submit" class="auth-submit">Sign In</button>
+                    <button type="submit" class="auth-submit" data-i18n="signIn">Sign In</button>
                 </form>
                 <div class="auth-footer">
-                    <p>Don't have an account? <a href="#" onclick="showPage('register')">Register Now</a></p>
+                    <p data-i18n="noAccount">Don't have an account? <a href="#" onclick="showPage('register')" data-i18n="registerNow">Register Now</a></p>
                 </div>
-            </div>
-            <div class="auth-footer">
-                <p>Logged in as: <span id="login-email-display">Not logged in</span></p>
             </div>
         </div>
     </section>
@@ -1400,58 +1706,55 @@
     <section class="auth-container page-navigation" id="register-page">
         <div class="auth-card">
             <div class="auth-header">
-                <h2>Create Account</h2>
-                <p>Join thousands of professionals finding their dream jobs</p>
+                <h2 data-i18n="createAccount">Create Account</h2>
+                <p data-i18n="joinProfessionals">Join thousands of professionals finding their dream jobs</p>
             </div>
             <div class="auth-body">
                 <form class="auth-form" id="register-form">
                     <div class="form-group">
-                        <label>I am a</label>
+                        <label data-i18n="iAmA">I am a</label>
                         <div class="user-type-selector">
                             <div class="user-type-btn" data-type="jobseeker">
                                 <i class="fas fa-user-tie"></i>
-                                <div>Job Seeker</div>
+                                <div data-i18n="jobSeeker">Job Seeker</div>
                             </div>
                             <div class="user-type-btn" data-type="employer">
                                 <i class="fas fa-building"></i>
-                                <div>Employer</div>
+                                <div data-i18n="employer">Employer</div>
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="register-name">Full Name</label>
-                        <input type="text" id="register-name" class="form-control" placeholder="Enter your full name" required>
+                        <label for="register-name" data-i18n="fullName">Full Name</label>
+                        <input type="text" id="register-name" class="form-control" placeholder="Enter your full name" data-i18n-ph="enterFullName" required>
                     </div>
                     <div class="form-group">
-                        <label for="register-email">Email Address</label>
-                        <input type="email" id="register-email" class="form-control" placeholder="Enter your email" required>
+                        <label for="register-email" data-i18n="emailAddress">Email Address</label>
+                        <input type="email" id="register-email" class="form-control" placeholder="Enter your email" data-i18n-ph="enterEmail" required>
                     </div>
                     <div class="form-group">
-                        <label for="register-password">Password</label>
-                        <input type="password" id="register-password" class="form-control" placeholder="Create a password" required>
+                        <label for="register-password" data-i18n="password">Password</label>
+                        <input type="password" id="register-password" class="form-control" placeholder="Create a password" data-i18n-ph="createPassword" required>
                         <button type="button" class="password-toggle" id="register-password-toggle">
                             <i class="fas fa-eye"></i>
                         </button>
                     </div>
                     <div class="form-group">
-                        <label for="register-confirm">Confirm Password</label>
-                        <input type="password" id="register-confirm" class="form-control" placeholder="Confirm your password" required>
+                        <label for="register-confirm" data-i18n="confirmPassword">Confirm Password</label>
+                        <input type="password" id="register-confirm" class="form-control" placeholder="Confirm your password" data-i18n-ph="confirmPassword" required>
                         <button type="button" class="password-toggle" id="register-confirm-toggle">
                             <i class="fas fa-eye"></i>
                         </button>
                     </div>
                     <div class="form-group">
                         <input type="checkbox" id="terms" required>
-                        <label for="terms" style="display: inline; font-size: 0.9rem;">I agree to the <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a></label>
+                        <label for="terms" style="display: inline; font-size: 0.9rem;" data-i18n="agreeTerms">I agree to the <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a></label>
                     </div>
-                    <button type="submit" class="auth-submit">Create Account</button>
+                    <button type="submit" class="auth-submit" data-i18n="createAccount">Create Account</button>
                 </form>
                 <div class="auth-footer">
-                    <p>Already have an account? <a href="#" onclick="showPage('login')">Sign In</a></p>
+                    <p data-i18n="alreadyAccount">Already have an account? <a href="#" onclick="showPage('login')" data-i18n="signIn">Sign In</a></p>
                 </div>
-            </div>
-            <div class="auth-footer">
-                <p>Your email: <span id="register-email-display">Not provided yet</span></p>
             </div>
         </div>
     </section>
@@ -1460,11 +1763,11 @@
     <section class="my-jobs page-navigation" id="my-jobs-page">
         <div class="container">
             <div class="my-jobs-header">
-                <h2 class="my-jobs-title">My Jobs <span class="user-email" id="profile-email-display">user@example.com</span></h2>
+                <h2 class="my-jobs-title" data-i18n="myJobs">My Jobs <span class="user-email" id="profile-email-display">user@example.com</span></h2>
                 <div class="jobs-tabs">
-                    <button class="tab-btn active" data-tab="posted">Posted Jobs</button>
-                    <button class="tab-btn" data-tab="applications">Applications</button>
-                    <button class="tab-btn" data-tab="saved">Saved Jobs</button>
+                    <button class="tab-btn active" data-tab="posted" data-i18n="postedJobs">Posted Jobs</button>
+                    <button class="tab-btn" data-tab="applications" data-i18n="applications">Applications</button>
+                    <button class="tab-btn" data-tab="saved" data-i18n="savedJobs">Saved Jobs</button>
                 </div>
             </div>
             
@@ -1473,25 +1776,19 @@
                     <!-- Posted jobs will be loaded here -->
                 </div>
                 <div class="view-more">
-                    <button class="view-more-btn" onclick="openJobPostModal()">Post a New Job</button>
+                    <button class="view-more-btn" onclick="openJobPostModal()" data-i18n="postNewJob">Post a New Job</button>
                 </div>
             </div>
             
             <div class="tab-content" id="applications-tab">
-                <div class="empty-state">
-                    <i class="fas fa-file-alt"></i>
-                    <h3>No applications yet</h3>
-                    <p>You haven't applied to any jobs yet. Start browsing jobs to apply!</p>
-                    <button class="view-more-btn" onclick="showPage('dashboard')">Browse Jobs</button>
+                <div class="job-listings" id="applicationsContainer">
+                    <!-- Applications will be loaded here -->
                 </div>
             </div>
             
             <div class="tab-content" id="saved-tab">
-                <div class="empty-state">
-                    <i class="fas fa-bookmark"></i>
-                    <h3>No saved jobs</h3>
-                    <p>You haven't saved any jobs yet. Start browsing jobs to save them for later!</p>
-                    <button class="view-more-btn" onclick="showPage('dashboard')">Browse Jobs</button>
+                <div class="job-listings" id="savedJobsContainer">
+                    <!-- Saved jobs will be loaded here -->
                 </div>
             </div>
         </div>
@@ -1501,117 +1798,113 @@
     <section class="settings page-navigation" id="settings-page">
         <div class="container">
             <div class="settings-header">
-                <h2 class="settings-title">Account Settings</h2>
+                <h2 class="settings-title" data-i18n="accountSettings">Account Settings</h2>
             </div>
             
             <div class="settings-card">
                 <div class="settings-card-header">
-                    <h3 class="settings-card-title">Profile Information</h3>
+                    <h3 class="settings-card-title" data-i18n="profileInformation">Profile Information</h3>
                 </div>
                 <form class="settings-form" id="profile-form">
                     <div class="form-group">
-                        <label for="profile-name">Full Name</label>
+                        <label for="profile-name" data-i18n="fullName">Full Name</label>
                         <input type="text" id="profile-name" class="form-control" value="John Doe" required>
                     </div>
                     <div class="form-group">
-                        <label for="profile-email">Email Address</label>
+                        <label for="profile-email" data-i18n="emailAddress">Email Address</label>
                         <input type="email" id="profile-email" class="form-control" value="john.doe@example.com" required>
                     </div>
                     <div class="form-group">
-                        <label for="profile-phone">Phone Number</label>
+                        <label for="profile-phone" data-i18n="phoneNumber">Phone Number</label>
                         <input type="tel" id="profile-phone" class="form-control" value="+91 98765 43210">
                     </div>
                     <div class="form-group">
-                        <label for="profile-location">Location</label>
+                        <label for="profile-location" data-i18n="location">Location</label>
                         <input type="text" id="profile-location" class="form-control" value="Mumbai, Maharashtra">
                     </div>
                     <div class="form-group full-width">
-                        <label for="profile-bio">Bio</label>
-                        <textarea id="profile-bio" class="form-control" rows="4" placeholder="Tell us about yourself">Experienced software developer with a passion for creating innovative web applications. Specialized in JavaScript frameworks and cloud technologies.</textarea>
-                    </div>
-                    <div class="form-group full-width">
-                        <button type="submit" class="save-btn-settings">Save Changes</button>
+                        <button type="submit" class="save-btn-settings" data-i18n="saveChanges">Save Changes</button>
                     </div>
                 </form>
             </div>
             
             <div class="settings-card">
                 <div class="settings-card-header">
-                    <h3 class="settings-card-title">Language Preferences</h3>
+                    <h3 class="settings-card-title" data-i18n="languagePreferences">Language Preferences</h3>
                 </div>
                 <form class="settings-form" id="language-form">
                     <div class="form-group full-width">
-                        <label for="language-select">Preferred Language</label>
+                        <label for="language-select" data-i18n="preferredLanguage">Preferred Language</label>
                         <select id="language-select" class="form-control">
                             <option value="english">English</option>
                             <option value="marathi">Marathi</option>
                         </select>
                     </div>
                     <div class="form-group full-width">
-                        <button type="submit" class="save-btn-settings">Save Language</button>
+                        <button type="submit" class="save-btn-settings" data-i18n="saveLanguage">Save Language</button>
                     </div>
                 </form>
             </div>
             
             <div class="settings-card">
                 <div class="settings-card-header">
-                    <h3 class="settings-card-title">Security Settings</h3>
+                    <h3 class="settings-card-title" data-i18n="securitySettings">Security Settings</h3>
                 </div>
                 <form class="settings-form" id="security-form">
                     <div class="form-group">
-                        <label for="current-password">Current Password</label>
-                        <input type="password" id="current-password" class="form-control" placeholder="Enter current password">
+                        <label for="current-password" data-i18n="currentPassword">Current Password</label>
+                        <input type="password" id="current-password" class="form-control" placeholder="Enter current password" data-i18n-ph="enterCurrentPassword">
                         <button type="button" class="password-toggle" id="current-password-toggle">
                             <i class="fas fa-eye"></i>
                         </button>
                     </div>
                     <div class="form-group">
-                        <label for="new-password">New Password</label>
-                        <input type="password" id="new-password" class="form-control" placeholder="Enter new password">
+                        <label for="new-password" data-i18n="newPassword">New Password</label>
+                        <input type="password" id="new-password" class="form-control" placeholder="Enter new password" data-i18n-ph="enterNewPassword">
                         <button type="button" class="password-toggle" id="new-password-toggle">
                             <i class="fas fa-eye"></i>
                         </button>
                     </div>
                     <div class="form-group">
-                        <label for="confirm-password">Confirm New Password</label>
-                        <input type="password" id="confirm-password" class="form-control" placeholder="Confirm new password">
+                        <label for="confirm-password" data-i18n="confirmNewPassword">Confirm New Password</label>
+                        <input type="password" id="confirm-password" class="form-control" placeholder="Confirm new password" data-i18n-ph="confirmNewPassword">
                         <button type="button" class="password-toggle" id="confirm-password-toggle">
                             <i class="fas fa-eye"></i>
                         </button>
                     </div>
                     <div class="form-group full-width">
-                        <button type="submit" class="save-btn-settings">Update Password</button>
+                        <button type="submit" class="save-btn-settings" data-i18n="updatePassword">Update Password</button>
                     </div>
                 </form>
             </div>
             
             <div class="settings-card">
                 <div class="settings-card-header">
-                    <h3 class="settings-card-title">Notification Preferences</h3>
+                    <h3 class="settings-card-title" data-i18n="notificationPreferences">Notification Preferences</h3>
                 </div>
                 <form class="settings-form" id="notifications-form">
                     <div class="form-group full-width">
                         <label style="font-weight: normal;">
-                            <input type="checkbox" checked> Email notifications
+                            <input type="checkbox" checked> <span data-i18n="emailNotifications">Email notifications</span>
                         </label>
                     </div>
                     <div class="form-group full-width">
                         <label style="font-weight: normal;">
-                            <input type="checkbox" checked> Job alerts
+                            <input type="checkbox" checked> <span data-i18n="jobAlerts">Job alerts</span>
                         </label>
                     </div>
                     <div class="form-group full-width">
                         <label style="font-weight: normal;">
-                            <input type="checkbox" checked> Application updates
+                            <input type="checkbox" checked> <span data-i18n="applicationUpdates">Application updates</span>
                         </label>
                     </div>
                     <div class="form-group full-width">
                         <label style="font-weight: normal;">
-                            <input type="checkbox"> Newsletter
+                            <input type="checkbox"> <span data-i18n="newsletter">Newsletter</span>
                         </label>
                     </div>
                     <div class="form-group full-width">
-                        <button type="submit" class="save-btn-settings">Save Preferences</button>
+                        <button type="submit" class="save-btn-settings" data-i18n="savePreferences">Save Preferences</button>
                     </div>
                 </form>
             </div>
@@ -1622,51 +1915,73 @@
     <div class="modal-overlay" id="jobPostModal">
         <div class="job-post-modal">
             <div class="modal-header">
-                <h2>Post a New Job</h2>
+                <h2 data-i18n="postNewJob">Post a New Job</h2>
                 <button class="close-modal" onclick="closeJobPostModal()">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             <form class="modal-form" id="job-post-form">
                 <div class="form-group">
-                    <label for="job-title">Job Title</label>
-                    <input type="text" id="job-title" class="form-control" placeholder="e.g. Senior Web Developer" required>
+                    <label for="job-title" data-i18n="jobTitle">Job Title</label>
+                    <input type="text" id="job-title" class="form-control" placeholder="e.g. Senior Web Developer" data-i18n-ph="jobTitlePlaceholder" required>
                 </div>
                 <div class="form-group">
-                    <label for="company-name">Company Name</label>
-                    <input type="text" id="company-name" class="form-control" placeholder="Enter company name" required>
+                    <label for="company-name" data-i18n="companyName">Company Name</label>
+                    <input type="text" id="company-name" class="form-control" placeholder="Enter company name" data-i18n-ph="enterCompanyName" required>
                 </div>
                 <div class="form-group">
-                    <label for="job-location">Location</label>
-                    <input type="text" id="job-location" class="form-control" placeholder="e.g. Mumbai, Maharashtra or Remote" required>
+                    <label for="job-location" data-i18n="location">Location</label>
+                    <input type="text" id="job-location" class="form-control" placeholder="e.g. Mumbai, Maharashtra or Remote" data-i18n-ph="locationPlaceholder" required>
                 </div>
                 <div class="form-group">
-                    <label for="job-type">Job Type</label>
+                    <label for="job-type" data-i18n="jobType">Job Type</label>
                     <select id="job-type" class="form-control" required>
-                        <option value="">Select job type</option>
-                        <option value="Full-time">Full-time</option>
-                        <option value="Part-time">Part-time</option>
-                        <option value="Contract">Contract</option>
+                        <option value="" data-i18n="selectJobType">Select job type</option>
+                        <option value="Full-time" data-i18n="fullTime">Full-time</option>
+                        <option value="Part-time" data-i18n="partTime">Part-time</option>
+                        <option value="Contract" data-i18n="contract">Contract</option>
                         <option value="NAPS">NAPS</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="job-salary">Salary Range (₹)</label>
-                    <input type="text" id="job-salary" class="form-control" placeholder="e.g. ₹8,00,000 - ₹10,00,000" required>
+                    <label for="job-shift" data-i18n="shift">Shift</label>
+                    <select id="job-shift" class="form-control" required>
+                        <option value="" data-i18n="selectShift">Select shift</option>
+                        <option value="1st Shift" data-i18n="firstShift">1st Shift</option>
+                        <option value="2nd Shift" data-i18n="secondShift">2nd Shift</option>
+                        <option value="3rd Shift" data-i18n="thirdShift">3rd Shift</option>
+                        <option value="General" data-i18n="general">General</option>
+                    </select>
                 </div>
                 <div class="form-group">
-                    <label for="job-contact">Contact Number</label>
-                    <input type="text" id="job-contact" class="form-control" placeholder="e.g. +91 98765 43210" required>
+                    <label for="job-salary" data-i18n="salaryRange">Salary Range (₹)</label>
+                    <input type="text" id="job-salary" class="form-control" placeholder="e.g. ₹8,00,000 - ₹10,00,000" data-i18n-ph="salaryPlaceholder" required>
                 </div>
                 <div class="form-group">
-                    <label for="job-description">Job Description</label>
-                    <textarea id="job-description" class="form-control" rows="5" placeholder="Describe the job responsibilities and requirements" required></textarea>
+                    <label for="job-contact" data-i18n="contactNumber">Contact Number</label>
+                    <input type="text" id="job-contact" class="form-control" placeholder="e.g. +91 98765 43210" data-i18n-ph="contactPlaceholder" required>
                 </div>
                 <div class="form-group">
-                    <label for="job-requirements">Skills</label>
-                    <textarea id="job-requirements" class="form-control" rows="3" placeholder="List the required skills" required></textarea>
+                    <label for="job-vacancies" data-i18n="numberOfVacancies">Number of Vacancies</label>
+                    <input type="number" id="job-vacancies" class="form-control" placeholder="e.g. 5" data-i18n-ph="vacanciesPlaceholder" min="1" required>
                 </div>
-                <button type="submit" class="auth-submit">Post Job</button>
+                <div class="form-group">
+                    <label for="job-gender" data-i18n="genderPreference">Gender Preference</label>
+                    <select id="job-gender" class="form-control">
+                        <option value="Any" data-i18n="any">Any</option>
+                        <option value="Male" data-i18n="male">Male</option>
+                        <option value="Female" data-i18n="female">Female</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="job-description" data-i18n="jobDescription">Job Description</label>
+                    <textarea id="job-description" class="form-control" rows="5" placeholder="Describe the job responsibilities and requirements" data-i18n-ph="jobDescriptionPlaceholder" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="job-requirements" data-i18n="skills">Skills</label>
+                    <textarea id="job-requirements" class="form-control" rows="3" placeholder="List the required skills" data-i18n-ph="skillsPlaceholder" required></textarea>
+                </div>
+                <button type="submit" class="auth-submit" data-i18n="postJob">Post Job</button>
             </form>
         </div>
     </div>
@@ -1675,7 +1990,7 @@
     <div class="modal-overlay" id="applicationsModal">
         <div class="applications-modal">
             <div class="modal-header">
-                <h2>Job Applications</h2>
+                <h2 data-i18n="jobApplications">Job Applications</h2>
                 <button class="close-modal" onclick="closeApplicationsModal()">
                     <i class="fas fa-times"></i>
                 </button>
@@ -1690,7 +2005,7 @@
     <div class="modal-overlay" id="editJobModal">
         <div class="job-post-modal">
             <div class="modal-header">
-                <h2>Edit Job Posting</h2>
+                <h2 data-i18n="editJobPosting">Edit Job Posting</h2>
                 <button class="close-modal" onclick="closeEditJobModal()">
                     <i class="fas fa-times"></i>
                 </button>
@@ -1698,101 +2013,171 @@
             <form class="modal-form" id="edit-job-form">
                 <input type="hidden" id="edit-job-id">
                 <div class="form-group">
-                    <label for="edit-job-title">Job Title</label>
-                    <input type="text" id="edit-job-title" class="form-control" placeholder="e.g. Senior Web Developer" required>
+                    <label for="edit-job-title" data-i18n="jobTitle">Job Title</label>
+                    <input type="text" id="edit-job-title" class="form-control" placeholder="e.g. Senior Web Developer" data-i18n-ph="jobTitlePlaceholder" required>
                 </div>
                 <div class="form-group">
-                    <label for="edit-company-name">Company Name</label>
-                    <input type="text" id="edit-company-name" class="form-control" placeholder="Enter company name" required>
+                    <label for="edit-company-name" data-i18n="companyName">Company Name</label>
+                    <input type="text" id="edit-company-name" class="form-control" placeholder="Enter company name" data-i18n-ph="enterCompanyName" required>
                 </div>
                 <div class="form-group">
-                    <label for="edit-job-location">Location</label>
-                    <input type="text" id="edit-job-location" class="form-control" placeholder="e.g. Mumbai, Maharashtra or Remote" required>
+                    <label for="edit-job-location" data-i18n="location">Location</label>
+                    <input type="text" id="edit-job-location" class="form-control" placeholder="e.g. Mumbai, Maharashtra or Remote" data-i18n-ph="locationPlaceholder" required>
                 </div>
                 <div class="form-group">
-                    <label for="edit-job-type">Job Type</label>
+                    <label for="edit-job-type" data-i18n="jobType">Job Type</label>
                     <select id="edit-job-type" class="form-control" required>
-                        <option value="">Select job type</option>
-                        <option value="Full-time">Full-time</option>
-                        <option value="Part-time">Part-time</option>
-                        <option value="Contract">Contract</option>
+                        <option value="" data-i18n="selectJobType">Select job type</option>
+                        <option value="Full-time" data-i18n="fullTime">Full-time</option>
+                        <option value="Part-time" data-i18n="partTime">Part-time</option>
+                        <option value="Contract" data-i18n="contract">Contract</option>
                         <option value="NAPS">NAPS</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="edit-job-salary">Salary Range (₹)</label>
-                    <input type="text" id="edit-job-salary" class="form-control" placeholder="e.g. ₹8,00,000 - ₹10,00,000" required>
+                    <label for="edit-job-shift" data-i18n="shift">Shift</label>
+                    <select id="edit-job-shift" class="form-control" required>
+                        <option value="" data-i18n="selectShift">Select shift</option>
+                        <option value="1st Shift" data-i18n="firstShift">1st Shift</option>
+                        <option value="2nd Shift" data-i18n="secondShift">2nd Shift</option>
+                        <option value="3rd Shift" data-i18n="thirdShift">3rd Shift</option>
+                        <option value="General" data-i18n="general">General</option>
+                    </select>
                 </div>
                 <div class="form-group">
-                    <label for="edit-job-contact">Contact Number</label>
-                    <input type="text" id="edit-job-contact" class="form-control" placeholder="e.g. +91 98765 43210" required>
+                    <label for="edit-job-salary" data-i18n="salaryRange">Salary Range (₹)</label>
+                    <input type="text" id="edit-job-salary" class="form-control" placeholder="e.g. ₹8,00,000 - ₹10,00,000" data-i18n-ph="salaryPlaceholder" required>
                 </div>
                 <div class="form-group">
-                    <label for="edit-job-description">Job Description</label>
-                    <textarea id="edit-job-description" class="form-control" rows="5" placeholder="Describe the job responsibilities and requirements" required></textarea>
+                    <label for="edit-job-contact" data-i18n="contactNumber">Contact Number</label>
+                    <input type="text" id="edit-job-contact" class="form-control" placeholder="e.g. +91 98765 43210" data-i18n-ph="contactPlaceholder" required>
                 </div>
                 <div class="form-group">
-                    <label for="edit-job-requirements">Skills</label>
-                    <textarea id="edit-job-requirements" class="form-control" rows="3" placeholder="List the required skills" required></textarea>
+                    <label for="edit-job-vacancies" data-i18n="numberOfVacancies">Number of Vacancies</label>
+                    <input type="number" id="edit-job-vacancies" class="form-control" placeholder="e.g. 5" data-i18n-ph="vacanciesPlaceholder" min="1" required>
                 </div>
-                <button type="submit" class="auth-submit">Update Job</button>
+                <div class="form-group">
+                    <label for="edit-job-gender" data-i18n="genderPreference">Gender Preference</label>
+                    <select id="edit-job-gender" class="form-control">
+                        <option value="Any" data-i18n="any">Any</option>
+                        <option value="Male" data-i18n="male">Male</option>
+                        <option value="Female" data-i18n="female">Female</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="edit-job-description" data-i18n="jobDescription">Job Description</label>
+                    <textarea id="edit-job-description" class="form-control" rows="5" placeholder="Describe the job responsibilities and requirements" data-i18n-ph="jobDescriptionPlaceholder" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="edit-job-requirements" data-i18n="skills">Skills</label>
+                    <textarea id="edit-job-requirements" class="form-control" rows="3" placeholder="List the required skills" data-i18n-ph="skillsPlaceholder" required></textarea>
+                </div>
+                <button type="submit" class="auth-submit" data-i18n="updateJob">Update Job</button>
+                <button type="button" class="auth-submit" style="background: var(--accent); margin-top: 10px;" onclick="handleDeleteJob(document.getElementById('edit-job-id').value)" data-i18n="deleteJob">Delete Job</button>
             </form>
         </div>
+    </div>
+
+    <!-- Success Animation Modal -->
+    <div class="success-animation" id="successAnimation">
+        <div class="success-content">
+            <div class="success-icon">
+                <i class="fas fa-check"></i>
+            </div>
+            <h3 id="successTitle">Success!</h3>
+            <p id="successMessage">Your action was completed successfully.</p>
+            <div class="success-actions">
+                <button class="success-btn success-primary" onclick="closeSuccessAnimation()" data-i18n="continue">Continue</button>
+                <button class="success-btn success-secondary" onclick="closeSuccessAnimation()" data-i18n="close">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Share Modal -->
+    <div class="modal-overlay" id="shareModal">
+        <div class="share-modal">
+            <div class="modal-header">
+                <h2 data-i18n="shareJobPosting">Share Job Posting</h2>
+                <button class="close-modal" onclick="closeShareModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="share-options">
+                <div class="share-option" onclick="shareJob('whatsapp')">
+                    <div class="share-icon share-whatsapp">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <span>WhatsApp</span>
+                </div>
+                <div class="share-option" onclick="shareJob('facebook')">
+                    <div class="share-icon share-facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </div>
+                    <span>Facebook</span>
+                </div>
+                <div class="share-option" onclick="shareJob('linkedin')">
+                    <div class="share-icon share-linkedin">
+                        <i class="fab fa-linkedin-in"></i>
+                    </div>
+                    <span>LinkedIn</span>
+                </div>
+                <div class="share-option" onclick="shareJob('twitter')">
+                    <div class="share-icon share-twitter">
+                        <i class="fab fa-twitter"></i>
+                    </div>
+                    <span>Twitter</span>
+                </div>
+            </div>
+            <div class="share-input">
+                <input type="text" id="shareLink" readonly>
+                <button onclick="copyShareLink()"><i class="fas fa-copy"></i></button>
+            </div>
+            <p style="text-align: center; font-size: 0.9rem; color: #666;" data-i18n="copyLinkToShare">Copy the link to share this job posting</p>
+        </div>
+    </div>
+
+    <!-- Language Selector -->
+    <div class="language-selector">
+        <button class="language-btn active" data-lang="en">EN</button>
+        <button class="language-btn" data-lang="mr">मराठी</button>
     </div>
 
     <footer>
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-col">
-                    <a href="#" class="logo" style="margin-bottom: 20px; display: inline-block;">
-                        <div class="logo-symbol">M</div>
-                        <div class="logo-text">
-                            <div class="logo-main">MECHTO</div>
-                            <div class="logo-sub">JOB PORTAL</div>
-                        </div>
-                    </a>
-                    <p>Connecting talented professionals with top companies across India. Find your dream job today!</p>
-                    <div class="social-icons">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="https://www.instagram.com/meechto"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                </div>
-                
-                <div class="footer-col">
-                    <h3>For Job Seekers</h3>
+                    <h3 data-i18n="forJobSeekers">For Job Seekers</h3>
                     <ul class="footer-links">
-                        <li><a href="#" onclick="showPage('dashboard')"><i class="fas fa-chevron-right"></i> Browse Jobs</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> Create Profile</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> Job Alerts</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> Career Advice</a></li>
+                        <li><a href="#" onclick="showPage('dashboard')"><i class="fas fa-chevron-right"></i> <span data-i18n="browseJobs">Browse Jobs</span></a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> <span data-i18n="createProfile">Create Profile</span></a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> <span data-i18n="jobAlerts">Job Alerts</span></a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> <span data-i18n="careerAdvice">Career Advice</span></a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-col">
-                    <h3>For Employers</h3>
+                    <h3 data-i18n="forEmployers">For Employers</h3>
                     <ul class="footer-links">
-                        <li><a href="#" onclick="openJobPostModal()"><i class="fas fa-chevron-right"></i> Post a Job</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> Browse Candidates</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> Recruiting Solutions</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> Pricing Plans</a></li>
+                        <li><a href="#" onclick="openJobPostModal()"><i class="fas fa-chevron-right"></i> <span data-i18n="postJob">Post a Job</span></a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> <span data-i18n="browseCandidates">Browse Candidates</span></a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> <span data-i18n="recruitingSolutions">Recruiting Solutions</span></a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> <span data-i18n="pricingPlans">Pricing Plans</span></a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-col">
-                    <h3>Contact Us</h3>
+                    <h3 data-i18n="contactUs">Contact Us</h3>
                     <ul class="footer-links">
-                        <li><a href="#"><i class="fas fa-map-marker-alt"></i> Pune ,Maharashtra</a></li>
-                        <li><a href="#"><i class="fas fa-phone"></i> +91 9421960833</a></li>
-                        <li><a href="#"><i class="fas fa-envelope"></i> meeechto@gmail.com</a></li>
-                        <li><a href="#"><i class="fas fa-clock"></i> Mon-Fri: 9AM-6PM</a></li>
+                        <li><a href="#"><i class="fas fa-map-marker-alt"></i> <span data-i18n="companyAddress">1234 Job Street, Mumbai, Maharashtra</span></a></li>
+                        <li><a href="#"><i class="fas fa-phone"></i> +91 9552586480</a></li>
+                        <li><a href="#"><i class="fas fa-envelope"></i> info@meechtojobs.com</a></li>
+                        <li><a href="#"><i class="fas fa-clock"></i> <span data-i18n="businessHours">Mon-Fri: 9AM-6PM</span></a></li>
                     </ul>
                 </div>
             </div>
             
             <div class="copyright">
-                <p>© 2025 Meechto Job Portal. All rights reserved.</p>
+                <p>© 2023 Meechto Job Portal. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -1800,15 +2185,15 @@
     <script>
         // Firebase configuration - Replace with your own config
         const firebaseConfig = {
-  apiKey: "AIzaSyCrJ6Ur1HLGX97ggVfeFQc65l16oq8k9kg",
-  authDomain: "webar-c2cf1.firebaseapp.com",
-  databaseURL: "https://webar-c2cf1-default-rtdb.firebaseio.com",
-  projectId: "webar-c2cf1",
-  storageBucket: "webar-c2cf1.firebasestorage.app",
-  messagingSenderId: "1019363026928",
-  appId: "1:1019363026928:web:9d25a79d8052527c02df35",
-  measurementId: "G-7JYSEJDPRP"
-};
+            apiKey: "AIzaSyCrJ6Ur1HLGX97ggVfeFQc65l16oq8k9kg",
+            authDomain: "webar-c2cf1.firebaseapp.com",
+            databaseURL: "https://webar-c2cf1-default-rtdb.firebaseio.com",
+            projectId: "webar-c2cf1",
+            storageBucket: "webar-c2cf1.firebasestorage.app",
+            messagingSenderId: "1019363026928",
+            appId: "1:1019363026928:web:9d25a79d8052527c02df35",
+            measurementId: "G-7JYSEJDPRP"
+        };
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
@@ -1825,6 +2210,296 @@
         let appliedJobs = [];
         let companies = [];
         let jobApplications = {};
+        let currentJobIdForSharing = null;
+        let currentLanguage = 'en';
+
+        // Language translations
+        const translations = {
+            en: {
+                // Navigation
+                "home": "Home",
+                "companies": "Companies",
+                "careerTips": "Career Tips",
+                "login": "Login",
+                "register": "Register",
+                "postJob": "Post a Job",
+                "dashboard": "Dashboard",
+                "myJobs": "My Jobs",
+                "settings": "Settings",
+                "logout": "Logout",
+                
+                // Dashboard
+                "findDreamJob": "Find Your Dream Job",
+                "searchJobs": "Search jobs by title, company, or keywords",
+                "welcomeJobSearch": "Welcome to Your Job Search,",
+                "welcomeOpportunities": "We've found some great opportunities that match your profile. Start applying today!",
+                "loadMoreJobs": "Load More Jobs",
+                
+                // Companies
+                "topCompanies": "Top Companies",
+                "discoverCompanies": "Discover companies that are hiring right now",
+                
+                // Auth
+                "welcomeBack": "Welcome Back",
+                "signInToAccess": "Sign in to access your account",
+                "emailAddress": "Email Address",
+                "enterEmail": "Enter your email",
+                "password": "Password",
+                "enterPassword": "Enter your password",
+                "forgotPassword": "Forgot Password?",
+                "signIn": "Sign In",
+                "noAccount": "Don't have an account?",
+                "registerNow": "Register Now",
+                "createAccount": "Create Account",
+                "joinProfessionals": "Join thousands of professionals finding their dream jobs",
+                "iAmA": "I am a",
+                "jobSeeker": "Job Seeker",
+                "employer": "Employer",
+                "fullName": "Full Name",
+                "enterFullName": "Enter your full name",
+                "createPassword": "Create a password",
+                "confirmPassword": "Confirm Password",
+                "confirmPasswordPlaceholder": "Confirm your password",
+                "agreeTerms": "I agree to the Terms & Conditions and Privacy Policy",
+                "alreadyAccount": "Already have an account?",
+                
+                // My Jobs
+                "myJobs": "My Jobs",
+                "postedJobs": "Posted Jobs",
+                "applications": "Applications",
+                "savedJobs": "Saved Jobs",
+                "postNewJob": "Post a New Job",
+                
+                // Settings
+                "accountSettings": "Account Settings",
+                "profileInformation": "Profile Information",
+                "phoneNumber": "Phone Number",
+                "location": "Location",
+                "saveChanges": "Save Changes",
+                "languagePreferences": "Language Preferences",
+                "preferredLanguage": "Preferred Language",
+                "saveLanguage": "Save Language",
+                "securitySettings": "Security Settings",
+                "currentPassword": "Current Password",
+                "enterCurrentPassword": "Enter current password",
+                "newPassword": "New Password",
+                "enterNewPassword": "Enter new password",
+                "confirmNewPassword": "Confirm New Password",
+                "confirmNewPasswordPlaceholder": "Confirm new password",
+                "updatePassword": "Update Password",
+                "notificationPreferences": "Notification Preferences",
+                "emailNotifications": "Email notifications",
+                "jobAlerts": "Job alerts",
+                "applicationUpdates": "Application updates",
+                "newsletter": "Newsletter",
+                "savePreferences": "Save Preferences",
+                
+                // Job Posting
+                "postNewJob": "Post a New Job",
+                "jobTitle": "Job Title",
+                "jobTitlePlaceholder": "e.g. Senior Web Developer",
+                "companyName": "Company Name",
+                "enterCompanyName": "Enter company name",
+                "locationPlaceholder": "e.g. Mumbai, Maharashtra or Remote",
+                "jobType": "Job Type",
+                "selectJobType": "Select job type",
+                "fullTime": "Full-time",
+                "partTime": "Part-time",
+                "contract": "Contract",
+                "shift": "Shift",
+                "selectShift": "Select shift",
+                "firstShift": "1st Shift",
+                "secondShift": "2nd Shift",
+                "thirdShift": "3rd Shift",
+                "general": "General",
+                "salaryRange": "Salary Range (₹)",
+                "salaryPlaceholder": "e.g. ₹8,00,000 - ₹10,00,000",
+                "contactNumber": "Contact Number",
+                "contactPlaceholder": "e.g. +91 98765 43210",
+                "numberOfVacancies": "Number of Vacancies",
+                "vacanciesPlaceholder": "e.g. 5",
+                "genderPreference": "Gender Preference",
+                "any": "Any",
+                "male": "Male",
+                "female": "Female",
+                "jobDescription": "Job Description",
+                "jobDescriptionPlaceholder": "Describe the job responsibilities and requirements",
+                "skills": "Skills",
+                "skillsPlaceholder": "List the required skills",
+                
+                // Edit Job
+                "editJobPosting": "Edit Job Posting",
+                "updateJob": "Update Job",
+                "deleteJob": "Delete Job",
+                
+                // Applications
+                "jobApplications": "Job Applications",
+                
+                // Success
+                "continue": "Continue",
+                "close": "Close",
+                
+                // Share
+                "shareJobPosting": "Share Job Posting",
+                "copyLinkToShare": "Copy the link to share this job posting",
+                
+                // Footer
+                "forJobSeekers": "For Job Seekers",
+                "browseJobs": "Browse Jobs",
+                "createProfile": "Create Profile",
+                "jobAlerts": "Job Alerts",
+                "careerAdvice": "Career Advice",
+                "forEmployers": "For Employers",
+                "browseCandidates": "Browse Candidates",
+                "recruitingSolutions": "Recruiting Solutions",
+                "pricingPlans": "Pricing Plans",
+                "contactUs": "Contact Us",
+                "companyAddress": "1234 Job Street, Mumbai, Maharashtra",
+                "businessHours": "Mon-Fri: 9AM-6PM"
+            },
+            mr: {
+                // Navigation
+                "home": "मुख्यपृष्ठ",
+                "companies": "कंपन्या",
+                "careerTips": "करिअर टिप्स",
+                "login": "लॉगिन",
+                "register": "नोंदणी",
+                "postJob": "नोकरी पोस्ट करा",
+                "dashboard": "डॅशबोर्ड",
+                "myJobs": "माझ्या नोकऱ्या",
+                "settings": "सेटिंग्ज",
+                "logout": "लॉगआउट",
+                
+                // Dashboard
+                "findDreamJob": "तुमची स्वप्नाची नोकरी शोधा",
+                "searchJobs": "शीर्षक, कंपनी किंवा कीवर्डद्वारे नोकऱ्या शोधा",
+                "welcomeJobSearch": "तुमच्या नोकरी शोधात स्वागत आहे,",
+                "welcomeOpportunities": "आम्हाला तुमच्या प्रोफाइलशी जुळणार्या काही छान संधी सापडल्या आहेत. आजच अर्ज करणे सुरू करा!",
+                "loadMoreJobs": "अधिक नोकऱ्या लोड करा",
+                
+                // Companies
+                "topCompanies": "अग्रगण्य कंपन्या",
+                "discoverCompanies": "आत्ता भरती करत असलेल्या कंपन्या शोधा",
+                
+                // Auth
+                "welcomeBack": "पुन्हा स्वागत आहे",
+                "signInToAccess": "तुमच्या खात्यात प्रवेश करण्यासाठी साइन इन करा",
+                "emailAddress": "ईमेल पत्ता",
+                "enterEmail": "तुमचा ईमेल प्रविष्ट करा",
+                "password": "पासवर्ड",
+                "enterPassword": "तुमचा पासवर्ड प्रविष्ट करा",
+                "forgotPassword": "पासवर्ड विसरलात?",
+                "signIn": "साइन इन",
+                "noAccount": "खाते नाही?",
+                "registerNow": "आत्ता नोंदणी करा",
+                "createAccount": "खाते तयार करा",
+                "joinProfessionals": "आपल्या स्वप्नातील नोकऱ्या शोधणाऱ्या हजारो व्यावसायिकांमध्ये सामील व्हा",
+                "iAmA": "मी एक",
+                "jobSeeker": "नोकरी शोधणारा",
+                "employer": "नियोक्ता",
+                "fullName": "पूर्ण नाव",
+                "enterFullName": "तुमचे पूर्ण नाव प्रविष्ट करा",
+                "createPassword": "पासवर्ड तयार करा",
+                "confirmPassword": "पासवर्ड निश्चित करा",
+                "confirmPasswordPlaceholder": "तुमचा पासवर्ड निश्चित करा",
+                "agreeTerms": "मी अटी आणि नियम आणि गोपनीयता धोरणाशी सहमत आहे",
+                "alreadyAccount": "आधीपासूनच खाते आहे?",
+                
+                // My Jobs
+                "myJobs": "माझ्या नोकऱ्या",
+                "postedJobs": "पोस्ट केलेल्या नोकऱ्या",
+                "applications": "अर्ज",
+                "savedJobs": "जतन केलेल्या नोकऱ्या",
+                "postNewJob": "नवीन नोकरी पोस्ट करा",
+                
+                // Settings
+                "accountSettings": "खाते सेटिंग्ज",
+                "profileInformation": "प्रोफाइल माहिती",
+                "phoneNumber": "फोन नंबर",
+                "location": "स्थान",
+                "saveChanges": "बदल जतन करा",
+                "languagePreferences": "भाषा प्राधान्ये",
+                "preferredLanguage": "पसंतीची भाषा",
+                "saveLanguage": "भाषा जतन करा",
+                "securitySettings": "सुरक्षा सेटिंग्ज",
+                "currentPassword": "सध्याचा पासवर्ड",
+                "enterCurrentPassword": "सध्याचा पासवर्ड प्रविष्ट करा",
+                "newPassword": "नवीन पासवर्ड",
+                "enterNewPassword": "नवीन पासवर्ड प्रविष्ट करा",
+                "confirmNewPassword": "नवीन पासवर्ड निश्चित करा",
+                "confirmNewPasswordPlaceholder": "नवीन पासवर्ड निश्चित करा",
+                "updatePassword": "पासवर्ड अद्यतनित करा",
+                "notificationPreferences": "अधिसूचना प्राधान्ये",
+                "emailNotifications": "ईमेल सूचना",
+                "jobAlerts": "नोकरी सतर्कता",
+                "applicationUpdates": "अर्ज अद्यतने",
+                "newsletter": "बातमीपत्र",
+                "savePreferences": "प्राधान्ये जतन करा",
+                
+                // Job Posting
+                "postNewJob": "नवीन नोकरी पोस्ट करा",
+                "jobTitle": "नोकरीचे शीर्षक",
+                "jobTitlePlaceholder": "उदा. वरिष्ठ वेब डेव्हलपर",
+                "companyName": "कंपनीचे नाव",
+                "enterCompanyName": "कंपनीचे नाव प्रविष्ट करा",
+                "locationPlaceholder": "उदा. मुंबई, महाराष्ट्र किंवा रिमोट",
+                "jobType": "नोकरीचा प्रकार",
+                "selectJobType": "नोकरीचा प्रकार निवडा",
+                "fullTime": "पूर्णवेळ",
+                "partTime": "अर्धवेळ",
+                "contract": "करार",
+                "shift": "शिफ्ट",
+                "selectShift": "शिफ्ट निवडा",
+                "firstShift": "पहिली शिफ्ट",
+                "secondShift": "दुसरी शिफ्ट",
+                "thirdShift": "तिसरी शिफ्ट",
+                "general": "सामान्य",
+                "salaryRange": "पगार श्रेणी (₹)",
+                "salaryPlaceholder": "उदा. ₹8,00,000 - ₹10,00,000",
+                "contactNumber": "संपर्क क्रमांक",
+                "contactPlaceholder": "उदा. +91 98765 43210",
+                "numberOfVacancies": "रिक्त जागांची संख्या",
+                "vacanciesPlaceholder": "उदा. 5",
+                "genderPreference": "लिंग प्राधान्य",
+                "any": "कोणतेही",
+                "male": "पुरुष",
+                "female": "स्त्री",
+                "jobDescription": "नोकरीचे वर्णन",
+                "jobDescriptionPlaceholder": "नोकरीची जबाबदाऱ्या आणि आवश्यकता वर्णन करा",
+                "skills": "कौशल्ये",
+                "skillsPlaceholder": "आवश्यक कौशल्यांची यादी करा",
+                
+                // Edit Job
+                "editJobPosting": "नोकरी पोस्टिंग संपादित करा",
+                "updateJob": "नोकरी अद्यतनित करा",
+                "deleteJob": "नोकरी हटवा",
+                
+                // Applications
+                "jobApplications": "नोकरी अर्ज",
+                
+                // Success
+                "continue": "सुरू ठेवा",
+                "close": "बंद करा",
+                
+                // Share
+                "shareJobPosting": "नोकरी पोस्टिंग शेअर करा",
+                "copyLinkToShare": "ही नोकरी पोस्टिंग शेअर करण्यासाठी लिंक कॉपी करा",
+                
+                // Footer
+                "forJobSeekers": "नोकरी शोधणाऱ्यांसाठी",
+                "browseJobs": "नोकऱ्या ब्राउझ करा",
+                "createProfile": "प्रोफाइल तयार करा",
+                "jobAlerts": "नोकरी सतर्कता",
+                "careerAdvice": "करिअर सल्ला",
+                "forEmployers": "नियोक्त्यांसाठी",
+                "browseCandidates": "उमेदवार ब्राउझ करा",
+                "recruitingSolutions": "भरती उपाय",
+                "pricingPlans": "किंमत योजना",
+                "contactUs": "आमच्याशी संपर्क साधा",
+                "companyAddress": "१२३४ जॉब स्ट्रीट, मुंबई, महाराष्ट्र",
+                "businessHours": "सोम-शुक्र: सकाळी ९-संध्याकाळी ६"
+            }
+        };
 
         // Listen for auth state changes
         auth.onAuthStateChanged((user) => {
@@ -1843,6 +2518,7 @@
                         updateNavigation();
                         showPage('dashboard');
                         loadJobs();
+                        loadMyPostedJobs();
                     } else {
                         console.log("No user data found!");
                     }
@@ -1885,15 +2561,6 @@
             setupPasswordToggle('new-password', 'new-password-toggle');
             setupPasswordToggle('confirm-password', 'confirm-password-toggle');
             
-            // Email display functionality
-            document.getElementById('login-email').addEventListener('input', function() {
-                document.getElementById('login-email-display').textContent = this.value || 'Not logged in';
-            });
-            
-            document.getElementById('register-email').addEventListener('input', function() {
-                document.getElementById('register-email-display').textContent = this.value || 'Not provided yet';
-            });
-            
             // Search functionality
             const searchBox = document.getElementById('searchInput');
             const searchBtn = document.getElementById('searchButton');
@@ -1914,7 +2581,7 @@
                 loadMoreBtn.textContent = 'Loading...';
                 setTimeout(() => {
                     loadMoreJobs();
-                    loadMoreBtn.textContent = 'Load More Jobs';
+                    loadMoreBtn.textContent = currentLanguage === 'en' ? 'Load More Jobs' : 'अधिक नोकऱ्या लोड करा';
                 }, 1500);
             });
             
@@ -1982,12 +2649,12 @@
                 const confirm = document.getElementById('register-confirm').value;
                 
                 if (password !== confirm) {
-                    alert('Passwords do not match!');
+                    alert(currentLanguage === 'en' ? 'Passwords do not match!' : 'पासवर्ड जुळत नाहीत!');
                     return;
                 }
                 
                 if (!userType) {
-                    alert('Please select a user type');
+                    alert(currentLanguage === 'en' ? 'Please select a user type' : 'कृपया वापरकर्ता प्रकार निवडा');
                     return;
                 }
                 
@@ -2004,7 +2671,6 @@
                             type: userType,
                             phone: "+91 00000 00000",
                             location: "India",
-                            bio: "",
                             createdAt: firebase.firestore.FieldValue.serverTimestamp()
                         });
                     })
@@ -2020,7 +2686,7 @@
             document.getElementById('job-post-form').addEventListener('submit', function(e) {
                 e.preventDefault();
                 if (!currentUser || currentUser.type !== 'employer') {
-                    alert('Only employers can post jobs');
+                    alert(currentLanguage === 'en' ? 'Only employers can post jobs' : 'फक्त नियोक्ताच नोकऱ्या पोस्ट करू शकतात');
                     return;
                 }
                 
@@ -2028,8 +2694,11 @@
                 const company = document.getElementById('company-name').value;
                 const location = document.getElementById('job-location').value;
                 const type = document.getElementById('job-type').value;
+                const shift = document.getElementById('job-shift').value;
                 const salary = document.getElementById('job-salary').value;
                 const contact = document.getElementById('job-contact').value;
+                const vacancies = document.getElementById('job-vacancies').value;
+                const gender = document.getElementById('job-gender').value;
                 const description = document.getElementById('job-description').value;
                 const requirements = document.getElementById('job-requirements').value;
                 
@@ -2039,8 +2708,11 @@
                     company: company,
                     location: location,
                     type: type,
+                    shift: shift,
                     salary: salary,
                     contact: contact,
+                    vacancies: vacancies,
+                    gender: gender,
                     description: description,
                     requirements: requirements,
                     postedBy: currentUser.uid,
@@ -2052,11 +2724,17 @@
                 .then((docRef) => {
                     console.log("Job posted with ID: ", docRef.id);
                     
+                    // Show success animation
+                    showSuccessAnimation(
+                        currentLanguage === 'en' ? 'Job Posted Successfully!' : 'नोकरी यशस्वीरित्या पोस्ट केली!', 
+                        currentLanguage === 'en' ? 'Your job has been posted and is now visible to job seekers.' : 'तुमची नोकरी पोस्ट केली गेली आहे आणि आता नोकरी शोधकांना दिसते आहे.'
+                    );
+                    
                     // Close modal and reset form
                     closeJobPostModal();
                     document.getElementById('job-post-form').reset();
                     
-                    alert('Job posted successfully!');
+                    // Load jobs to refresh the list
                     loadMyPostedJobs();
                 })
                 .catch((error) => {
@@ -2072,8 +2750,11 @@
                 const company = document.getElementById('edit-company-name').value;
                 const location = document.getElementById('edit-job-location').value;
                 const type = document.getElementById('edit-job-type').value;
+                const shift = document.getElementById('edit-job-shift').value;
                 const salary = document.getElementById('edit-job-salary').value;
                 const contact = document.getElementById('edit-job-contact').value;
+                const vacancies = document.getElementById('edit-job-vacancies').value;
+                const gender = document.getElementById('edit-job-gender').value;
                 const description = document.getElementById('edit-job-description').value;
                 const requirements = document.getElementById('edit-job-requirements').value;
                 
@@ -2083,8 +2764,11 @@
                     company: company,
                     location: location,
                     type: type,
+                    shift: shift,
                     salary: salary,
                     contact: contact,
+                    vacancies: vacancies,
+                    gender: gender,
                     description: description,
                     requirements: requirements,
                     tags: requirements.split(',').map(tag => tag.trim())
@@ -2092,10 +2776,16 @@
                 .then(() => {
                     console.log("Job updated successfully");
                     
+                    // Show success animation
+                    showSuccessAnimation(
+                        currentLanguage === 'en' ? 'Job Updated Successfully!' : 'नोकरी यशस्वीरित्या अद्यतनित केली!', 
+                        currentLanguage === 'en' ? 'Your job posting has been updated.' : 'तुमची नोकरी पोस्टिंग अद्यतनित केली गेली आहे.'
+                    );
+                    
                     // Close modal
                     closeEditJobModal();
                     
-                    alert('Job updated successfully!');
+                    // Reload jobs
                     loadMyPostedJobs();
                     loadJobs();
                 })
@@ -2113,15 +2803,13 @@
                 const email = document.getElementById('profile-email').value;
                 const phone = document.getElementById('profile-phone').value;
                 const location = document.getElementById('profile-location').value;
-                const bio = document.getElementById('profile-bio').value;
                 
                 // Update user data in Firestore
                 db.collection("users").doc(currentUser.uid).update({
                     name: name,
                     email: email,
                     phone: phone,
-                    location: location,
-                    bio: bio
+                    location: location
                 })
                 .then(() => {
                     // Update local user data
@@ -2129,14 +2817,17 @@
                     currentUser.email = email;
                     currentUser.phone = phone;
                     currentUser.location = location;
-                    currentUser.bio = bio;
                     
                     updateNavigation();
                     
                     // Update email display on My Jobs page
                     document.getElementById('profile-email-display').textContent = email;
                     
-                    alert('Profile updated successfully!');
+                    // Show success animation
+                    showSuccessAnimation(
+                        currentLanguage === 'en' ? 'Profile Updated!' : 'प्रोफाइल अद्यतनित केली!', 
+                        currentLanguage === 'en' ? 'Your profile information has been updated successfully.' : 'तुमची प्रोफाइल माहिती यशस्वीरित्या अद्यतनित केली गेली आहे.'
+                    );
                 })
                 .catch((error) => {
                     alert('Error updating profile: ' + error.message);
@@ -2147,9 +2838,11 @@
                 e.preventDefault();
                 const language = document.getElementById('language-select').value;
                 if (language === 'marathi') {
-                    alert('Marathi language support will be available soon!');
+                    setLanguage('mr');
+                    alert(currentLanguage === 'en' ? 'Language changed to Marathi' : 'भाषा मराठीमध्ये बदलली');
                 } else {
-                    alert('Language preference set to English');
+                    setLanguage('en');
+                    alert(currentLanguage === 'en' ? 'Language changed to English' : 'भाषा इंग्रजीमध्ये बदलली');
                 }
             });
             
@@ -2160,7 +2853,7 @@
                 const confirmPassword = document.getElementById('confirm-password').value;
                 
                 if (newPassword !== confirmPassword) {
-                    alert('New passwords do not match!');
+                    alert(currentLanguage === 'en' ? 'New passwords do not match!' : 'नवीन पासवर्ड जुळत नाहीत!');
                     return;
                 }
                 
@@ -2179,7 +2872,10 @@
                     })
                     .then(() => {
                         document.getElementById('security-form').reset();
-                        alert('Password updated successfully!');
+                        showSuccessAnimation(
+                            currentLanguage === 'en' ? 'Password Updated!' : 'पासवर्ड अद्यतनित केला!', 
+                            currentLanguage === 'en' ? 'Your password has been updated successfully.' : 'तुमचा पासवर्ड यशस्वीरित्या अद्यतनित केला गेला आहे.'
+                        );
                     })
                     .catch((error) => {
                         alert('Error updating password: ' + error.message);
@@ -2188,7 +2884,10 @@
             
             document.getElementById('notifications-form').addEventListener('submit', function(e) {
                 e.preventDefault();
-                alert('Notification preferences saved!');
+                showSuccessAnimation(
+                    currentLanguage === 'en' ? 'Preferences Saved!' : 'प्राधान्ये जतन केली!', 
+                    currentLanguage === 'en' ? 'Your notification preferences have been saved.' : 'तुमची अधिसूचना प्राधान्ये जतन केली गेली आहेत.'
+                );
             });
             
             // User dropdown toggle
@@ -2207,10 +2906,54 @@
                 if (userDropdown) userDropdown.classList.remove('active');
             });
             
+            // Language selector functionality
+            const languageBtns = document.querySelectorAll('.language-btn');
+            languageBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const lang = this.getAttribute('data-lang');
+                    setLanguage(lang);
+                    
+                    // Update active button
+                    languageBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
             // Show the dashboard page by default
             showPage('dashboard');
             updateNavigation();
+            setLanguage('en');
         });
+        
+        // Set language function
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Update all elements with data-i18n attribute
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+            
+            // Update all placeholders with data-i18n-ph attribute
+            document.querySelectorAll('[data-i18n-ph]').forEach(element => {
+                const key = element.getAttribute('data-i18n-ph');
+                if (translations[lang][key]) {
+                    element.setAttribute('placeholder', translations[lang][key]);
+                }
+            });
+            
+            // Update page titles and other dynamic content
+            if (document.getElementById('dashboard-page').style.display === 'block') {
+                loadJobs();
+            }
+            
+            if (document.getElementById('my-jobs-page').style.display === 'block') {
+                loadMyPostedJobs();
+            }
+        }
         
         // Load jobs from Firestore
         function loadJobs() {
@@ -2229,7 +2972,15 @@
                 })
                 .catch((error) => {
                     console.log("Error getting jobs: ", error);
+                    // Load sample jobs if Firebase fails
+                    loadSampleJobs();
                 });
+        }
+        
+        // Load sample jobs (fallback)
+        function loadSampleJobs() {
+            jobListings = [...sampleJobs];
+            renderJobListings();
         }
         
         // Load more jobs (for pagination)
@@ -2257,41 +3008,35 @@
                 })
                 .catch((error) => {
                     console.log("Error getting my jobs: ", error);
+                    // Load sample posted jobs if Firebase fails
+                    loadSamplePostedJobs();
                 });
+        }
+        
+        // Load sample posted jobs (fallback)
+        function loadSamplePostedJobs() {
+            myPostedJobs = [...sampleJobs.filter(job => job.postedBy === 'employer')];
+            renderMyPostedJobs();
         }
         
         // Load saved jobs
         function loadSavedJobs() {
             if (!currentUser) return;
             
-            db.collection("users").doc(currentUser.uid).get()
-                .then((doc) => {
-                    if (doc.exists) {
-                        const userData = doc.data();
-                        savedJobs = userData.savedJobs || [];
-                        renderSavedJobs();
-                    }
-                })
-                .catch((error) => {
-                    console.log("Error getting saved jobs: ", error);
-                });
+            // In a real app, this would come from Firebase
+            // For demo purposes, we'll use a sample
+            savedJobs = [...sampleJobs.filter(job => job.saved)];
+            renderSavedJobs();
         }
         
         // Load applied jobs
         function loadAppliedJobs() {
             if (!currentUser) return;
             
-            db.collection("users").doc(currentUser.uid).get()
-                .then((doc) => {
-                    if (doc.exists) {
-                        const userData = doc.data();
-                        appliedJobs = userData.appliedJobs || [];
-                        renderAppliedJobs();
-                    }
-                })
-                .catch((error) => {
-                    console.log("Error getting applied jobs: ", error);
-                });
+            // In a real app, this would come from Firebase
+            // For demo purposes, we'll use a sample
+            appliedJobs = [...sampleJobs.filter(job => job.applied)];
+            renderAppliedJobs();
         }
         
         // Format Firestore timestamp to relative time
@@ -2307,15 +3052,15 @@
             const diffDays = Math.floor(diffHours / 24);
             
             if (diffSecs < 60) {
-                return "Just now";
+                return currentLanguage === 'en' ? "Just now" : "आत्ताच";
             } else if (diffMins < 60) {
-                return `${diffMins} minutes ago`;
+                return currentLanguage === 'en' ? `${diffMins} minutes ago` : `${diffMins} मिनिटांपूर्वी`;
             } else if (diffHours < 24) {
-                return `${diffHours} hours ago`;
+                return currentLanguage === 'en' ? `${diffHours} hours ago` : `${diffHours} तासांपूर्वी`;
             } else if (diffDays === 1) {
-                return "1 day ago";
+                return currentLanguage === 'en' ? "1 day ago" : "1 दिवसापूर्वी";
             } else {
-                return `${diffDays} days ago`;
+                return currentLanguage === 'en' ? `${diffDays} days ago` : `${diffDays} दिवसांपूर्वी`;
             }
         }
         
@@ -2369,8 +3114,8 @@
                 listingsContainer.innerHTML = `
                     <div class="empty-state">
                         <i class="fas fa-search"></i>
-                        <h3>No jobs found</h3>
-                        <p>Try different search terms or browse all jobs</p>
+                        <h3>${currentLanguage === 'en' ? 'No jobs found' : 'कोणतीही नोकरी सापडली नाही'}</h3>
+                        <p>${currentLanguage === 'en' ? 'Try different search terms or browse all jobs' : 'वेगवेगळे शोध शब्द वापरून पहा किंवा सर्व नोकऱ्या ब्राउझ करा'}</p>
                     </div>
                 `;
                 return;
@@ -2388,6 +3133,17 @@
             if (!listingsContainer) return;
             
             listingsContainer.innerHTML = '';
+            
+            if (jobListings.length === 0) {
+                listingsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-briefcase"></i>
+                        <h3>${currentLanguage === 'en' ? 'No jobs available' : 'कोणतीही नोकरी उपलब्ध नाही'}</h3>
+                        <p>${currentLanguage === 'en' ? 'There are no job listings at the moment. Please check back later.' : 'सध्या कोणतीही नोकरी यादी उपलब्ध नाही. कृपया नंतर पुन्हा तपासा.'}</p>
+                    </div>
+                `;
+                return;
+            }
             
             jobListings.forEach(job => {
                 createJobCard(job, listingsContainer);
@@ -2435,25 +3191,57 @@
                             <span>${job.posted}</span>
                         </div>
                     </div>
+                    <div class="detail-row">
+                        <div class="detail-item">
+                            <i class="fas fa-users"></i>
+                            <span>${job.vacancies || 1} ${currentLanguage === 'en' ? 'Vacancies' : 'रिक्त जागा'}</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-venus-mars"></i>
+                            <span>${job.gender || 'Any'} ${currentLanguage === 'en' ? 'Candidates' : 'उमेदवार'}</span>
+                        </div>
+                    </div>
+                    ${job.shift ? `<div class="detail-row">
+                        <div class="detail-item">
+                            <i class="fas fa-clock"></i>
+                            <span>${currentLanguage === 'en' ? 'Shift' : 'शिफ्ट'}: ${job.shift}</span>
+                        </div>
+                    </div>` : ''}
                     <div class="job-tags">
                         ${job.tags ? job.tags.map(tag => `<span class="job-tag">${tag}</span>`).join('') : ''}
                     </div>
-                    <p>${job.description}</p>
+                    <div class="job-description-text">${job.description}</div>
+                    <button class="read-more-btn" onclick="toggleReadMore(this)">
+                        <span>${currentLanguage === 'en' ? 'Read More' : 'अधिक वाचा'}</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
                     <div class="job-actions">
                         <a href="tel:${job.contact}" class="action-btn call-btn">
-                            <i class="fas fa-phone"></i> Call
+                            <i class="fas fa-phone"></i> ${currentLanguage === 'en' ? 'Call' : 'कॉल करा'}
                         </a>
                         <a href="https://wa.me/${job.contact.replace(/\D/g, '')}" target="_blank" class="action-btn whatsapp-btn">
                             <i class="fab fa-whatsapp"></i> WhatsApp
                         </a>
                         <button class="action-btn apply-btn ${isApplied ? 'applied' : ''}" onclick="handleApply('${job.id}')">
-                            <i class="fas fa-paper-plane"></i> ${isApplied ? 'Applied' : 'Apply'}
+                            <i class="fas fa-paper-plane"></i> ${isApplied ? (currentLanguage === 'en' ? 'Applied' : 'अर्ज केला') : (currentLanguage === 'en' ? 'Apply' : 'अर्ज करा')}
                         </button>
                     </div>
                 </div>
             `;
             
             container.appendChild(jobCard);
+        }
+        
+        // Toggle read more functionality
+        function toggleReadMore(button) {
+            const descriptionText = button.previousElementSibling;
+            descriptionText.classList.toggle('expanded');
+            
+            if (descriptionText.classList.contains('expanded')) {
+                button.innerHTML = `<span>${currentLanguage === 'en' ? 'Read Less' : 'कमी वाचा'}</span> <i class="fas fa-chevron-up"></i>`;
+            } else {
+                button.innerHTML = `<span>${currentLanguage === 'en' ? 'Read More' : 'अधिक वाचा'}</span> <i class="fas fa-chevron-down"></i>`;
+            }
         }
         
         // Render companies
@@ -2484,7 +3272,7 @@
                     <div class="company-info">
                         <h3>${company.name}</h3>
                         <p>${company.description}</p>
-                        <div class="company-jobs">${company.jobs} open positions</div>
+                        <div class="company-jobs">${company.jobs} ${currentLanguage === 'en' ? 'open positions' : 'खुल्या पदांची संख्या'}</div>
                     </div>
                 `;
                 
@@ -2501,9 +3289,9 @@
                 listingsContainer.innerHTML = `
                     <div class="empty-state">
                         <i class="fas fa-briefcase"></i>
-                        <h3>No jobs posted yet</h3>
-                        <p>You haven't posted any jobs yet. Get started by posting your first job!</p>
-                        <button class="view-more-btn" onclick="openJobPostModal()">Post a Job</button>
+                        <h3>${currentLanguage === 'en' ? 'No jobs posted yet' : 'अद्याप कोणतीही नोकरी पोस्ट केलेली नाही'}</h3>
+                        <p>${currentLanguage === 'en' ? 'You haven\'t posted any jobs yet. Get started by posting your first job!' : 'तुम्ही अद्याप कोणतीही नोकरी पोस्ट केलेली नाही. तुमची पहिली नोकरी पोस्ट करून प्रारंभ करा!'}</p>
+                        <button class="view-more-btn" onclick="openJobPostModal()">${currentLanguage === 'en' ? 'Post a Job' : 'नोकरी पोस्ट करा'}</button>
                     </div>
                 `;
                 return;
@@ -2534,6 +3322,9 @@
                             <p>${job.company} • ${job.location}</p>
                         </div>
                         <span class="job-type">${job.type}</span>
+                        <button class="save-btn" onclick="openShareModal('${job.id}')">
+                            <i class="fas fa-share-alt"></i>
+                        </button>
                     </div>
                     <div class="job-details">
                         <div class="detail-row">
@@ -2546,19 +3337,39 @@
                                 <span>${job.posted}</span>
                             </div>
                         </div>
+                        <div class="detail-row">
+                            <div class="detail-item">
+                                <i class="fas fa-users"></i>
+                                <span>${job.vacancies || 1} ${currentLanguage === 'en' ? 'Vacancies' : 'रिक्त जागा'}</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-venus-mars"></i>
+                                <span>${job.gender || 'Any'} ${currentLanguage === 'en' ? 'Candidates' : 'उमेदवार'}</span>
+                            </div>
+                        </div>
+                        ${job.shift ? `<div class="detail-row">
+                            <div class="detail-item">
+                                <i class="fas fa-clock"></i>
+                                <span>${currentLanguage === 'en' ? 'Shift' : 'शिफ्ट'}: ${job.shift}</span>
+                            </div>
+                        </div>` : ''}
                         <div class="job-tags">
                             ${job.tags ? job.tags.map(tag => `<span class="job-tag">${tag}</span>`).join('') : ''}
                         </div>
-                        <p>${job.description}</p>
+                        <div class="job-description-text">${job.description}</div>
+                        <button class="read-more-btn" onclick="toggleReadMore(this)">
+                            <span>${currentLanguage === 'en' ? 'Read More' : 'अधिक वाचा'}</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
                         <div class="job-actions">
                             <button class="action-btn apply-btn" onclick="viewApplications('${job.id}')">
-                                <i class="fas fa-eye"></i> View Applications (${applications.length})
+                                <i class="fas fa-eye"></i> ${currentLanguage === 'en' ? 'View Applications' : 'अर्ज पहा'} (${applications.length})
                             </button>
                             <button class="action-btn call-btn" onclick="editJob('${job.id}')">
-                                <i class="fas fa-edit"></i> Edit
+                                <i class="fas fa-edit"></i> ${currentLanguage === 'en' ? 'Edit' : 'संपादित करा'}
                             </button>
                             <button class="action-btn whatsapp-btn" onclick="handleDeleteJob('${job.id}')">
-                                <i class="fas fa-trash"></i> Delete
+                                <i class="fas fa-trash"></i> ${currentLanguage === 'en' ? 'Delete' : 'हटवा'}
                             </button>
                         </div>
                     </div>
@@ -2570,16 +3381,16 @@
         
         // Render saved jobs
         function renderSavedJobs() {
-            const listingsContainer = document.querySelector('#saved-tab .job-listings');
+            const listingsContainer = document.getElementById('savedJobsContainer');
             if (!listingsContainer) return;
             
             if (savedJobs.length === 0) {
                 listingsContainer.innerHTML = `
                     <div class="empty-state">
                         <i class="fas fa-bookmark"></i>
-                        <h3>No saved jobs</h3>
-                        <p>You haven't saved any jobs yet. Start browsing jobs to save them for later!</p>
-                        <button class="view-more-btn" onclick="showPage('dashboard')">Browse Jobs</button>
+                        <h3>${currentLanguage === 'en' ? 'No saved jobs' : 'जतन केलेल्या नोकऱ्या नाहीत'}</h3>
+                        <p>${currentLanguage === 'en' ? 'You haven\'t saved any jobs yet. Start browsing jobs to save them for later!' : 'तुम्ही अद्याप कोणतीही नोकरी जतन केलेली नाही. नंतरसाठी जतन करण्यासाठी नोकऱ्या ब्राउझ करणे सुरू करा!'}</p>
+                        <button class="view-more-btn" onclick="showPage('dashboard')">${currentLanguage === 'en' ? 'Browse Jobs' : 'नोकऱ्या ब्राउझ करा'}</button>
                     </div>
                 `;
                 return;
@@ -2588,26 +3399,23 @@
             listingsContainer.innerHTML = '';
             
             // We need to get the full job details for saved jobs
-            savedJobs.forEach(savedJobId => {
-                const job = jobListings.find(j => j.id === savedJobId);
-                if (job) {
-                    createJobCard(job, listingsContainer);
-                }
+            savedJobs.forEach(savedJob => {
+                createJobCard(savedJob, listingsContainer);
             });
         }
         
         // Render applied jobs
         function renderAppliedJobs() {
-            const listingsContainer = document.querySelector('#applications-tab .job-listings');
+            const listingsContainer = document.getElementById('applicationsContainer');
             if (!listingsContainer) return;
             
             if (appliedJobs.length === 0) {
                 listingsContainer.innerHTML = `
                     <div class="empty-state">
                         <i class="fas fa-file-alt"></i>
-                        <h3>No applications yet</h3>
-                        <p>You haven't applied to any jobs yet. Start browsing jobs to apply!</p>
-                        <button class="view-more-btn" onclick="showPage('dashboard')">Browse Jobs</button>
+                        <h3>${currentLanguage === 'en' ? 'No applications yet' : 'अद्याप कोणतेही अर्ज नाहीत'}</h3>
+                        <p>${currentLanguage === 'en' ? 'You haven\'t applied to any jobs yet. Start browsing jobs to apply!' : 'तुम्ही अद्याप कोणत्याही नोकरीसाठी अर्ज केलेला नाही. अर्ज करण्यासाठी नोकऱ्या ब्राउझ करणे सुरू करा!'}</p>
+                        <button class="view-more-btn" onclick="showPage('dashboard')">${currentLanguage === 'en' ? 'Browse Jobs' : 'नोकऱ्या ब्राउझ करा'}</button>
                     </div>
                 `;
                 return;
@@ -2616,11 +3424,8 @@
             listingsContainer.innerHTML = '';
             
             // We need to get the full job details for applied jobs
-            appliedJobs.forEach(appliedJobId => {
-                const job = jobListings.find(j => j.id === appliedJobId);
-                if (job) {
-                    createJobCard(job, listingsContainer);
-                }
+            appliedJobs.forEach(appliedJob => {
+                createJobCard(appliedJob, listingsContainer);
             });
         }
         
@@ -2637,8 +3442,8 @@
                 applicationsContainer.innerHTML = `
                     <div class="empty-state">
                         <i class="fas fa-user-times"></i>
-                        <h3>No applications yet</h3>
-                        <p>No one has applied to this job yet.</p>
+                        <h3>${currentLanguage === 'en' ? 'No applications yet' : 'अद्याप कोणतेही अर्ज नाहीत'}</h3>
+                        <p>${currentLanguage === 'en' ? 'No one has applied to this job yet.' : 'आतापर्यंत कोणीही या नोकरीसाठी अर्ज केलेला नाही.'}</p>
                     </div>
                 `;
                 return;
@@ -2653,18 +3458,18 @@
                         <h4>${application.name}</h4>
                         <p><i class="fas fa-envelope"></i> ${application.email}</p>
                         <p><i class="fas fa-phone"></i> ${application.phone}</p>
-                        <p><i class="fas fa-calendar"></i> Applied on: ${application.appliedDate}</p>
-                        <p><strong>Cover Letter:</strong> ${application.coverLetter}</p>
+                        <p><i class="fas fa-calendar"></i> ${currentLanguage === 'en' ? 'Applied on' : 'अर्ज केलेली तारीख'}: ${application.appliedDate}</p>
+                        <p><strong>${currentLanguage === 'en' ? 'Cover Letter' : 'कव्हर लेटर'}:</strong> ${application.coverLetter}</p>
                     </div>
                     <div class="application-actions">
                         <a href="tel:${application.phone}" class="action-btn call-btn">
-                            <i class="fas fa-phone"></i> Call
+                            <i class="fas fa-phone"></i> ${currentLanguage === 'en' ? 'Call' : 'कॉल करा'}
                         </a>
                         <a href="https://wa.me/${application.phone.replace(/\D/g, '')}" target="_blank" class="action-btn whatsapp-btn">
                             <i class="fab fa-whatsapp"></i> WhatsApp
                         </a>
                         <a href="#" class="action-btn apply-btn">
-                            <i class="fas fa-download"></i> Resume
+                            <i class="fas fa-download"></i> ${currentLanguage === 'en' ? 'Resume' : 'बायोडाटा'}
                         </a>
                     </div>
                 `;
@@ -2676,97 +3481,70 @@
         // Handle apply action
         function handleApply(jobId) {
             if (!isLoggedIn) {
-                alert('Please login to apply for jobs');
+                alert(currentLanguage === 'en' ? 'Please login to apply for jobs' : 'नोकऱ्यांसाठी अर्ज करण्यासाठी कृपया लॉगिन करा');
                 showPage('login');
                 return;
             }
             
             const job = jobListings.find(j => j.id === jobId);
-            if (job && !appliedJobs.includes(jobId)) {
-                // Add to applied jobs in Firestore
-                db.collection("users").doc(currentUser.uid).update({
-                    appliedJobs: firebase.firestore.FieldValue.arrayUnion(jobId)
-                })
-                .then(() => {
-                    appliedJobs.push(jobId);
-                    
-                    // Add sample application
-                    if (!jobApplications[jobId]) {
-                        jobApplications[jobId] = [];
-                    }
-                    
-                    jobApplications[jobId].push({
-                        name: currentUser.name,
-                        email: currentUser.email,
-                        phone: currentUser.phone,
-                        appliedDate: new Date().toISOString().split('T')[0],
-                        resume: "my_resume.pdf",
-                        coverLetter: `I am interested in the ${job.title} position at ${job.company} and believe my skills are a good match for this role.`
-                    });
-                    
-                    alert(`Successfully applied for ${job.title} at ${job.company}!`);
-                    renderJobListings();
-                    
-                    // If we're on the applications tab, refresh it
-                    if (document.getElementById('applications-tab').classList.contains('active')) {
-                        renderAppliedJobs();
-                    }
-                })
-                .catch((error) => {
-                    alert('Error applying for job: ' + error.message);
-                });
+            if (job && !appliedJobs.some(appliedJob => appliedJob.id === jobId)) {
+                // Add to applied jobs
+                appliedJobs.push(job);
+                
+                // Show success animation
+                showSuccessAnimation(
+                    currentLanguage === 'en' ? 'Application Sent!' : 'अर्ज पाठवला!', 
+                    currentLanguage === 'en' ? `You have successfully applied for ${job.title} at ${job.company}.` : `तुम्ही यशस्वीरित्या ${job.company} मध्ये ${job.title} साठी अर्ज केला आहे.`
+                );
+                
+                renderJobListings();
+                
+                // If we're on the applications tab, refresh it
+                if (document.getElementById('applications-tab').classList.contains('active')) {
+                    renderAppliedJobs();
+                }
             } else {
-                alert('You have already applied for this job');
+                alert(currentLanguage === 'en' ? 'You have already applied for this job' : 'तुम्ही आधीच या नोकरीसाठी अर्ज केला आहे');
             }
         }
         
         // Toggle save job action
         function toggleSaveJob(jobId) {
             if (!isLoggedIn) {
-                alert('Please login to save jobs');
+                alert(currentLanguage === 'en' ? 'Please login to save jobs' : 'नोकऱ्या जतन करण्यासाठी कृपया लॉगिन करा');
                 showPage('login');
                 return;
             }
             
             const job = jobListings.find(j => j.id === jobId);
-            const savedJobIndex = savedJobs.indexOf(jobId);
+            const savedJobIndex = savedJobs.findIndex(savedJob => savedJob.id === jobId);
             
             if (savedJobIndex !== -1) {
                 // Already saved, so remove it
-                db.collection("users").doc(currentUser.uid).update({
-                    savedJobs: firebase.firestore.FieldValue.arrayRemove(jobId)
-                })
-                .then(() => {
-                    savedJobs.splice(savedJobIndex, 1);
-                    alert(`Removed ${job.title} at ${job.company} from your saved jobs`);
-                    renderJobListings();
-                    
-                    // Refresh the appropriate view
-                    if (document.getElementById('saved-tab').classList.contains('active')) {
-                        renderSavedJobs();
-                    }
-                })
-                .catch((error) => {
-                    alert('Error removing saved job: ' + error.message);
-                });
+                savedJobs.splice(savedJobIndex, 1);
+                showSuccessAnimation(
+                    currentLanguage === 'en' ? 'Job Removed' : 'नोकरी काढली', 
+                    currentLanguage === 'en' ? `${job.title} at ${job.company} has been removed from your saved jobs` : `${job.company} मधील ${job.title} तुमच्या जतन केलेल्या नोकऱ्यांमधून काढली गेली आहे`
+                );
+                renderJobListings();
+                
+                // Refresh the appropriate view
+                if (document.getElementById('saved-tab').classList.contains('active')) {
+                    renderSavedJobs();
+                }
             } else {
                 // Not saved, so add it
-                db.collection("users").doc(currentUser.uid).update({
-                    savedJobs: firebase.firestore.FieldValue.arrayUnion(jobId)
-                })
-                .then(() => {
-                    savedJobs.push(jobId);
-                    alert(`Saved ${job.title} at ${job.company} to your saved jobs!`);
-                    renderJobListings();
-                    
-                    // Refresh the appropriate view
-                    if (document.getElementById('saved-tab').classList.contains('active')) {
-                        renderSavedJobs();
-                    }
-                })
-                .catch((error) => {
-                    alert('Error saving job: ' + error.message);
-                });
+                savedJobs.push(job);
+                showSuccessAnimation(
+                    currentLanguage === 'en' ? 'Job Saved!' : 'नोकरी जतन केली!', 
+                    currentLanguage === 'en' ? `${job.title} at ${job.company} has been saved to your saved jobs!` : `${job.company} मधील ${job.title} तुमच्या जतन केलेल्या नोकऱ्यांमध्ये जतन केली गेली आहे!`
+                );
+                renderJobListings();
+                
+                // Refresh the appropriate view
+                if (document.getElementById('saved-tab').classList.contains('active')) {
+                    renderSavedJobs();
+                }
             }
         }
         
@@ -2788,8 +3566,11 @@
                 document.getElementById('edit-company-name').value = job.company;
                 document.getElementById('edit-job-location').value = job.location;
                 document.getElementById('edit-job-type').value = job.type;
+                document.getElementById('edit-job-shift').value = job.shift || '';
                 document.getElementById('edit-job-salary').value = job.salary;
                 document.getElementById('edit-job-contact').value = job.contact;
+                document.getElementById('edit-job-vacancies').value = job.vacancies || 1;
+                document.getElementById('edit-job-gender').value = job.gender || 'Any';
                 document.getElementById('edit-job-description').value = job.description;
                 document.getElementById('edit-job-requirements').value = job.requirements;
                 
@@ -2799,17 +3580,89 @@
         
         // Handle delete job action
         function handleDeleteJob(jobId) {
-            if (confirm('Are you sure you want to delete this job posting?')) {
+            if (confirm(currentLanguage === 'en' ? 'Are you sure you want to delete this job posting?' : 'तुम्हाला ही नोकरी पोस्टिंग हटवायची आहे का?')) {
+                // Delete from Firebase
                 db.collection("jobs").doc(jobId).delete()
-                    .then(() => {
-                        alert('Job deleted successfully');
-                        loadMyPostedJobs();
-                        loadJobs();
-                    })
-                    .catch((error) => {
-                        alert('Error deleting job: ' + error.message);
-                    });
+                .then(() => {
+                    // Remove from local array
+                    const jobIndex = myPostedJobs.findIndex(job => job.id === jobId);
+                    if (jobIndex !== -1) {
+                        myPostedJobs.splice(jobIndex, 1);
+                    }
+                    
+                    showSuccessAnimation(
+                        currentLanguage === 'en' ? 'Job Deleted' : 'नोकरी हटवली', 
+                        currentLanguage === 'en' ? 'The job posting has been deleted successfully' : 'नोकरी पोस्टिंग यशस्वीरित्या हटवली गेली आहे'
+                    );
+                    renderMyPostedJobs();
+                    closeEditJobModal();
+                })
+                .catch((error) => {
+                    alert('Error deleting job: ' + error.message);
+                });
             }
+        }
+        
+        // Open share modal
+        function openShareModal(jobId) {
+            if (!isLoggedIn || currentUser.type !== 'employer') {
+                alert(currentLanguage === 'en' ? 'Only employers can share job postings' : 'फक्त नियोक्ताच नोकरी पोस्टिंग शेअर करू शकतात');
+                return;
+            }
+            
+            currentJobIdForSharing = jobId;
+            const job = myPostedJobs.find(j => j.id === jobId);
+            if (job) {
+                // Generate a shareable link
+                const shareLink = `${window.location.origin}${window.location.pathname}?job=${jobId}`;
+                document.getElementById('shareLink').value = shareLink;
+                document.getElementById('shareModal').classList.add('active');
+            }
+        }
+        
+        // Close share modal
+        function closeShareModal() {
+            document.getElementById('shareModal').classList.remove('active');
+        }
+        
+        // Share job on social media
+        function shareJob(platform) {
+            const job = myPostedJobs.find(j => j.id === currentJobIdForSharing);
+            if (!job) return;
+            
+            const shareLink = document.getElementById('shareLink').value;
+            let shareUrl = '';
+            
+            switch(platform) {
+                case 'whatsapp':
+                    shareUrl = `https://wa.me/?text=Check out this job: ${job.title} at ${job.company} - ${shareLink}`;
+                    break;
+                case 'facebook':
+                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareLink)}`;
+                    break;
+                case 'linkedin':
+                    shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareLink)}`;
+                    break;
+                case 'twitter':
+                    shareUrl = `https://twitter.com/intent/tweet?text=Check out this job: ${job.title} at ${job.company}&url=${encodeURIComponent(shareLink)}`;
+                    break;
+                default:
+                    return;
+            }
+            
+            window.open(shareUrl, '_blank');
+        }
+        
+        // Copy share link to clipboard
+        function copyShareLink() {
+            const shareLinkInput = document.getElementById('shareLink');
+            shareLinkInput.select();
+            document.execCommand('copy');
+            
+            showSuccessAnimation(
+                currentLanguage === 'en' ? 'Link Copied!' : 'लिंक कॉपी केली!', 
+                currentLanguage === 'en' ? 'The job link has been copied to your clipboard.' : 'नोकरी लिंक तुमच्या क्लिपबोर्डवर कॉपी केली गेली आहे.'
+            );
         }
         
         // Close applications modal
@@ -2820,6 +3673,18 @@
         // Close edit job modal
         function closeEditJobModal() {
             document.getElementById('editJobModal').classList.remove('active');
+        }
+        
+        // Show success animation
+        function showSuccessAnimation(title, message) {
+            document.getElementById('successTitle').textContent = title;
+            document.getElementById('successMessage').textContent = message;
+            document.getElementById('successAnimation').classList.add('active');
+        }
+        
+        // Close success animation
+        function closeSuccessAnimation() {
+            document.getElementById('successAnimation').classList.remove('active');
         }
         
         // Page navigation function
@@ -2919,7 +3784,7 @@
             }
             
             if (currentUser.type !== 'employer') {
-                alert('Only employers can post jobs');
+                alert(currentLanguage === 'en' ? 'Only employers can post jobs' : 'फक्त नियोक्ताच नोकऱ्या पोस्ट करू शकतात');
                 return;
             }
             
@@ -2983,6 +3848,70 @@
                 description: "Cloud computing and infrastructure solutions provider.",
                 jobs: 9,
                 logo: "cloudnova"
+            }
+        ];
+
+        // Sample jobs data
+        const sampleJobs = [
+            {
+                id: 'job1',
+                title: 'Senior Web Developer',
+                company: 'Tech Solutions India',
+                location: 'Mumbai, Maharashtra',
+                type: 'Full-time',
+                shift: '1st Shift',
+                salary: '₹8,00,000 - ₹10,00,000',
+                contact: '+91 98765 43210',
+                vacancies: 3,
+                gender: 'Any',
+                description: 'We are looking for an experienced web developer to join our team. You will be responsible for building and maintaining our web applications. The ideal candidate should have strong problem-solving skills and experience with modern web technologies. You will work closely with our design team to implement responsive and user-friendly interfaces. This is a great opportunity to work on exciting projects and grow your career in a dynamic environment.',
+                requirements: 'JavaScript, React, Node.js, HTML, CSS',
+                tags: ['JavaScript', 'React', 'Node.js', 'HTML', 'CSS'],
+                posted: '2 days ago',
+                logo: 'tech',
+                postedBy: 'employer',
+                saved: false,
+                applied: false
+            },
+            {
+                id: 'job2',
+                title: 'UX/UI Designer',
+                company: 'Digital Innovations Pvt Ltd',
+                location: 'Remote',
+                type: 'Full-time',
+                shift: 'General',
+                salary: '₹6,00,000 - ₹8,00,000',
+                contact: '+91 98765 43211',
+                vacancies: 2,
+                gender: 'Female',
+                description: 'Join our design team to create beautiful and functional user interfaces for our digital products. You will be involved in all aspects of the design process from concept to implementation. We value creativity, attention to detail, and a user-centered approach to design. You will collaborate with product managers and developers to create seamless experiences for our users.',
+                requirements: 'Figma, Adobe XD, UI Design, UX Research',
+                tags: ['Figma', 'Adobe XD', 'UI Design', 'UX Research'],
+                posted: '1 day ago',
+                logo: 'digital',
+                postedBy: 'employer',
+                saved: true,
+                applied: false
+            },
+            {
+                id: 'job3',
+                title: 'Mobile App Developer',
+                company: 'AppCreators India',
+                location: 'Bangalore, Karnataka',
+                type: 'Contract',
+                shift: '2nd Shift',
+                salary: '₹5,00,000 - ₹7,00,000',
+                contact: '+91 98765 43212',
+                vacancies: 5,
+                gender: 'Male',
+                description: 'Develop mobile applications for iOS and Android platforms using modern frameworks. You will be responsible for the full lifecycle of application development from concept to deployment. We are looking for someone who is passionate about mobile technologies and stays up-to-date with the latest trends. You will work in an agile environment and collaborate with cross-functional teams.',
+                requirements: 'React Native, Flutter, iOS, Android',
+                tags: ['React Native', 'Flutter', 'iOS', 'Android'],
+                posted: '3 days ago',
+                logo: 'appcreators',
+                postedBy: 'employer',
+                saved: false,
+                applied: true
             }
         ];
     </script>
