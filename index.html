@@ -11,7 +11,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInWithCustomToken, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, addDoc, setDoc, updateDoc, deleteDoc, onSnapshot, collection, query, where, getDocs, orderBy, limit, serverTimestamp, runTransaction } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js"; // Storage Import
+        import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js"; // Storage Import updated to include uploadBytesResumable
         import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         
         // --- MANDATORY CANVAS GLOBALS ---
@@ -38,8 +38,8 @@
         const TEMPLATES_COLLECTION = `artifacts/${appId}/public/data/templates`;
         
         // --- ADMIN LOGIN CREDENTIALS ---
-        const ADMIN_USERNAME = 'remech96@gmail.com';
-        const ADMIN_EMAIL = 'remech96@gmail.com'; 
+        const ADMIN_USERNAME = 'remeech96@gmail.com';
+        const ADMIN_EMAIL = 'remeech96@gmail.com'; 
         const ADMIN_PASSWORD = 'Cha@123';
         // -------------------------------
 
@@ -230,6 +230,7 @@
             document.getElementById('template-order').value = window.templatesData.length ? Math.max(...window.templatesData.map(t => t.order)) + 1 : 1;
             document.getElementById('current-image-status').textContent = 'सध्या कोणतीही इमेज नाही.';
             document.getElementById('template-image-file').value = '';
+            document.getElementById('upload-progress-container').classList.add('hidden'); // Hide progress bar on new form
             document.getElementById('admin-template-form').classList.remove('hidden');
         }
 
@@ -244,16 +245,21 @@
             document.getElementById('template-order').value = t.order;
             document.getElementById('current-image-status').textContent = t.imageUrl ? 'इमेज अपलोड झाली आहे.' : 'सध्या कोणतीही इमेज नाही.';
             document.getElementById('template-image-file').value = '';
+            document.getElementById('upload-progress-container').classList.add('hidden'); // Hide progress bar on edit
             document.getElementById('admin-template-form').classList.remove('hidden');
         }
 
         window.saveTemplate = async function(e) {
             e.preventDefault();
             
-            // Show loading state
             const saveBtn = document.getElementById('save-template-btn');
+            const statusDiv = document.getElementById('current-image-status');
+            const progressBarContainer = document.getElementById('upload-progress-container');
+            const progressBar = document.getElementById('upload-progress-bar');
+            
             saveBtn.disabled = true;
             saveBtn.textContent = 'सेव्ह करत आहे...';
+            progressBarContainer.classList.add('hidden'); // Reset
 
             const id = document.getElementById('template-id').value;
             const name = document.getElementById('template-name').value;
@@ -278,18 +284,44 @@
                     const storagePath = `templates/${templateDocRef.id}/${imageFile.name}`;
                     const imageRef = storageRef(storage, storagePath);
                     
-                    // Upload file
-                    const uploadResult = await uploadBytes(imageRef, imageFile);
+                    // Initiate resumable upload
+                    const uploadTask = uploadBytesResumable(imageRef, imageFile);
                     
-                    // Get URL
-                    imageUrl = await getDownloadURL(uploadResult.ref);
-                    console.log("Image uploaded and URL retrieved:", imageUrl);
+                    // Show progress bar
+                    progressBarContainer.classList.remove('hidden');
+
+                    // Wait for the upload to complete and update progress
+                    await new Promise((resolve, reject) => {
+                        uploadTask.on('state_changed', 
+                            (snapshot) => {
+                                // Observe state change for progress bar update
+                                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                                progressBar.style.width = progress + '%';
+                                statusDiv.textContent = `अपलोड प्रगती: ${progress.toFixed(0)}%`;
+                            }, 
+                            (error) => {
+                                // Handle unsuccessful uploads
+                                console.error("Upload error:", error);
+                                reject(error);
+                            }, 
+                            () => {
+                                // Handle successful uploads
+                                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                                    imageUrl = downloadURL;
+                                    statusDiv.textContent = 'इमेज अपलोड यशस्वी!';
+                                    resolve();
+                                });
+                            }
+                        );
+                    });
+
                     
                 } catch (error) {
-                    console.error("Error uploading image:", error);
+                    console.error("Error during image processing:", error);
                     alert('इमेज अपलोड करताना मोठी त्रुटी आली. Firebase Storage नियम तपासा: ' + error.message);
                     saveBtn.disabled = false;
                     saveBtn.textContent = 'सेव्ह करा';
+                    progressBarContainer.classList.add('hidden');
                     return;
                 }
             } else if (id) {
@@ -297,14 +329,13 @@
                 const existingTemplate = window.templatesData.find(t => t.id === id);
                 imageUrl = existingTemplate ? existingTemplate.imageUrl : '';
             }
-
+            
             // 3. Save/Update Firestore Document
             const templateData = { 
                 name, 
                 description, 
                 order, 
                 imageUrl: imageUrl,
-                // Remove color/icon as per user request
             };
             
             try {
@@ -322,6 +353,7 @@
             } finally {
                 saveBtn.disabled = false;
                 saveBtn.textContent = 'सेव्ह करा';
+                progressBarContainer.classList.add('hidden');
             }
         }
 
@@ -468,6 +500,20 @@
         .admin-login-btn:hover {
             opacity: 1;
             transform: scale(1.1);
+        }
+        
+        /* Progress Bar Styling */
+        .progress-bar {
+            height: 8px;
+            background-color: #d1d5db;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-bar-inner {
+            height: 100%;
+            width: 0%;
+            background-color: #10b981; /* Green */
+            transition: width 0.1s ease-in;
         }
 
         @media (min-width: 1024px) {
@@ -647,7 +693,14 @@
                 <div class="border p-3 rounded-lg bg-gray-50">
                     <h5 class="text-sm font-medium text-gray-800 mb-2">टेम्प्लेट इमेज अपलोड करा (.jpg/.png)</h5>
                     <input type="file" id="template-image-file" accept="image/jpeg, image/png" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"/>
-                    <p id="current-image-status" class="mt-2 text-xs text-gray-500"></p>
+                    <p id="current-image-status" class="mt-2 text-xs text-gray-500">सध्या कोणतीही इमेज नाही.</p>
+                    
+                    <!-- Progress Bar Container -->
+                    <div id="upload-progress-container" class="mt-3 hidden">
+                        <div class="progress-bar">
+                            <div id="upload-progress-bar" class="progress-bar-inner"></div>
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="flex justify-end space-x-3">
