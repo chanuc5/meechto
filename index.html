@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meechto AI Hub | Complete AI-Powered Productivity Suite</title>
+    <title>Mechto AI Hub | Complete AI-Powered Productivity Suite</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
     <style>
@@ -54,6 +54,251 @@
         .dashboard-container {
             display: flex;
             min-height: 100vh;
+        }
+
+        /* Welcome Dialog Styles */
+        .welcome-dialog {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .welcome-dialog.active {
+            display: flex;
+        }
+
+        .dialog-content {
+            background: white;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 500px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            animation: slideUp 0.6s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .dialog-icon {
+            width: 100px;
+            height: 100px;
+            background: var(--accent-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .dialog-icon i {
+            font-size: 48px;
+            color: white;
+        }
+
+        .dialog-content h2 {
+            font-size: 28px;
+            margin-bottom: 16px;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .dialog-content p {
+            color: #666;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .dialog-features {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(45, 91, 255, 0.05);
+            border-radius: 12px;
+        }
+
+        .feature-item i {
+            color: var(--primary-blue);
+            font-size: 20px;
+        }
+
+        .dialog-actions {
+            display: flex;
+            gap: 16px;
+        }
+
+        .dialog-actions button {
+            flex: 1;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .primary-dialog-btn {
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .secondary-dialog-btn {
+            background: transparent;
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+        }
+
+        .dialog-actions button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* Profile Dialog Styles */
+        .profile-dialog {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .profile-dialog.active {
+            display: flex;
+        }
+
+        .profile-content {
+            background: white;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 500px;
+            padding: 32px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            animation: slideUp 0.6s ease;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--accent-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            font-weight: 600;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .profile-info h2 {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        .profile-info p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .profile-details {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: rgba(45, 91, 255, 0.05);
+            border-radius: 12px;
+        }
+
+        .detail-item i {
+            color: var(--primary-blue);
+            font-size: 20px;
+            width: 24px;
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .profile-actions button {
+            flex: 1;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .close-profile-btn {
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .edit-profile-btn {
+            background: transparent;
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+        }
+
+        .profile-actions button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow);
         }
 
         /* Sidebar Styles */
@@ -174,6 +419,13 @@
             display: flex;
             align-items: center;
             cursor: pointer;
+            transition: var(--transition);
+            padding: 8px 16px;
+            border-radius: 50px;
+        }
+
+        .user-profile:hover {
+            background: rgba(255, 255, 255, 0.3);
         }
 
         .avatar {
@@ -886,6 +1138,161 @@
             background: rgba(45, 91, 255, 0.2);
         }
 
+        /* Resume Template Gallery Styles */
+        .category-filters {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            background: var(--glass-bg);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 14px;
+        }
+
+        .filter-btn.active {
+            background: var(--accent-gradient);
+            color: white;
+            border-color: transparent;
+        }
+
+        .resume-template-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 24px;
+            box-shadow: var(--shadow-soft);
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .resume-template-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--accent-gradient);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: -1;
+        }
+
+        .resume-template-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .resume-template-card:hover::before {
+            opacity: 0.05;
+        }
+
+        .template-preview-img {
+            width: 100%;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 12px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: #ccc;
+            box-shadow: var(--shadow-inset);
+        }
+
+        .template-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .template-actions button {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-preview {
+            width: 100%;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 12px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 64px;
+            color: #ccc;
+            box-shadow: var(--shadow-inset);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
         /* Responsive Design */
         @media (max-width: 1024px) {
             .features-grid {
@@ -955,6 +1362,14 @@
             .job-cards-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .dialog-actions {
+                flex-direction: column;
+            }
+            
+            .profile-actions {
+                flex-direction: column;
+            }
         }
 
         @media (max-width: 480px) {
@@ -973,6 +1388,14 @@
             .job-actions {
                 flex-direction: column;
             }
+            
+            .dialog-content {
+                padding: 24px;
+            }
+            
+            .profile-content {
+                padding: 20px;
+            }
         }
     </style>
 </head>
@@ -980,8 +1403,117 @@
     <!-- Animated Background -->
     <div class="particles" id="particles-js"></div>
     
+    <!-- Welcome Dialog -->
+    <div class="welcome-dialog" id="welcomeDialog">
+        <div class="dialog-content">
+            <div class="dialog-icon">
+                <i class="mdi mdi-robot"></i>
+            </div>
+            <h2>Welcome to Mechto AI Hub!</h2>
+            <p>Your AI-powered productivity suite is ready to supercharge your workflow. Discover amazing features designed to make your life easier.</p>
+            
+            <div class="dialog-features">
+                <div class="feature-item">
+                    <i class="mdi mdi-file-account"></i>
+                    <span>AI Resume Builder</span>
+                </div>
+                <div class="feature-item">
+                    <i class="mdi mdi-book-open-variant"></i>
+                    <span>Smart Study Assistant</span>
+                </div>
+                <div class="feature-item">
+                    <i class="mdi mdi-image"></i>
+                    <span>AI Image Generator</span>
+                </div>
+                <div class="feature-item">
+                    <i class="mdi mdi-store"></i>
+                    <span>Prompt Store</span>
+                </div>
+            </div>
+            
+            <div class="dialog-actions">
+                <button class="primary-dialog-btn" id="exploreBtn">
+                    <i class="mdi mdi-rocket"></i> Explore Features
+                </button>
+                <button class="secondary-dialog-btn" id="skipBtn">
+                    Skip for Now
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Profile Dialog -->
+    <div class="profile-dialog" id="profileDialog">
+        <div class="profile-content">
+            <div class="profile-header">
+                <div class="profile-avatar">A</div>
+                <div class="profile-info">
+                    <h2>Alex Johnson</h2>
+                    <p>Premium Member</p>
+                </div>
+            </div>
+            
+            <div class="profile-details">
+                <div class="detail-item">
+                    <i class="mdi mdi-email"></i>
+                    <span>alex.johnson@example.com</span>
+                </div>
+                <div class="detail-item">
+                    <i class="mdi mdi-phone"></i>
+                    <span>+1 (555) 123-4567</span>
+                </div>
+                <div class="detail-item">
+                    <i class="mdi mdi-map-marker"></i>
+                    <span>San Francisco, CA</span>
+                </div>
+                <div class="detail-item">
+                    <i class="mdi mdi-calendar"></i>
+                    <span>Member since: January 2023</span>
+                </div>
+                <div class="detail-item">
+                    <i class="mdi mdi-account-group"></i>
+                    <span>AI Tools Used: 6/6</span>
+                </div>
+            </div>
+            
+            <div class="profile-actions">
+                <button class="close-profile-btn" id="closeProfileBtn">
+                    <i class="mdi mdi-close"></i> Close
+                </button>
+                <button class="edit-profile-btn" id="editProfileBtn">
+                    <i class="mdi mdi-pencil"></i> Edit Profile
+                </button>
+            </div>
+        </div>
+    </div>
+    
     <!-- Overlay for mobile menu -->
     <div class="overlay" id="overlay"></div>
+    
+    <!-- Resume Template Modal -->
+    <div class="modal" id="resumeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Resume Template Preview</h2>
+                <button class="modal-close" id="modalClose">
+                    <i class="mdi mdi-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-preview" id="modalPreview">
+                    <i class="mdi mdi-file-document"></i>
+                </div>
+                <div class="modal-actions">
+                    <button class="cta-button" id="downloadPdfBtn">
+                        <i class="mdi mdi-file-pdf"></i> Download PDF
+                    </button>
+                    <button class="cta-button" id="downloadDocxBtn">
+                        <i class="mdi mdi-file-word"></i> Download DOCX
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <div class="dashboard-container">
         <!-- Sidebar -->
@@ -990,7 +1522,7 @@
                 <div class="logo-icon">
                     <i class="mdi mdi-robot"></i>
                 </div>
-                <div class="logo-text">MeechTo AI Hub</div>
+                <div class="logo-text">Mechto AI Hub</div>
             </div>
             
             <nav class="menu">
@@ -1002,6 +1534,10 @@
                     <i class="mdi mdi-file-account"></i>
                     <span>Resume Helper</span>
                     <span class="badge">AI</span>
+                </div>
+                <div class="menu-item" data-page="resume-templates">
+                    <i class="mdi mdi-file-document"></i>
+                    <span>Resume Templates</span>
                 </div>
                 <div class="menu-item" data-page="study-helper">
                     <i class="mdi mdi-book-open-variant"></i>
@@ -1037,7 +1573,7 @@
                     <input type="text" id="globalSearch" placeholder="Search across all features...">
                 </div>
                 
-                <div class="user-profile">
+                <div class="user-profile" id="userProfile">
                     <span>Hi, Alex!</span>
                     <div class="avatar">A</div>
                 </div>
@@ -1048,7 +1584,7 @@
                 <!-- Dashboard Section -->
                 <section id="dashboard" class="page-section active">
                     <div class="welcome-section">
-                        <h1>Welcome to MeechTo AI Hub</h1>
+                        <h1>Welcome to Mechto AI Hub</h1>
                         <p>Your AI-powered productivity suite. Choose a tool to get started.</p>
                     </div>
                     
@@ -1059,6 +1595,14 @@
                             </div>
                             <h3>Resume Helper</h3>
                             <p>AI-powered resume builder that analyzes job descriptions and optimizes your resume for better chances of landing interviews.</p>
+                        </div>
+                        
+                        <div class="feature-card" data-page="resume-templates">
+                            <div class="card-icon">
+                                <i class="mdi mdi-file-document"></i>
+                            </div>
+                            <h3>Resume Templates</h3>
+                            <p>Browse 25+ professional resume templates. Download in PDF or DOCX format and customize as per your needs.</p>
                         </div>
                         
                         <div class="feature-card" data-page="study-helper">
@@ -1096,7 +1640,7 @@
                     
                     <div class="stats-section">
                         <div class="stat-card">
-                            <div class="stat-value">5</div>
+                            <div class="stat-value">6</div>
                             <div class="stat-label">AI Tools</div>
                         </div>
                         <div class="stat-card">
@@ -1172,6 +1716,26 @@
                             <h3>Format Templates</h3>
                             <p>Apply polished professional templates designed for different industries and roles.</p>
                         </div>
+                    </div>
+                </section>
+                
+                <!-- Resume Templates Section -->
+                <section id="resume-templates" class="page-section">
+                    <div class="hero-section">
+                        <h1>Resume Templates</h1>
+                        <p>Choose from 25+ professional resume templates. Download in PDF or DOCX format and customize as per your needs.</p>
+                    </div>
+                    
+                    <div class="category-filters" id="categoryFilters">
+                        <button class="filter-btn active" data-category="all">All</button>
+                        <button class="filter-btn" data-category="monochrome">Monochrome</button>
+                        <button class="filter-btn" data-category="modern">Modern</button>
+                        <button class="filter-btn" data-category="creative">Creative</button>
+                        <button class="filter-btn" data-category="professional">Professional</button>
+                    </div>
+                    
+                    <div class="templates-grid" id="resumeTemplatesGrid">
+                        <!-- Resume templates will be dynamically generated -->
                     </div>
                 </section>
                 
@@ -1670,6 +2234,63 @@
     </div>
 
     <script>
+        // Welcome Dialog Functionality
+        const welcomeDialog = document.getElementById('welcomeDialog');
+        const exploreBtn = document.getElementById('exploreBtn');
+        const skipBtn = document.getElementById('skipBtn');
+        
+        // Show welcome dialog on first visit
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user has visited before
+            if (!localStorage.getItem('hasVisited')) {
+                setTimeout(() => {
+                    welcomeDialog.classList.add('active');
+                }, 1000);
+                localStorage.setItem('hasVisited', 'true');
+            }
+        });
+        
+        // Explore button functionality
+        exploreBtn.addEventListener('click', function() {
+            welcomeDialog.classList.remove('active');
+            // Optionally scroll to features section
+            document.querySelector('.features-grid').scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        // Skip button functionality
+        skipBtn.addEventListener('click', function() {
+            welcomeDialog.classList.remove('active');
+        });
+        
+        // Profile Dialog Functionality
+        const profileDialog = document.getElementById('profileDialog');
+        const userProfile = document.getElementById('userProfile');
+        const closeProfileBtn = document.getElementById('closeProfileBtn');
+        const editProfileBtn = document.getElementById('editProfileBtn');
+        
+        // Open profile dialog
+        userProfile.addEventListener('click', function() {
+            profileDialog.classList.add('active');
+        });
+        
+        // Close profile dialog
+        closeProfileBtn.addEventListener('click', function() {
+            profileDialog.classList.remove('active');
+        });
+        
+        // Edit profile functionality
+        editProfileBtn.addEventListener('click', function() {
+            alert('Edit profile functionality would open here');
+            // In a real implementation, this would open an edit form
+        });
+        
+        // Close profile dialog when clicking outside
+        window.addEventListener('click', function(e) {
+            if (e.target === profileDialog) {
+                profileDialog.classList.remove('active');
+            }
+        });
+        
         // Sidebar Toggle Functionality
         const sidebar = document.getElementById('sidebar');
         const sidebarToggle = document.getElementById('sidebarToggle');
@@ -1860,6 +2481,128 @@
                 document.getElementById('processResumeBtn').addEventListener('click', function() {
                     alert('Processing resume with AI... This would analyze and optimize your resume.');
                 });
+            }
+        });
+        
+        // Resume Templates Gallery Functionality
+        const categoryFilters = document.getElementById('categoryFilters');
+        const resumeTemplatesGrid = document.getElementById('resumeTemplatesGrid');
+        const resumeModal = document.getElementById('resumeModal');
+        const modalClose = document.getElementById('modalClose');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalPreview = document.getElementById('modalPreview');
+        const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+        const downloadDocxBtn = document.getElementById('downloadDocxBtn');
+        
+        // Resume template data
+        const resumeTemplateData = [
+            { id: 1, name: "Classic Professional", category: "monochrome", description: "Clean and traditional design perfect for corporate roles", popular: true },
+            { id: 2, name: "Modern Minimalist", category: "modern", description: "Contemporary design with clean lines and ample white space" },
+            { id: 3, name: "Creative Portfolio", category: "creative", description: "Eye-catching design ideal for creative professionals" },
+            { id: 4, name: "Executive Summary", category: "professional", description: "Sophisticated layout for senior-level professionals" },
+            { id: 5, name: "Tech Innovator", category: "modern", description: "Modern design tailored for technology professionals" },
+            { id: 6, name: "Academic Excellence", category: "monochrome", description: "Formal template suitable for academic positions" },
+            { id: 7, name: "Marketing Pro", category: "creative", description: "Dynamic design perfect for marketing professionals" },
+            { id: 8, name: "Startup Visionary", category: "modern", description: "Fresh and innovative design for startup environments" },
+            { id: 9, name: "Corporate Leader", category: "professional", description: "Elegant template for executive positions" },
+            { id: 10, name: "Design Portfolio", category: "creative", description: "Visually appealing layout for designers and artists" },
+            { id: 11, name: "Healthcare Professional", category: "monochrome", description: "Clean and professional template for healthcare roles" },
+            { id: 12, name: "Finance Expert", category: "professional", description: "Formal design suitable for finance and banking" },
+            { id: 13, name: "Education Specialist", category: "monochrome", description: "Traditional template for education professionals" },
+            { id: 14, name: "Sales Champion", category: "modern", description: "Dynamic layout for sales and business development" },
+            { id: 15, name: "Engineering Pro", category: "professional", description: "Structured design for engineering professionals" },
+            { id: 16, name: "Legal Professional", category: "monochrome", description: "Formal template suitable for legal positions" },
+            { id: 17, name: "Consulting Expert", category: "professional", description: "Sophisticated design for consulting roles" },
+            { id: 18, name: "Non-Profit Leader", category: "modern", description: "Clean and approachable design for non-profit work" },
+            { id: 19, name: "Government Official", category: "monochrome", description: "Traditional template for government positions" },
+            { id: 20, name: "Research Scientist", category: "professional", description: "Structured layout for research and academia" },
+            { id: 21, name: "Media Professional", category: "creative", description: "Dynamic design for media and communications" },
+            { id: 22, name: "Hospitality Manager", category: "modern", description: "Warm and inviting template for hospitality" },
+            { id: 23, name: "Real Estate Agent", category: "creative", description: "Professional yet approachable design for real estate" },
+            { id: 24, name: "Freelance Creative", category: "creative", description: "Portfolio-style template for freelancers" },
+            { id: 25, name: "Student Fresh", category: "modern", description: "Clean and modern design for recent graduates" }
+        ];
+        
+        // Generate resume template cards
+        function generateResumeTemplates(category = 'all') {
+            resumeTemplatesGrid.innerHTML = '';
+            
+            const filteredTemplates = category === 'all' 
+                ? resumeTemplateData 
+                : resumeTemplateData.filter(template => template.category === category);
+            
+            filteredTemplates.forEach(template => {
+                const templateCard = document.createElement('div');
+                templateCard.className = 'resume-template-card';
+                templateCard.innerHTML = `
+                    ${template.popular ? '<div class="template-badge">Popular</div>' : ''}
+                    <div class="template-preview-img">
+                        <i class="mdi mdi-file-document"></i>
+                    </div>
+                    <h3>${template.name}</h3>
+                    <p style="color: #666; font-size: 14px; margin-top: 8px;">${template.description}</p>
+                    <div class="template-actions">
+                        <button class="secondary-button" onclick="previewTemplate(${template.id})">
+                            <i class="mdi mdi-eye"></i> Preview
+                        </button>
+                        <button class="cta-button" onclick="downloadTemplate(${template.id}, 'pdf')">
+                            <i class="mdi mdi-file-pdf"></i> PDF
+                        </button>
+                        <button class="cta-button" onclick="downloadTemplate(${template.id}, 'docx')">
+                            <i class="mdi mdi-file-word"></i> DOCX
+                        </button>
+                    </div>
+                `;
+                resumeTemplatesGrid.appendChild(templateCard);
+            });
+        }
+        
+        // Initialize resume templates
+        generateResumeTemplates();
+        
+        // Category filter functionality
+        categoryFilters.addEventListener('click', function(e) {
+            if (e.target.classList.contains('filter-btn')) {
+                // Remove active class from all buttons
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Add active class to clicked button
+                e.target.classList.add('active');
+                
+                // Filter templates
+                const category = e.target.getAttribute('data-category');
+                generateResumeTemplates(category);
+            }
+        });
+        
+        // Preview template function
+        function previewTemplate(templateId) {
+            const template = resumeTemplateData.find(t => t.id === templateId);
+            modalTitle.textContent = template.name;
+            modalPreview.innerHTML = `
+                <i class="mdi mdi-file-document"></i>
+                <p style="margin-top: 16px; color: #666;">Preview of ${template.name} template</p>
+            `;
+            resumeModal.classList.add('active');
+        }
+        
+        // Download template function
+        function downloadTemplate(templateId, format) {
+            const template = resumeTemplateData.find(t => t.id === templateId);
+            alert(`Downloading ${template.name} in ${format.toUpperCase()} format...`);
+        }
+        
+        // Close modal
+        modalClose.addEventListener('click', function() {
+            resumeModal.classList.remove('active');
+        });
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', function(e) {
+            if (e.target === resumeModal) {
+                resumeModal.classList.remove('active');
             }
         });
         
