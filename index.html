@@ -11,6 +11,8 @@
             --primary-blue: #2d5bff;
             --secondary-purple: #8b5cf6;
             --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-yellow: #f59e0b;
             --accent-gradient: linear-gradient(135deg, var(--primary-blue), var(--secondary-purple));
             --glass-bg: rgba(255, 255, 255, 0.1);
             --shadow-soft: 8px 8px 16px rgba(0, 0, 0, 0.1), -8px -8px 16px rgba(255, 255, 255, 0.7);
@@ -183,6 +185,138 @@
             box-shadow: var(--shadow-glow);
         }
 
+        /* Login/Register Dialog Styles */
+        .auth-dialog {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .auth-dialog.active {
+            display: flex;
+        }
+
+        .auth-content {
+            background: white;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 450px;
+            padding: 32px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            animation: slideUp 0.6s ease;
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            background: transparent;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            color: #666;
+        }
+
+        .auth-tab.active {
+            color: var(--primary-blue);
+            border-bottom: 2px solid var(--primary-blue);
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(45, 91, 255, 0.1);
+        }
+
+        .auth-actions {
+            margin-top: 24px;
+        }
+
+        .auth-actions button {
+            width: 100%;
+            padding: 14px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .auth-primary-btn {
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+            margin-bottom: 12px;
+        }
+
+        .auth-secondary-btn {
+            background: transparent;
+            color: var(--primary-blue);
+            border: 1px solid var(--primary-blue);
+        }
+
+        .auth-actions button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .auth-error {
+            color: var(--accent-red);
+            font-size: 14px;
+            margin-top: 8px;
+            text-align: center;
+            display: none;
+        }
+
+        .auth-error.active {
+            display: block;
+        }
+
         /* Profile Dialog Styles */
         .profile-dialog {
             display: none;
@@ -332,32 +466,6 @@
         .edit-profile-form.active {
             display: block;
             animation: fadeIn 0.5s ease;
-        }
-
-        .form-group {
-            margin-bottom: 16px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: 500;
-            color: #333;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: var(--transition);
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--primary-blue);
-            box-shadow: 0 0 0 3px rgba(45, 91, 255, 0.1);
         }
 
         .avatar-upload {
@@ -1698,6 +1806,50 @@
         </div>
     </div>
     
+    <!-- Auth Dialog -->
+    <div class="auth-dialog" id="authDialog">
+        <div class="auth-content">
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Login</button>
+                <button class="auth-tab" data-tab="register">Register</button>
+            </div>
+            
+            <div class="auth-form active" id="loginForm">
+                <div class="form-group">
+                    <label for="loginName">Full Name</label>
+                    <input type="text" id="loginName" placeholder="Enter your full name">
+                </div>
+                <div class="form-group">
+                    <label for="loginMobile">Mobile Number</label>
+                    <input type="tel" id="loginMobile" placeholder="Enter your mobile number">
+                </div>
+                <div class="auth-error" id="loginError"></div>
+                <div class="auth-actions">
+                    <button class="auth-primary-btn" id="loginBtn">
+                        <i class="mdi mdi-login"></i> Login
+                    </button>
+                </div>
+            </div>
+            
+            <div class="auth-form" id="registerForm">
+                <div class="form-group">
+                    <label for="registerName">Full Name</label>
+                    <input type="text" id="registerName" placeholder="Enter your full name">
+                </div>
+                <div class="form-group">
+                    <label for="registerMobile">Mobile Number</label>
+                    <input type="tel" id="registerMobile" placeholder="Enter your mobile number">
+                </div>
+                <div class="auth-error" id="registerError"></div>
+                <div class="auth-actions">
+                    <button class="auth-primary-btn" id="registerBtn">
+                        <i class="mdi mdi-account-plus"></i> Register
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!-- Profile Dialog -->
     <div class="profile-dialog" id="profileDialog">
         <div class="profile-content">
@@ -1713,16 +1865,12 @@
             
             <div class="profile-details">
                 <div class="detail-item">
-                    <i class="mdi mdi-email"></i>
-                    <span id="profileEmail">alex.johnson@example.com</span>
+                    <i class="mdi mdi-account"></i>
+                    <span id="profileFullName">Alex Johnson</span>
                 </div>
                 <div class="detail-item">
                     <i class="mdi mdi-phone"></i>
-                    <span id="profilePhone">+1 (555) 123-4567</span>
-                </div>
-                <div class="detail-item">
-                    <i class="mdi mdi-map-marker"></i>
-                    <span id="profileLocation">San Francisco, CA</span>
+                    <span id="profileMobile">+1 (555) 123-4567</span>
                 </div>
                 <div class="detail-item">
                     <i class="mdi mdi-calendar"></i>
@@ -1750,16 +1898,8 @@
                     <input type="text" id="editName" value="Alex Johnson">
                 </div>
                 <div class="form-group">
-                    <label for="editEmail">Email</label>
-                    <input type="email" id="editEmail" value="alex.johnson@example.com">
-                </div>
-                <div class="form-group">
-                    <label for="editPhone">Phone</label>
-                    <input type="tel" id="editPhone" value="+1 (555) 123-4567">
-                </div>
-                <div class="form-group">
-                    <label for="editLocation">Location</label>
-                    <input type="text" id="editLocation" value="San Francisco, CA">
+                    <label for="editMobile">Mobile Number</label>
+                    <input type="tel" id="editMobile" value="+1 (555) 123-4567">
                 </div>
                 <div class="form-actions">
                     <button class="save-btn" id="saveProfileBtn">
@@ -1938,9 +2078,9 @@
                 </div>
                 
                 <div class="user-profile" id="userProfile">
-                    <span>Hi, <span id="userGreeting">Alex</span>!</span>
+                    <span>Hi, <span id="userGreeting">Guest</span>!</span>
                     <div class="avatar" id="userAvatar">
-                        <div class="avatar-placeholder">A</div>
+                        <div class="avatar-placeholder">G</div>
                     </div>
                 </div>
             </header>
@@ -2604,19 +2744,19 @@
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
-        import { getFirestore, collection, addDoc, getDocs, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, setDoc, getDoc, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
         // Your web app's Firebase configuration
         const firebaseConfig = {
-            apiKey: "AIzaSyCrJ6Ur1HLGX97ggVfeFQc65l16oq8k9kg",
-  authDomain: "webar-c2cf1.firebaseapp.com",
-  databaseURL: "https://webar-c2cf1-default-rtdb.firebaseio.com",
-  projectId: "webar-c2cf1",
-  storageBucket: "webar-c2cf1.firebasestorage.app",
-  messagingSenderId: "1019363026928",
-  appId: "1:1019363026928:web:9d25a79d8052527c02df35",
-  measurementId: "G-7JYSEJDPRP"
+            apiKey: "AIzaSyAIGsEpRYk12YQQnweUlwuLoPD06887aqk",
+            authDomain: "aicoursey-9d107.firebaseapp.com",
+            databaseURL: "https://aicoursey-9d107-default-rtdb.firebaseio.com",
+            projectId: "aicoursey-9d107",
+            storageBucket: "aicoursey-9d107.firebasestorage.app",
+            messagingSenderId: "281959011326",
+            appId: "1:281959011326:web:733e577955f80eb7c326af",
+            measurementId: "G-D5R1K0XJ4F"
         };
 
         // Initialize Firebase
@@ -2646,6 +2786,9 @@
                 }, 1000);
                 localStorage.setItem('hasVisited', 'true');
             }
+            
+            // Check if user is logged in
+            checkUserLogin();
         });
         
         // Explore button functionality
@@ -2660,9 +2803,162 @@
             welcomeDialog.classList.remove('active');
         });
         
+        // Auth Dialog Functionality
+        const authDialog = document.getElementById('authDialog');
+        const authTabs = document.querySelectorAll('.auth-tab');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const loginBtn = document.getElementById('loginBtn');
+        const registerBtn = document.getElementById('registerBtn');
+        const loginError = document.getElementById('loginError');
+        const registerError = document.getElementById('registerError');
+        const userProfile = document.getElementById('userProfile');
+        
+        // Check if user is logged in
+        function checkUserLogin() {
+            const currentUser = localStorage.getItem('currentUser');
+            if (currentUser) {
+                const userData = JSON.parse(currentUser);
+                updateUserDisplay(userData);
+            } else {
+                // Show auth dialog if not logged in
+                setTimeout(() => {
+                    authDialog.classList.add('active');
+                }, 1500);
+            }
+        }
+        
+        // Auth tabs functionality
+        authTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabName = this.getAttribute('data-tab');
+                
+                // Update active tab
+                authTabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show corresponding form
+                if (tabName === 'login') {
+                    loginForm.classList.add('active');
+                    registerForm.classList.remove('active');
+                } else {
+                    registerForm.classList.add('active');
+                    loginForm.classList.remove('active');
+                }
+            });
+        });
+        
+        // Login functionality
+        loginBtn.addEventListener('click', async function() {
+            const name = document.getElementById('loginName').value.trim();
+            const mobile = document.getElementById('loginMobile').value.trim();
+            
+            if (!name || !mobile) {
+                loginError.textContent = 'Please fill in all fields';
+                loginError.classList.add('active');
+                return;
+            }
+            
+            // Check if user exists in Firebase
+            try {
+                const usersRef = collection(window.firebaseDb, "users");
+                const q = query(usersRef, where("mobile", "==", mobile));
+                const querySnapshot = await getDocs(q);
+                
+                if (querySnapshot.empty) {
+                    loginError.textContent = 'User not found. Please register first.';
+                    loginError.classList.add('active');
+                    return;
+                }
+                
+                // User exists, log them in
+                let userData;
+                querySnapshot.forEach((doc) => {
+                    userData = doc.data();
+                    userData.id = doc.id;
+                });
+                
+                // Check if name matches
+                if (userData.name !== name) {
+                    loginError.textContent = 'Name does not match our records';
+                    loginError.classList.add('active');
+                    return;
+                }
+                
+                // Login successful
+                localStorage.setItem('currentUser', JSON.stringify(userData));
+                updateUserDisplay(userData);
+                authDialog.classList.remove('active');
+                loginError.classList.remove('active');
+                
+            } catch (error) {
+                console.error("Error logging in:", error);
+                loginError.textContent = 'An error occurred. Please try again.';
+                loginError.classList.add('active');
+            }
+        });
+        
+        // Register functionality
+        registerBtn.addEventListener('click', async function() {
+            const name = document.getElementById('registerName').value.trim();
+            const mobile = document.getElementById('registerMobile').value.trim();
+            
+            if (!name || !mobile) {
+                registerError.textContent = 'Please fill in all fields';
+                registerError.classList.add('active');
+                return;
+            }
+            
+            // Check if user already exists
+            try {
+                const usersRef = collection(window.firebaseDb, "users");
+                const q = query(usersRef, where("mobile", "==", mobile));
+                const querySnapshot = await getDocs(q);
+                
+                if (!querySnapshot.empty) {
+                    registerError.textContent = 'User with this mobile number already exists';
+                    registerError.classList.add('active');
+                    return;
+                }
+                
+                // Create new user
+                const userData = {
+                    name: name,
+                    mobile: mobile,
+                    memberSince: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long' }),
+                    toolsUsed: "0/6",
+                    type: "Free Member"
+                };
+                
+                const docRef = await addDoc(collection(window.firebaseDb, "users"), userData);
+                userData.id = docRef.id;
+                
+                // Registration successful
+                localStorage.setItem('currentUser', JSON.stringify(userData));
+                updateUserDisplay(userData);
+                authDialog.classList.remove('active');
+                registerError.classList.remove('active');
+                
+            } catch (error) {
+                console.error("Error registering:", error);
+                registerError.textContent = 'An error occurred. Please try again.';
+                registerError.classList.add('active');
+            }
+        });
+        
+        // Update user display
+        function updateUserDisplay(userData) {
+            document.getElementById('userGreeting').textContent = userData.name.split(' ')[0];
+            
+            const initial = userData.name.charAt(0);
+            document.getElementById('userAvatar').innerHTML = `<div class="avatar-placeholder">${initial}</div>`;
+            
+            // Enable profile functionality
+            userProfile.style.cursor = 'pointer';
+        }
+        
         // Profile Dialog Functionality
         const profileDialog = document.getElementById('profileDialog');
-        const userProfile = document.getElementById('userProfile');
         const closeProfileBtn = document.getElementById('closeProfileBtn');
         const editProfileBtn = document.getElementById('editProfileBtn');
         const editProfileForm = document.getElementById('editProfileForm');
@@ -2672,22 +2968,16 @@
         const avatarUploadBtn = document.getElementById('avatarUploadBtn');
         const avatarUpload = document.getElementById('avatarUpload');
         
-        // User profile data
-        let userProfileData = {
-            name: "Alex Johnson",
-            email: "alex.johnson@example.com",
-            phone: "+1 (555) 123-4567",
-            location: "San Francisco, CA",
-            memberSince: "January 2023",
-            toolsUsed: "6/6",
-            type: "Premium Member",
-            avatar: null
-        };
-        
         // Open profile dialog
         userProfile.addEventListener('click', function() {
-            updateProfileDisplay();
-            profileDialog.classList.add('active');
+            const currentUser = localStorage.getItem('currentUser');
+            if (currentUser) {
+                const userData = JSON.parse(currentUser);
+                updateProfileDisplay(userData);
+                profileDialog.classList.add('active');
+            } else {
+                authDialog.classList.add('active');
+            }
         });
         
         // Close profile dialog
@@ -2703,31 +2993,45 @@
             profileActions.style.display = 'none';
             
             // Populate form fields with current data
-            document.getElementById('editName').value = userProfileData.name;
-            document.getElementById('editEmail').value = userProfileData.email;
-            document.getElementById('editPhone').value = userProfileData.phone;
-            document.getElementById('editLocation').value = userProfileData.location;
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            document.getElementById('editName').value = currentUser.name;
+            document.getElementById('editMobile').value = currentUser.mobile;
         });
         
         // Save profile changes
-        saveProfileBtn.addEventListener('click', function() {
+        saveProfileBtn.addEventListener('click', async function() {
+            const name = document.getElementById('editName').value;
+            const mobile = document.getElementById('editMobile').value;
+            
             // Update user profile data
-            userProfileData.name = document.getElementById('editName').value;
-            userProfileData.email = document.getElementById('editEmail').value;
-            userProfileData.phone = document.getElementById('editPhone').value;
-            userProfileData.location = document.getElementById('editLocation').value;
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            currentUser.name = name;
+            currentUser.mobile = mobile;
             
             // Update display
-            updateProfileDisplay();
+            updateProfileDisplay(currentUser);
+            updateUserDisplay(currentUser);
+            
+            // Save to localStorage
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            // Save to Firebase
+            try {
+                const userRef = doc(window.firebaseDb, "users", currentUser.id);
+                await setDoc(userRef, {
+                    name: currentUser.name,
+                    mobile: currentUser.mobile,
+                    memberSince: currentUser.memberSince,
+                    toolsUsed: currentUser.toolsUsed,
+                    type: currentUser.type
+                }, { merge: true });
+            } catch (error) {
+                console.error("Error updating profile:", error);
+            }
             
             // Hide edit form
             editProfileForm.classList.remove('active');
             profileActions.style.display = 'flex';
-            
-            // Save to Firebase (if available)
-            if (window.firebaseDb) {
-                saveProfileToFirebase();
-            }
             
             alert('Profile updated successfully!');
         });
@@ -2762,12 +3066,9 @@
                     editProfileAvatar.innerHTML = `<img src="${event.target.result}" alt="Profile Avatar">`;
                     
                     // Store avatar data
-                    userProfileData.avatar = event.target.result;
-                    
-                    // Save to Firebase (if available)
-                    if (window.firebaseDb) {
-                        saveProfileToFirebase();
-                    }
+                    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                    currentUser.avatar = event.target.result;
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
                 };
                 
                 reader.readAsDataURL(file);
@@ -2775,38 +3076,24 @@
         });
         
         // Update profile display
-        function updateProfileDisplay() {
-            document.getElementById('profileName').textContent = userProfileData.name;
-            document.getElementById('profileEmail').textContent = userProfileData.email;
-            document.getElementById('profilePhone').textContent = userProfileData.phone;
-            document.getElementById('profileLocation').textContent = userProfileData.location;
-            document.getElementById('profileMemberSince').textContent = `Member since: ${userProfileData.memberSince}`;
-            document.getElementById('profileToolsUsed').textContent = `AI Tools Used: ${userProfileData.toolsUsed}`;
-            document.getElementById('profileType').textContent = userProfileData.type;
-            document.getElementById('userGreeting').textContent = userProfileData.name.split(' ')[0];
+        function updateProfileDisplay(userData) {
+            document.getElementById('profileName').textContent = userData.name;
+            document.getElementById('profileFullName').textContent = userData.name;
+            document.getElementById('profileMobile').textContent = userData.mobile;
+            document.getElementById('profileMemberSince').textContent = `Member since: ${userData.memberSince}`;
+            document.getElementById('profileToolsUsed').textContent = `AI Tools Used: ${userData.toolsUsed}`;
+            document.getElementById('profileType').textContent = userData.type;
             
             // Update avatar if available
-            if (userProfileData.avatar) {
-                document.getElementById('profileAvatar').innerHTML = `<img src="${userProfileData.avatar}" alt="Profile Avatar">`;
-                document.getElementById('userAvatar').innerHTML = `<img src="${userProfileData.avatar}" alt="Profile Avatar">`;
-                document.getElementById('editProfileAvatar').innerHTML = `<img src="${userProfileData.avatar}" alt="Profile Avatar">`;
+            if (userData.avatar) {
+                document.getElementById('profileAvatar').innerHTML = `<img src="${userData.avatar}" alt="Profile Avatar">`;
+                document.getElementById('userAvatar').innerHTML = `<img src="${userData.avatar}" alt="Profile Avatar">`;
+                document.getElementById('editProfileAvatar').innerHTML = `<img src="${userData.avatar}" alt="Profile Avatar">`;
             } else {
-                const initial = userProfileData.name.charAt(0);
+                const initial = userData.name.charAt(0);
                 document.getElementById('profileAvatar').innerHTML = `<div class="avatar-placeholder">${initial}</div>`;
                 document.getElementById('userAvatar').innerHTML = `<div class="avatar-placeholder">${initial}</div>`;
                 document.getElementById('editProfileAvatar').innerHTML = `<div class="avatar-placeholder">${initial}</div>`;
-            }
-        }
-        
-        // Save profile to Firebase
-        async function saveProfileToFirebase() {
-            try {
-                const userId = "user123"; // In a real app, this would be the authenticated user's ID
-                const userRef = doc(window.firebaseDb, "users", userId);
-                await setDoc(userRef, userProfileData);
-                console.log("Profile saved to Firebase");
-            } catch (error) {
-                console.error("Error saving profile to Firebase:", error);
             }
         }
         
@@ -2816,6 +3103,9 @@
                 profileDialog.classList.remove('active');
                 editProfileForm.classList.remove('active');
                 profileActions.style.display = 'flex';
+            }
+            if (e.target === authDialog) {
+                authDialog.classList.remove('active');
             }
         });
         
