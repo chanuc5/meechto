@@ -250,6 +250,7 @@
 
         .form-group {
             margin-bottom: 16px;
+            position: relative;
         }
 
         .form-group label {
@@ -272,6 +273,16 @@
             outline: none;
             border-color: var(--primary-blue);
             box-shadow: 0 0 0 3px rgba(45, 91, 255, 0.1);
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 38px;
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
         }
 
         .auth-actions {
@@ -371,6 +382,7 @@
             box-shadow: var(--shadow-soft);
             position: relative;
             overflow: hidden;
+            transition: all 0.5s ease;
         }
 
         .profile-avatar img {
@@ -487,6 +499,35 @@
 
         .avatar-upload-btn:hover {
             background: rgba(45, 91, 255, 0.1);
+        }
+
+        .avatar-options {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .avatar-option {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .avatar-option.selected {
+            border-color: var(--primary-blue);
+            transform: scale(1.1);
+        }
+
+        .avatar-option i {
+            font-size: 24px;
+            color: white;
         }
 
         .form-actions {
@@ -1816,12 +1857,15 @@
             
             <div class="auth-form active" id="loginForm">
                 <div class="form-group">
-                    <label for="loginName">Full Name</label>
-                    <input type="text" id="loginName" placeholder="Enter your full name">
+                    <label for="loginUsername">Username</label>
+                    <input type="text" id="loginUsername" placeholder="Enter your username">
                 </div>
                 <div class="form-group">
-                    <label for="loginMobile">Mobile Number</label>
-                    <input type="tel" id="loginMobile" placeholder="Enter your mobile number">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password">
+                    <button type="button" class="password-toggle" id="loginPasswordToggle">
+                        <i class="mdi mdi-eye"></i>
+                    </button>
                 </div>
                 <div class="auth-error" id="loginError"></div>
                 <div class="auth-actions">
@@ -1833,12 +1877,26 @@
             
             <div class="auth-form" id="registerForm">
                 <div class="form-group">
-                    <label for="registerName">Full Name</label>
-                    <input type="text" id="registerName" placeholder="Enter your full name">
+                    <label for="registerUsername">Username</label>
+                    <input type="text" id="registerUsername" placeholder="Choose a username">
                 </div>
                 <div class="form-group">
                     <label for="registerMobile">Mobile Number</label>
                     <input type="tel" id="registerMobile" placeholder="Enter your mobile number">
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Password</label>
+                    <input type="password" id="registerPassword" placeholder="Create a password">
+                    <button type="button" class="password-toggle" id="registerPasswordToggle">
+                        <i class="mdi mdi-eye"></i>
+                    </button>
+                </div>
+                <div class="form-group">
+                    <label for="registerConfirmPassword">Confirm Password</label>
+                    <input type="password" id="registerConfirmPassword" placeholder="Confirm your password">
+                    <button type="button" class="password-toggle" id="registerConfirmPasswordToggle">
+                        <i class="mdi mdi-eye"></i>
+                    </button>
                 </div>
                 <div class="auth-error" id="registerError"></div>
                 <div class="auth-actions">
@@ -1888,10 +1946,26 @@
                     <div class="profile-avatar" id="editProfileAvatar">
                         <div class="avatar-placeholder">A</div>
                     </div>
-                    <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
                     <button class="avatar-upload-btn" id="avatarUploadBtn">
-                        <i class="mdi mdi-camera"></i> Change Photo
+                        <i class="mdi mdi-camera"></i> Change Avatar
                     </button>
+                </div>
+                <div class="avatar-options" id="avatarOptions">
+                    <div class="avatar-option selected" data-avatar="mdi-account" style="background: linear-gradient(135deg, #2d5bff, #8b5cf6);">
+                        <i class="mdi mdi-account"></i>
+                    </div>
+                    <div class="avatar-option" data-avatar="mdi-robot" style="background: linear-gradient(135deg, #10b981, #059669);">
+                        <i class="mdi mdi-robot"></i>
+                    </div>
+                    <div class="avatar-option" data-avatar="mdi-star" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                        <i class="mdi mdi-star"></i>
+                    </div>
+                    <div class="avatar-option" data-avatar="mdi-rocket" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+                        <i class="mdi mdi-rocket"></i>
+                    </div>
+                    <div class="avatar-option" data-avatar="mdi-crown" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                        <i class="mdi mdi-crown"></i>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="editName">Full Name</label>
@@ -2150,11 +2224,11 @@
                             <div class="stat-label">AI Tools</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-value">95%</div>
+                            <div class="stat-value">23%</div>
                             <div class="stat-label">Success Rate</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-value">10K+</div>
+                            <div class="stat-value">139+</div>
                             <div class="stat-label">Users</div>
                         </div>
                         <div class="stat-card">
@@ -2749,14 +2823,14 @@
 
         // Your web app's Firebase configuration
         const firebaseConfig = {
-            apiKey: "AIzaSyAIGsEpRYk12YQQnweUlwuLoPD06887aqk",
-            authDomain: "aicoursey-9d107.firebaseapp.com",
-            databaseURL: "https://aicoursey-9d107-default-rtdb.firebaseio.com",
-            projectId: "aicoursey-9d107",
-            storageBucket: "aicoursey-9d107.firebasestorage.app",
-            messagingSenderId: "281959011326",
-            appId: "1:281959011326:web:733e577955f80eb7c326af",
-            measurementId: "G-D5R1K0XJ4F"
+            apiKey: "AIzaSyCrJ6Ur1HLGX97ggVfeFQc65l16oq8k9kg",
+            authDomain: "webar-c2cf1.firebaseapp.com",
+            databaseURL: "https://webar-c2cf1-default-rtdb.firebaseio.com",
+            projectId: "webar-c2cf1",
+            storageBucket: "webar-c2cf1.firebasestorage.app",
+            messagingSenderId: "1019363026928",
+            appId: "1:1019363026928:web:9d25a79d8052527c02df35",
+            measurementId: "G-7JYSEJDPRP"
         };
 
         // Initialize Firebase
@@ -2814,6 +2888,32 @@
         const registerError = document.getElementById('registerError');
         const userProfile = document.getElementById('userProfile');
         
+        // Password toggle functionality
+        const loginPasswordToggle = document.getElementById('loginPasswordToggle');
+        const registerPasswordToggle = document.getElementById('registerPasswordToggle');
+        const registerConfirmPasswordToggle = document.getElementById('registerConfirmPasswordToggle');
+        
+        loginPasswordToggle.addEventListener('click', function() {
+            const passwordInput = document.getElementById('loginPassword');
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.innerHTML = type === 'password' ? '<i class="mdi mdi-eye"></i>' : '<i class="mdi mdi-eye-off"></i>';
+        });
+        
+        registerPasswordToggle.addEventListener('click', function() {
+            const passwordInput = document.getElementById('registerPassword');
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.innerHTML = type === 'password' ? '<i class="mdi mdi-eye"></i>' : '<i class="mdi mdi-eye-off"></i>';
+        });
+        
+        registerConfirmPasswordToggle.addEventListener('click', function() {
+            const passwordInput = document.getElementById('registerConfirmPassword');
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.innerHTML = type === 'password' ? '<i class="mdi mdi-eye"></i>' : '<i class="mdi mdi-eye-off"></i>';
+        });
+        
         // Check if user is logged in
         function checkUserLogin() {
             const currentUser = localStorage.getItem('currentUser');
@@ -2850,10 +2950,10 @@
         
         // Login functionality
         loginBtn.addEventListener('click', async function() {
-            const name = document.getElementById('loginName').value.trim();
-            const mobile = document.getElementById('loginMobile').value.trim();
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
             
-            if (!name || !mobile) {
+            if (!username || !password) {
                 loginError.textContent = 'Please fill in all fields';
                 loginError.classList.add('active');
                 return;
@@ -2862,7 +2962,7 @@
             // Check if user exists in Firebase
             try {
                 const usersRef = collection(window.firebaseDb, "users");
-                const q = query(usersRef, where("mobile", "==", mobile));
+                const q = query(usersRef, where("username", "==", username));
                 const querySnapshot = await getDocs(q);
                 
                 if (querySnapshot.empty) {
@@ -2871,16 +2971,16 @@
                     return;
                 }
                 
-                // User exists, log them in
+                // User exists, check password
                 let userData;
                 querySnapshot.forEach((doc) => {
                     userData = doc.data();
                     userData.id = doc.id;
                 });
                 
-                // Check if name matches
-                if (userData.name !== name) {
-                    loginError.textContent = 'Name does not match our records';
+                // Check if password matches
+                if (userData.password !== password) {
+                    loginError.textContent = 'Invalid password';
                     loginError.classList.add('active');
                     return;
                 }
@@ -2900,11 +3000,25 @@
         
         // Register functionality
         registerBtn.addEventListener('click', async function() {
-            const name = document.getElementById('registerName').value.trim();
+            const username = document.getElementById('registerUsername').value.trim();
             const mobile = document.getElementById('registerMobile').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
             
-            if (!name || !mobile) {
+            if (!username || !mobile || !password || !confirmPassword) {
                 registerError.textContent = 'Please fill in all fields';
+                registerError.classList.add('active');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                registerError.textContent = 'Passwords do not match';
+                registerError.classList.add('active');
+                return;
+            }
+            
+            if (password.length < 6) {
+                registerError.textContent = 'Password must be at least 6 characters long';
                 registerError.classList.add('active');
                 return;
             }
@@ -2912,22 +3026,25 @@
             // Check if user already exists
             try {
                 const usersRef = collection(window.firebaseDb, "users");
-                const q = query(usersRef, where("mobile", "==", mobile));
+                const q = query(usersRef, where("username", "==", username));
                 const querySnapshot = await getDocs(q);
                 
                 if (!querySnapshot.empty) {
-                    registerError.textContent = 'User with this mobile number already exists';
+                    registerError.textContent = 'Username already exists';
                     registerError.classList.add('active');
                     return;
                 }
                 
                 // Create new user
                 const userData = {
-                    name: name,
+                    username: username,
+                    name: username,
                     mobile: mobile,
+                    password: password,
                     memberSince: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long' }),
                     toolsUsed: "0/6",
-                    type: "Free Member"
+                    type: "Free Member",
+                    avatar: "mdi-account"
                 };
                 
                 const docRef = await addDoc(collection(window.firebaseDb, "users"), userData);
@@ -2950,11 +3067,24 @@
         function updateUserDisplay(userData) {
             document.getElementById('userGreeting').textContent = userData.name.split(' ')[0];
             
-            const initial = userData.name.charAt(0);
-            document.getElementById('userAvatar').innerHTML = `<div class="avatar-placeholder">${initial}</div>`;
+            // Update avatar
+            updateAvatar(userData.avatar);
             
             // Enable profile functionality
             userProfile.style.cursor = 'pointer';
+        }
+        
+        // Update avatar function
+        function updateAvatar(avatarType) {
+            const avatarElements = [
+                document.getElementById('userAvatar'),
+                document.getElementById('profileAvatar'),
+                document.getElementById('editProfileAvatar')
+            ];
+            
+            avatarElements.forEach(element => {
+                element.innerHTML = `<div class="avatar-placeholder"><i class="mdi ${avatarType}"></i></div>`;
+            });
         }
         
         // Profile Dialog Functionality
@@ -2965,8 +3095,7 @@
         const profileActions = document.getElementById('profileActions');
         const saveProfileBtn = document.getElementById('saveProfileBtn');
         const cancelEditBtn = document.getElementById('cancelEditBtn');
-        const avatarUploadBtn = document.getElementById('avatarUploadBtn');
-        const avatarUpload = document.getElementById('avatarUpload');
+        const avatarOptions = document.querySelectorAll('.avatar-option');
         
         // Open profile dialog
         userProfile.addEventListener('click', function() {
@@ -2996,17 +3125,40 @@
             const currentUser = JSON.parse(localStorage.getItem('currentUser'));
             document.getElementById('editName').value = currentUser.name;
             document.getElementById('editMobile').value = currentUser.mobile;
+            
+            // Set selected avatar
+            avatarOptions.forEach(option => {
+                if (option.getAttribute('data-avatar') === currentUser.avatar) {
+                    option.classList.add('selected');
+                } else {
+                    option.classList.remove('selected');
+                }
+            });
+        });
+        
+        // Avatar selection
+        avatarOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                avatarOptions.forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                
+                // Update preview
+                const avatarType = this.getAttribute('data-avatar');
+                document.getElementById('editProfileAvatar').innerHTML = `<div class="avatar-placeholder"><i class="mdi ${avatarType}"></i></div>`;
+            });
         });
         
         // Save profile changes
         saveProfileBtn.addEventListener('click', async function() {
             const name = document.getElementById('editName').value;
             const mobile = document.getElementById('editMobile').value;
+            const selectedAvatar = document.querySelector('.avatar-option.selected').getAttribute('data-avatar');
             
             // Update user profile data
             const currentUser = JSON.parse(localStorage.getItem('currentUser'));
             currentUser.name = name;
             currentUser.mobile = mobile;
+            currentUser.avatar = selectedAvatar;
             
             // Update display
             updateProfileDisplay(currentUser);
@@ -3021,6 +3173,7 @@
                 await setDoc(userRef, {
                     name: currentUser.name,
                     mobile: currentUser.mobile,
+                    avatar: currentUser.avatar,
                     memberSince: currentUser.memberSince,
                     toolsUsed: currentUser.toolsUsed,
                     type: currentUser.type
@@ -3033,46 +3186,18 @@
             editProfileForm.classList.remove('active');
             profileActions.style.display = 'flex';
             
-            alert('Profile updated successfully!');
+            // Show success animation
+            const profileAvatar = document.getElementById('profileAvatar');
+            profileAvatar.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                profileAvatar.style.transform = 'scale(1)';
+            }, 300);
         });
         
         // Cancel edit
         cancelEditBtn.addEventListener('click', function() {
             editProfileForm.classList.remove('active');
             profileActions.style.display = 'flex';
-        });
-        
-        // Avatar upload
-        avatarUploadBtn.addEventListener('click', function() {
-            avatarUpload.click();
-        });
-        
-        avatarUpload.addEventListener('change', function(e) {
-            if (e.target.files.length > 0) {
-                const file = e.target.files[0];
-                const reader = new FileReader();
-                
-                reader.onload = function(event) {
-                    // Update avatar in profile dialog
-                    const profileAvatar = document.getElementById('profileAvatar');
-                    profileAvatar.innerHTML = `<img src="${event.target.result}" alt="Profile Avatar">`;
-                    
-                    // Update avatar in top navigation
-                    const userAvatar = document.getElementById('userAvatar');
-                    userAvatar.innerHTML = `<img src="${event.target.result}" alt="Profile Avatar">`;
-                    
-                    // Update edit profile avatar
-                    const editProfileAvatar = document.getElementById('editProfileAvatar');
-                    editProfileAvatar.innerHTML = `<img src="${event.target.result}" alt="Profile Avatar">`;
-                    
-                    // Store avatar data
-                    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-                    currentUser.avatar = event.target.result;
-                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                };
-                
-                reader.readAsDataURL(file);
-            }
         });
         
         // Update profile display
@@ -3084,17 +3209,8 @@
             document.getElementById('profileToolsUsed').textContent = `AI Tools Used: ${userData.toolsUsed}`;
             document.getElementById('profileType').textContent = userData.type;
             
-            // Update avatar if available
-            if (userData.avatar) {
-                document.getElementById('profileAvatar').innerHTML = `<img src="${userData.avatar}" alt="Profile Avatar">`;
-                document.getElementById('userAvatar').innerHTML = `<img src="${userData.avatar}" alt="Profile Avatar">`;
-                document.getElementById('editProfileAvatar').innerHTML = `<img src="${userData.avatar}" alt="Profile Avatar">`;
-            } else {
-                const initial = userData.name.charAt(0);
-                document.getElementById('profileAvatar').innerHTML = `<div class="avatar-placeholder">${initial}</div>`;
-                document.getElementById('userAvatar').innerHTML = `<div class="avatar-placeholder">${initial}</div>`;
-                document.getElementById('editProfileAvatar').innerHTML = `<div class="avatar-placeholder">${initial}</div>`;
-            }
+            // Update avatar
+            updateAvatar(userData.avatar);
         }
         
         // Close profile dialog when clicking outside
