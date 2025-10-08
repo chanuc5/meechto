@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini Prompts | MeechTo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #7c3aed;
+            --primary-light: #8b5cf6;
+            --primary-dark: #6d28d9;
+            --accent-yellow: #f59e0b;
+            --accent-red: #ef4444;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-glass: rgba(255, 255, 255, 0.8);
+            --border-glass: rgba(226, 232, 240, 0.8);
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        header {
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--bg-primary);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .icon-btn {
+            background: var(--bg-secondary);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-secondary);
+        }
+
+        .icon-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, #f0f4ff, #fdf2ff);
+            border-radius: 0 0 30px 30px;
+            margin-bottom: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: var(--bg-glass);
+            border: 1px solid var(--border-glass);
+            border-radius: 50px;
+            padding: 0.75rem 1.5rem;
+            backdrop-filter: blur(10px);
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+
+        .search-bar:focus-within {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+
+        .search-bar i {
+            color: var(--text-secondary);
+            margin-right: 0.75rem;
+        }
+
+        .search-bar input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .search-bar input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        /* Trending Slider */
+        .trending-section {
+            padding: 0 2rem 2rem;
+        }
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .slider-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .slider-btn {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-glass);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .slider-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .trending-slider {
+            position: relative;
+            overflow: hidden;
+            border-radius: 16px;
+            height: 300px;
+        }
+
+        .slider-track {
+            display: flex;
+            transition: transform 0.5s ease;
+            height: 100%;
+        }
+
+        .slider-slide {
+            min-width: 100%;
+            height: 100%;
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .slider-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .slide-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 2rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: white;
+        }
+
+        .slide-category {
+            background: var(--primary);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+
+        .slide-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .slide-description {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .slider-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .slider-dot.active {
+            background: var(--primary);
+        }
+
+        /* Filter Tabs */
+        .filter-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0 2rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .filter-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab {
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-glass);
+            border-radius: 50px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .tab:hover {
+            background: rgba(124, 58, 237, 0.1);
+            color: var(--primary);
+        }
+
+        .tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Prompt Grid */
+        .prompt-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            padding: 0 2rem;
+            margin-bottom: 3rem;
+        }
+
+        /* Prompt Card */
+        .prompt-card {
+            background: var(--bg-glass);
+            border: 1px solid var(--border-glass);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+            position: relative;
+            box-shadow: var(--shadow);
+        }
+
+        .prompt-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-image {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 75%; /* 3:4 aspect ratio */
+            overflow: hidden;
+        }
+
+        .card-image img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .prompt-card:hover .card-image img {
+            transform: scale(1.05);
+        }
+
+        .image-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60%;
+            background: linear-gradient(to top, rgba(30, 41, 59, 0.7), transparent);
+        }
+
+        .category-badge {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            background: var(--primary);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .copy-btn {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: var(--primary);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        .copy-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .card-content {
+            padding: 1.25rem;
+        }
+
+        .card-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .card-description {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .copy-prompt-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .copy-prompt-btn:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, #f0f4ff, #fdf2ff);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin: 0 2rem 3rem;
+        }
+
+        .cta-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .cta-section p {
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 5px 15px rgba(124, 58, 237, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(124, 58, 237, 0.4);
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: var(--bg-glass);
+            border: 1px solid var(--border-glass);
+            color: var(--text-primary);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            backdrop-filter: blur(10px);
+            transform: translateX(300px);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+
+        .toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .toast i {
+            color: var(--accent-yellow);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border-glass);
+        }
+
+        .brand {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* Submit Page Styles */
+        .submit-page {
+            display: none;
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .submit-page h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .submit-form {
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-glass);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .back-btn {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-glass);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .back-btn:hover {
+            background: var(--text-secondary);
+            color: white;
+        }
+
+        .submit-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .submit-btn:hover {
+            background: var(--primary-light);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .prompt-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            header {
+                padding: 1rem;
+            }
+            
+            .trending-slider {
+                height: 250px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .prompt-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-tabs {
+                justify-content: flex-start;
+            }
+            
+            .trending-slider {
+                height: 200px;
+            }
+            
+            .slide-content {
+                padding: 1rem;
+            }
+            
+            .slide-title {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo" id="home-logo">
+            <div class="logo-icon">M</div>
+            <div class="logo-text">MeechTo</div>
+        </div>
+        <div class="header-actions">
+            <button class="icon-btn" aria-label="Notifications">
+                <i class="fas fa-bell"></i>
+            </button>
+            <button class="icon-btn" aria-label="User profile">
+                <i class="fas fa-user"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Page -->
+    <div id="main-page">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Gemini Prompts Collection</h1>
+            <p>Discover and use the best AI prompts for Gemini. Perfect for creating amazing images with simple text instructions.</p>
+            <div class="search-container">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search Gemini prompts..." id="search-input">
+                </div>
+            </div>
+        </section>
+
+        <!-- Trending Slider -->
+        <section class="trending-section">
+            <div class="section-title">
+                <h2>Trending Prompts</h2>
+                <div class="slider-controls">
+                    <button class="slider-btn" id="prev-slide">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="slider-btn" id="next-slide">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="trending-slider">
+                <div class="slider-track" id="slider-track">
+                    <div class="slider-slide">
+                        <img src="https://images.unsplash.com/photo-1519456264917-42d0aa2e0625?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="Mother with Baby">
+                        <div class="slide-content">
+                            <span class="slide-category">Mother</span>
+                            <h3 class="slide-title">Mother with Baby</h3>
+                            <p class="slide-description">Tender moments between mother and child captured with emotional depth</p>
+                        </div>
+                    </div>
+                    <div class="slider-slide">
+                        <img src="https://images.unsplash.com/photo-1534308143481-c55f00be8bd7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="Romantic Couple">
+                        <div class="slide-content">
+                            <span class="slide-category">Couple</span>
+                            <h3 class="slide-title">Romantic Couple Scene</h3>
+                            <p class="slide-description">Create beautiful romantic scenes with perfect lighting and composition</p>
+                        </div>
+                    </div>
+                    <div class="slider-slide">
+                        <img src="https://images.unsplash.com/photo-1548358181-ec1efb3910ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="Diwali Festival">
+                        <div class="slide-content">
+                            <span class="slide-category">Festival</span>
+                            <h3 class="slide-title">Diwali Celebration</h3>
+                            <p class="slide-description">Vibrant Diwali scenes with diyas, fireworks, and traditional celebrations</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slider-dots" id="slider-dots">
+                <div class="slider-dot active"></div>
+                <div class="slider-dot"></div>
+                <div class="slider-dot"></div>
+            </div>
+        </section>
+
+        <!-- Filter Tabs -->
+        <div class="filter-tabs">
+            <div class="tab active" data-category="all">All Prompts</div>
+            <div class="tab" data-category="Men">Men</div>
+            <div class="tab" data-category="Women">Women</div>
+            <div class="tab" data-category="Couple">Couple</div>
+            <div class="tab" data-category="Child">Child</div>
+            <div class="tab" data-category="Father">Father</div>
+            <div class="tab" data-category="Mother">Mother</div>
+            <div class="tab" data-category="Family">Family</div>
+            <div class="tab" data-category="Festival">Festival</div>
+        </div>
+
+        <!-- Prompt Grid -->
+        <div class="prompt-grid" id="prompt-grid">
+            <!-- Prompts will be dynamically inserted here -->
+        </div>
+
+        <!-- CTA Section -->
+        <div class="cta-section">
+            <h2>Create Your Own Gemini Prompts</h2>
+            <p>Join our community and share your creative prompt ideas with others. Help expand our collection of amazing Gemini prompts.</p>
+            <button class="cta-button" id="submit-prompt-btn">
+                <i class="fas fa-plus"></i>
+                Submit Your Prompt
+            </button>
+        </div>
+    </div>
+
+    <!-- Submit Page -->
+    <div class="submit-page" id="submit-page">
+        <h1>Submit Your Prompt</h1>
+        <div class="submit-form">
+            <div class="form-group">
+                <label for="prompt-title">Prompt Title</label>
+                <input type="text" id="prompt-title" placeholder="Enter a descriptive title for your prompt">
+            </div>
+            <div class="form-group">
+                <label for="prompt-category">Category</label>
+                <select id="prompt-category">
+                    <option value="">Select a category</option>
+                    <option value="Men">Men</option>
+                    <option value="Women">Women</option>
+                    <option value="Couple">Couple</option>
+                    <option value="Child">Child</option>
+                    <option value="Father">Father</option>
+                    <option value="Mother">Mother</option>
+                    <option value="Family">Family</option>
+                    <option value="Festival">Festival</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="prompt-description">Description</label>
+                <textarea id="prompt-description" placeholder="Describe what your prompt creates and how to use it effectively"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="prompt-text">Prompt Text</label>
+                <textarea id="prompt-text" placeholder="Enter the actual prompt text that users will copy"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="prompt-image">Image URL (Optional)</label>
+                <input type="text" id="prompt-image" placeholder="Paste a URL to an example image">
+            </div>
+            <div class="form-actions">
+                <button class="back-btn" id="back-to-main">Back to Prompts</button>
+                <button class="submit-btn">Submit Prompt</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span>Prompt copied to clipboard!</span>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2023 <span class="brand">MeechTo</span> - All rights reserved</p>
+    </footer>
+
+    <script>
+        // Sample prompt data
+        const prompts = [
+            {
+                id: 1,
+                title: "Professional Man Portrait",
+                category: "Men",
+                description: "Create a professional portrait of a man in business attire with perfect lighting and composition.",
+                prompt_text: "A professional portrait of a man in business attire, studio lighting, sharp focus, professional composition, corporate background",
+                image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                id: 2,
+                title: "Elegant Woman Portrait",
+                category: "Women",
+                description: "Generate an elegant portrait of a woman with soft lighting and artistic composition.",
+                prompt_text: "An elegant portrait of a woman, soft natural lighting, artistic composition, subtle background, professional photo quality",
+                image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                id: 3,
+                title: "Romantic Couple Scene",
+                category: "Couple",
+                description: "Create a romantic scene with a couple in a beautiful outdoor setting during golden hour.",
+                prompt_text: "A romantic couple in a beautiful outdoor setting during golden hour, soft focus, warm tones, emotional connection, cinematic quality",
+                image: "https://images.unsplash.com/photo-1534308143481-c55f00be8bd7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                id: 4,
+                title: "Playful Child Scene",
+                category: "Child",
+                description: "Generate a joyful scene of a child playing in a garden with vibrant colors and natural lighting.",
+                prompt_text: "A joyful child playing in a colorful garden, natural lighting, vibrant colors, candid moment, happy expression",
+                image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                id: 5,
+                title: "Father with Child",
+                category: "Father",
+                description: "Create a heartwarming scene of a father spending quality time with his child in a cozy home setting.",
+                prompt_text: "A father spending quality time with his child in a cozy home setting, warm lighting, emotional connection, candid moment, family bond",
+                image: "https://images.unsplash.com/photo-1543269664-6473ef1f46e0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                id: 6,
+                title: "Mother with Baby",
+                category: "Mother",
+                description: "Generate a tender scene of a mother holding her baby with soft, warm lighting and emotional connection.",
+                prompt_text: "A tender scene of a mother holding her baby, soft warm lighting, emotional connection, gentle embrace, maternal bond",
+                image: "https://images.unsplash.com/photo-1519456264917-42d0aa2e0625?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                id: 7,
+                title: "Happy Family Portrait",
+                category: "Family",
+                description: "Create a joyful family portrait with parents and children in a natural outdoor setting with perfect composition.",
+                prompt_text: "A joyful family portrait with parents and children in a natural outdoor setting, perfect composition, happy expressions, golden hour lighting",
+                image: "https://images.unsplash.com/photo-1511988617509-a57c8a288659?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                id: 8,
+                title: "Diwali Celebration",
+                category: "Festival",
+                description: "Generate a vibrant Diwali celebration scene with diyas, fireworks, and family gatherings in traditional attire.",
+                prompt_text: "A vibrant Diwali celebration scene with diyas, fireworks, family gatherings, traditional attire, festive atmosphere, colorful decorations",
+                image: "https://images.unsplash.com/photo-1548358181-ec1efb3910ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+            }
+        ];
+
+        // DOM Elements
+        const mainPage = document.getElementById('main-page');
+        const submitPage = document.getElementById('submit-page');
+        const promptGrid = document.getElementById('prompt-grid');
+        const searchInput = document.getElementById('search-input');
+        const tabs = document.querySelectorAll('.tab');
+        const toast = document.getElementById('toast');
+        const submitPromptBtn = document.getElementById('submit-prompt-btn');
+        const backToMainBtn = document.getElementById('back-to-main');
+        const homeLogo = document.getElementById('home-logo');
+        
+        // Slider Elements
+        const sliderTrack = document.getElementById('slider-track');
+        const prevSlideBtn = document.getElementById('prev-slide');
+        const nextSlideBtn = document.getElementById('next-slide');
+        const sliderDots = document.getElementById('slider-dots');
+
+        // State variables
+        let currentCategory = 'all';
+        let searchQuery = '';
+        let currentSlide = 0;
+        const totalSlides = 3;
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            renderPrompts(prompts);
+            setupEventListeners();
+            startSliderAutoPlay();
+        });
+
+        // Render prompts to the grid
+        function renderPrompts(promptsToRender) {
+            promptGrid.innerHTML = '';
+            
+            if (promptsToRender.length === 0) {
+                promptGrid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 3rem 2rem; color: var(--text-secondary);">
+                        <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                        <h3>No prompts found</h3>
+                        <p>Try adjusting your search or filter criteria</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            promptsToRender.forEach(prompt => {
+                const promptCard = document.createElement('div');
+                promptCard.className = 'prompt-card';
+                promptCard.innerHTML = `
+                    <div class="card-image">
+                        <img src="${prompt.image}" alt="${prompt.title}" loading="lazy">
+                        <div class="image-overlay"></div>
+                        <div class="category-badge">${prompt.category}</div>
+                        <button class="copy-btn" data-prompt-id="${prompt.id}">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">${prompt.title}</h3>
+                        <p class="card-description">${prompt.description}</p>
+                        <div class="card-footer">
+                            <button class="copy-prompt-btn" data-prompt-id="${prompt.id}">
+                                <i class="far fa-copy"></i>
+                                Copy Prompt
+                            </button>
+                        </div>
+                    </div>
+                `;
+                promptGrid.appendChild(promptCard);
+            });
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Tab filtering
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    currentCategory = tab.getAttribute('data-category');
+                    filterPrompts();
+                });
+            });
+            
+            // Search functionality
+            searchInput.addEventListener('input', (e) => {
+                searchQuery = e.target.value.toLowerCase().trim();
+                filterPrompts();
+            });
+            
+            // Copy prompt functionality
+            document.addEventListener('click', (e) => {
+                if (e.target.closest('.copy-btn') || e.target.closest('.copy-prompt-btn')) {
+                    const button = e.target.closest('.copy-btn') || e.target.closest('.copy-prompt-btn');
+                    const promptId = parseInt(button.getAttribute('data-prompt-id'));
+                    copyPrompt(promptId);
+                }
+            });
+            
+            // Page navigation
+            submitPromptBtn.addEventListener('click', () => {
+                mainPage.style.display = 'none';
+                submitPage.style.display = 'block';
+            });
+            
+            backToMainBtn.addEventListener('click', () => {
+                submitPage.style.display = 'none';
+                mainPage.style.display = 'block';
+            });
+            
+            homeLogo.addEventListener('click', () => {
+                submitPage.style.display = 'none';
+                mainPage.style.display = 'block';
+            });
+            
+            // Slider controls
+            prevSlideBtn.addEventListener('click', () => {
+                currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+                updateSlider();
+            });
+            
+            nextSlideBtn.addEventListener('click', () => {
+                currentSlide = (currentSlide + 1) % totalSlides;
+                updateSlider();
+            });
+            
+            // Slider dots
+            sliderDots.querySelectorAll('.slider-dot').forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    currentSlide = index;
+                    updateSlider();
+                });
+            });
+        }
+
+        // Filter prompts based on category and search query
+        function filterPrompts() {
+            let filteredPrompts = prompts;
+            
+            // Filter by category
+            if (currentCategory !== 'all') {
+                filteredPrompts = filteredPrompts.filter(prompt => prompt.category === currentCategory);
+            }
+            
+            // Filter by search query
+            if (searchQuery) {
+                filteredPrompts = filteredPrompts.filter(prompt => 
+                    prompt.title.toLowerCase().includes(searchQuery) ||
+                    prompt.description.toLowerCase().includes(searchQuery) ||
+                    prompt.category.toLowerCase().includes(searchQuery)
+                );
+            }
+            
+            renderPrompts(filteredPrompts);
+        }
+
+        // Copy prompt text to clipboard
+        function copyPrompt(promptId) {
+            const prompt = prompts.find(p => p.id === promptId);
+            if (!prompt) return;
+            
+            navigator.clipboard.writeText(prompt.prompt_text)
+                .then(() => {
+                    // Show toast notification
+                    toast.classList.add('show');
+                    setTimeout(() => {
+                        toast.classList.remove('show');
+                    }, 3000);
+                    
+                    // Log copy event
+                    console.log(`Prompt copied: ${prompt.title}`);
+                })
+                .catch(err => {
+                    console.error('Failed to copy prompt: ', err);
+                });
+        }
+
+        // Update slider position
+        function updateSlider() {
+            sliderTrack.style.transform = `translateX(-${currentSlide * 100}%)`;
+            
+            // Update dots
+            sliderDots.querySelectorAll('.slider-dot').forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+
+        // Auto-play slider
+        function startSliderAutoPlay() {
+            setInterval(() => {
+                currentSlide = (currentSlide + 1) % totalSlides;
+                updateSlider();
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
