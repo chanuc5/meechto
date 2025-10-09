@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gemini Prompts| MeechTo</title>
+    <title>Gemini Prompts | MeechTo</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
     <style>
         :root {
             --primary: #7c3aed;
@@ -44,6 +47,8 @@
             justify-content: space-between;
             background: var(--bg-primary);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 100;
         }
 
         .logo {
@@ -76,6 +81,7 @@
         .header-actions {
             display: flex;
             gap: 1rem;
+            position: relative;
         }
 
         .icon-btn {
@@ -98,6 +104,42 @@
             transform: translateY(-2px);
         }
 
+        .profile-menu {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: var(--bg-glass);
+            border: 1px solid var(--border-glass);
+            border-radius: 12px;
+            padding: 1rem;
+            min-width: 200px;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow);
+            display: none;
+            z-index: 1000;
+        }
+
+        .profile-menu.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .profile-menu button {
+            width: 100%;
+            padding: 0.75rem;
+            background: transparent;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: var(--transition);
+            color: var(--text-primary);
+        }
+
+        .profile-menu button:hover {
+            background: var(--bg-secondary);
+        }
+
         /* Hero Section */
         .hero {
             text-align: center;
@@ -105,6 +147,8 @@
             background: linear-gradient(135deg, #f0f4ff, #fdf2ff);
             border-radius: 0 0 30px 30px;
             margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
         }
 
         .hero h1 {
@@ -114,19 +158,25 @@
             background: linear-gradient(135deg, var(--primary), var(--primary-light));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            position: relative;
+            z-index: 2;
         }
 
-        .hero p {
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto 2rem;
-            font-size: 1.1rem;
-            line-height: 1.6;
+        .brand-tagline {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            position: relative;
+            z-index: 2;
+            animation: fadeInUp 1s ease;
         }
 
         .search-container {
             max-width: 600px;
             margin: 0 auto;
+            position: relative;
+            z-index: 2;
         }
 
         .search-bar {
@@ -139,16 +189,40 @@
             backdrop-filter: blur(10px);
             transition: var(--transition);
             box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .search-bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.7s ease;
         }
 
         .search-bar:focus-within {
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .search-bar:focus-within::before {
+            left: 100%;
         }
 
         .search-bar i {
             color: var(--text-secondary);
             margin-right: 0.75rem;
+            transition: var(--transition);
+        }
+
+        .search-bar:focus-within i {
+            color: var(--primary);
+            transform: scale(1.1);
         }
 
         .search-bar input {
@@ -158,15 +232,21 @@
             color: var(--text-primary);
             font-size: 1rem;
             outline: none;
+            transition: var(--transition);
         }
 
         .search-bar input::placeholder {
             color: var(--text-secondary);
         }
 
+        .search-bar:focus-within input {
+            transform: translateX(5px);
+        }
+
         /* Trending Slider */
         .trending-section {
             padding: 0 2rem 2rem;
+            position: relative;
         }
 
         .section-title {
@@ -209,6 +289,7 @@
             overflow: hidden;
             border-radius: 16px;
             height: 300px;
+            perspective: 1000px;
         }
 
         .slider-track {
@@ -223,12 +304,18 @@
             position: relative;
             border-radius: 16px;
             overflow: hidden;
+            transform-style: preserve-3d;
         }
 
         .slider-slide img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .slider-slide:hover img {
+            transform: scale(1.05);
         }
 
         .slide-content {
@@ -239,6 +326,7 @@
             padding: 2rem;
             background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
             color: white;
+            transform: translateZ(20px);
         }
 
         .slide-category {
@@ -281,17 +369,22 @@
 
         .slider-dot.active {
             background: var(--primary);
+            transform: scale(1.2);
         }
 
         /* Filter Tabs */
-        .filter-tabs {
-            display: flex;
-            justify-content: center;
-            gap: 0.5rem;
+        .filter-tabs-container {
+            position: relative;
             padding: 0 2rem;
             margin-bottom: 2rem;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 0.5rem;
             overflow-x: auto;
             scrollbar-width: none;
+            position: relative;
         }
 
         .filter-tabs::-webkit-scrollbar {
@@ -308,17 +401,45 @@
             cursor: pointer;
             transition: var(--transition);
             white-space: nowrap;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(124, 58, 237, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .tab:hover::before {
+            left: 100%;
         }
 
         .tab:hover {
             background: rgba(124, 58, 237, 0.1);
             color: var(--primary);
+            transform: translateY(-2px);
         }
 
         .tab.active {
             background: var(--primary);
             color: white;
             border-color: var(--primary);
+            box-shadow: 0 5px 15px rgba(124, 58, 237, 0.3);
+        }
+
+        .tab-slider {
+            position: absolute;
+            bottom: 0;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 3px;
+            transition: all 0.3s ease;
         }
 
         /* Prompt Grid */
@@ -340,25 +461,22 @@
             backdrop-filter: blur(10px);
             position: relative;
             box-shadow: var(--shadow);
+            transform-style: preserve-3d;
         }
 
         .prompt-card:hover {
-            transform: translateY(-8px);
+            transform: translateY(-8px) rotateX(5deg);
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
         }
 
         .card-image {
             position: relative;
             width: 100%;
-            height: 0;
-            padding-bottom: 75%; /* 3:4 aspect ratio */
+            height: 200px;
             overflow: hidden;
         }
 
         .card-image img {
-            position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -411,7 +529,7 @@
         .copy-btn:hover {
             background: var(--primary);
             color: white;
-            transform: scale(1.1);
+            transform: scale(1.1) rotate(10deg);
         }
 
         .card-content {
@@ -422,6 +540,7 @@
             font-weight: 600;
             margin-bottom: 0.5rem;
             font-size: 1.1rem;
+            text-align: center;
         }
 
         .card-description {
@@ -429,14 +548,16 @@
             margin-bottom: 1rem;
             line-height: 1.5;
             display: -webkit-box;
-            -webkit-line-clamp: 3;
+            -webkit-line-clamp: 5;
             -webkit-box-orient: vertical;
             overflow: hidden;
+            text-align: center;
+            min-height: 90px;
         }
 
         .card-footer {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
         }
 
@@ -452,11 +573,29 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .copy-prompt-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .copy-prompt-btn:hover::before {
+            left: 100%;
         }
 
         .copy-prompt-btn:hover {
             background: var(--primary-light);
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(124, 58, 237, 0.3);
         }
 
         /* CTA Section */
@@ -466,12 +605,27 @@
             padding: 3rem 2rem;
             text-align: center;
             margin: 0 2rem 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(124, 58, 237, 0.05) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
         }
 
         .cta-section h2 {
             font-size: 1.8rem;
             margin-bottom: 1rem;
             color: var(--text-primary);
+            position: relative;
+            z-index: 2;
         }
 
         .cta-section p {
@@ -479,6 +633,8 @@
             max-width: 600px;
             margin: 0 auto 2rem;
             line-height: 1.6;
+            position: relative;
+            z-index: 2;
         }
 
         .cta-button {
@@ -495,6 +651,24 @@
             align-items: center;
             gap: 0.5rem;
             box-shadow: 0 5px 15px rgba(124, 58, 237, 0.3);
+            position: relative;
+            z-index: 2;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.7s ease;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
         }
 
         .cta-button:hover {
@@ -546,25 +720,46 @@
             font-weight: 700;
         }
 
-        /* Submit Page Styles */
-        .submit-page {
-            display: none;
-            padding: 2rem;
-            max-width: 800px;
-            margin: 0 auto;
+        /* Admin Login Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
         }
 
-        .submit-page h1 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            text-align: center;
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
         }
 
-        .submit-form {
-            background: var(--bg-secondary);
-            padding: 2rem;
+        .modal-content {
+            background: var(--bg-primary);
             border-radius: 16px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 400px;
             box-shadow: var(--shadow);
+            transform: translateY(-20px);
+            transition: var(--transition);
+        }
+
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal h2 {
+            margin-bottom: 1.5rem;
+            text-align: center;
         }
 
         .form-group {
@@ -577,9 +772,7 @@
             font-weight: 500;
         }
 
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
+        .form-group input {
             width: 100%;
             padding: 0.75rem;
             border: 1px solid var(--border-glass);
@@ -588,20 +781,152 @@
             transition: var(--transition);
         }
 
-        .form-group input:focus,
-        .form-group select:focus,
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .cancel-btn {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-glass);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .cancel-btn:hover {
+            background: var(--text-secondary);
+            color: white;
+        }
+
+        .login-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .login-btn:hover {
+            background: var(--primary-light);
+        }
+
+        /* Admin Panel */
+        .admin-panel {
+            display: none;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .admin-panel h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .admin-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-glass);
+        }
+
+        .admin-tab {
+            padding: 1rem 2rem;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .admin-tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .admin-tab-content {
+            display: none;
+        }
+
+        .admin-tab-content.active {
+            display: block;
+        }
+
+        .admin-form {
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .admin-form h2 {
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-glass);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+            min-height: 100px;
+            resize: vertical;
+        }
+
         .form-group textarea:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
         }
 
-        .form-group textarea {
-            min-height: 120px;
-            resize: vertical;
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-glass);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
         }
 
-        .form-actions {
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+
+        .admin-actions {
             display: flex;
             gap: 1rem;
             justify-content: flex-end;
@@ -636,6 +961,131 @@
             background: var(--primary-light);
         }
 
+        /* Prompts List */
+        .prompts-list {
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        .prompts-list h2 {
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .prompt-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-glass);
+            transition: var(--transition);
+        }
+
+        .prompt-item:hover {
+            background: rgba(124, 58, 237, 0.05);
+        }
+
+        .prompt-item:last-child {
+            border-bottom: none;
+        }
+
+        .prompt-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-right: 1rem;
+        }
+
+        .prompt-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .prompt-details {
+            flex: 1;
+        }
+
+        .prompt-details h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        .prompt-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .edit-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .edit-btn:hover {
+            background: var(--primary-light);
+        }
+
+        .delete-btn {
+            background: var(--accent-red);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .delete-btn:hover {
+            background: #dc2626;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-10px) rotate(180deg);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .prompt-grid {
@@ -652,6 +1102,26 @@
             
             .trending-slider {
                 height: 250px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+            }
+            
+            .prompt-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .prompt-image {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+            
+            .prompt-actions {
+                width: 100%;
+                justify-content: flex-end;
+                margin-top: 1rem;
             }
         }
 
@@ -686,12 +1156,12 @@
             <div class="logo-text">MeechTo</div>
         </div>
         <div class="header-actions">
-            <button class="icon-btn" aria-label="Notifications">
-                <i class="fas fa-bell"></i>
-            </button>
-            <button class="icon-btn" aria-label="User profile">
+            <button class="icon-btn" id="profile-btn" aria-label="User profile">
                 <i class="fas fa-user"></i>
             </button>
+            <div class="profile-menu" id="profile-menu">
+                <button id="admin-login-btn">Admin Login</button>
+            </div>
         </div>
     </header>
 
@@ -700,7 +1170,7 @@
         <!-- Hero Section -->
         <section class="hero">
             <h1>Gemini Prompts Collection</h1>
-            <p>Discover and use the best AI prompts for Gemini. Perfect for creating amazing images with simple text instructions.</p>
+            <div class="brand-tagline">Meechto – Turning Ideas into Reality</div>
             <div class="search-container">
                 <div class="search-bar">
                     <i class="fas fa-search"></i>
@@ -724,50 +1194,28 @@
             </div>
             <div class="trending-slider">
                 <div class="slider-track" id="slider-track">
-                    <div class="slider-slide">
-                        <img src="https://images.unsplash.com/photo-1519456264917-42d0aa2e0625?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="Mother with Baby">
-                        <div class="slide-content">
-                            <span class="slide-category">Mother</span>
-                            <h3 class="slide-title">Mother with Baby</h3>
-                            <p class="slide-description">Tender moments between mother and child captured with emotional depth</p>
-                        </div>
-                    </div>
-                    <div class="slider-slide">
-                        <img src="https://images.unsplash.com/photo-1534308143481-c55f00be8bd7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="Romantic Couple">
-                        <div class="slide-content">
-                            <span class="slide-category">Couple</span>
-                            <h3 class="slide-title">Romantic Couple Scene</h3>
-                            <p class="slide-description">Create beautiful romantic scenes with perfect lighting and composition</p>
-                        </div>
-                    </div>
-                    <div class="slider-slide">
-                        <img src="https://images.unsplash.com/photo-1548358181-ec1efb3910ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="Diwali Festival">
-                        <div class="slide-content">
-                            <span class="slide-category">Festival</span>
-                            <h3 class="slide-title">Diwali Celebration</h3>
-                            <p class="slide-description">Vibrant Diwali scenes with diyas, fireworks, and traditional celebrations</p>
-                        </div>
-                    </div>
+                    <!-- Trending slides will be dynamically inserted here -->
                 </div>
             </div>
             <div class="slider-dots" id="slider-dots">
-                <div class="slider-dot active"></div>
-                <div class="slider-dot"></div>
-                <div class="slider-dot"></div>
+                <!-- Slider dots will be dynamically inserted here -->
             </div>
         </section>
 
         <!-- Filter Tabs -->
-        <div class="filter-tabs">
-            <div class="tab active" data-category="all">All Prompts</div>
-            <div class="tab" data-category="Men">Men</div>
-            <div class="tab" data-category="Women">Women</div>
-            <div class="tab" data-category="Couple">Couple</div>
-            <div class="tab" data-category="Child">Child</div>
-            <div class="tab" data-category="Father">Father</div>
-            <div class="tab" data-category="Mother">Mother</div>
-            <div class="tab" data-category="Family">Family</div>
-            <div class="tab" data-category="Festival">Festival</div>
+        <div class="filter-tabs-container">
+            <div class="filter-tabs" id="filter-tabs">
+                <div class="tab active" data-category="all">All Prompts</div>
+                <div class="tab" data-category="Men">Men</div>
+                <div class="tab" data-category="Women">Women</div>
+                <div class="tab" data-category="Couple">Couple</div>
+                <div class="tab" data-category="Child">Child</div>
+                <div class="tab" data-category="Father">Father</div>
+                <div class="tab" data-category="Mother">Mother</div>
+                <div class="tab" data-category="Family">Family</div>
+                <div class="tab" data-category="Festival">Festival</div>
+            </div>
+            <div class="tab-slider" id="tab-slider"></div>
         </div>
 
         <!-- Prompt Grid -->
@@ -777,52 +1225,125 @@
 
         <!-- CTA Section -->
         <div class="cta-section">
-            <h2>Create Your Own Gemini Prompts</h2>
-            <p>Join our community and share your creative prompt ideas with others. Help expand our collection of amazing Gemini prompts.</p>
-            <button class="cta-button" id="submit-prompt-btn">
-                <i class="fas fa-plus"></i>
-                Submit Your Prompt
+            <h2>Explore More Gemini Prompts</h2>
+            <p>Discover the full potential of AI image generation with our extensive collection of curated prompts.</p>
+            <button class="cta-button" id="explore-more-btn">
+                <i class="fas fa-compass"></i>
+                Explore More
             </button>
         </div>
     </div>
 
-    <!-- Submit Page -->
-    <div class="submit-page" id="submit-page">
-        <h1>Submit Your Prompt</h1>
-        <div class="submit-form">
+    <!-- Admin Login Modal -->
+    <div class="modal" id="login-modal">
+        <div class="modal-content">
+            <h2>Admin Login</h2>
             <div class="form-group">
-                <label for="prompt-title">Prompt Title</label>
-                <input type="text" id="prompt-title" placeholder="Enter a descriptive title for your prompt">
+                <label for="admin-email">Email</label>
+                <input type="email" id="admin-email" placeholder="Enter admin email">
             </div>
             <div class="form-group">
-                <label for="prompt-category">Category</label>
-                <select id="prompt-category">
-                    <option value="">Select a category</option>
-                    <option value="Men">Men</option>
-                    <option value="Women">Women</option>
-                    <option value="Couple">Couple</option>
-                    <option value="Child">Child</option>
-                    <option value="Father">Father</option>
-                    <option value="Mother">Mother</option>
-                    <option value="Family">Family</option>
-                    <option value="Festival">Festival</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="prompt-description">Description</label>
-                <textarea id="prompt-description" placeholder="Describe what your prompt creates and how to use it effectively"></textarea>
-            </div>
-            <div class="form-group">
-                <label for="prompt-text">Prompt Text</label>
-                <textarea id="prompt-text" placeholder="Enter the actual prompt text that users will copy"></textarea>
-            </div>
-            <div class="form-group">
-                <label for="prompt-image">Image URL (Optional)</label>
-                <input type="text" id="prompt-image" placeholder="Paste a URL to an example image">
+                <label for="admin-password">Password</label>
+                <input type="password" id="admin-password" placeholder="Enter admin password">
             </div>
             <div class="form-actions">
-                <button class="back-btn" id="back-to-main">Back to Prompts</button>
-                <button class="submit-btn">Submit Prompt</button>
+                <button class="cancel-btn" id="cancel-login">Cancel</button>
+                <button class="login-btn" id="login-admin">Login</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div class="admin-panel" id="admin-panel">
+        <h1>Admin Panel</h1>
+        
+        <div class="admin-tabs">
+            <button class="admin-tab active" data-tab="prompts">Manage Prompts</button>
+            <button class="admin-tab" data-tab="trending">Trending Prompts</button>
+        </div>
+
+        <!-- Manage Prompts Tab -->
+        <div class="admin-tab-content active" id="prompts-tab">
+            <div class="admin-form">
+                <h2>Add New Prompt</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="prompt-category">Category</label>
+                        <select id="prompt-category">
+                            <option value="">Select a category</option>
+                            <option value="Men">Men</option>
+                            <option value="Women">Women</option>
+                            <option value="Couple">Couple</option>
+                            <option value="Child">Child</option>
+                            <option value="Father">Father</option>
+                            <option value="Mother">Mother</option>
+                            <option value="Family">Family</option>
+                            <option value="Festival">Festival</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="prompt-image">Image Location</label>
+                        <input type="text" id="prompt-image" placeholder="Enter image file location">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="prompt-text">Prompt Text</label>
+                    <textarea id="prompt-text" placeholder="Enter the actual prompt text that users will copy"></textarea>
+                </div>
+                <div class="admin-actions">
+                    <button class="back-btn" id="back-to-main-admin">Back to Main</button>
+                    <button class="submit-btn" id="add-prompt">Submit Prompt</button>
+                </div>
+            </div>
+            <div class="prompts-list">
+                <h2>Manage Prompts</h2>
+                <div id="admin-prompt-list">
+                    <!-- Admin prompt list will be dynamically inserted here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Trending Prompts Tab -->
+        <div class="admin-tab-content" id="trending-tab">
+            <div class="admin-form">
+                <h2>Add Trending Prompt</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="trending-category">Category</label>
+                        <select id="trending-category">
+                            <option value="">Select a category</option>
+                            <option value="Men">Men</option>
+                            <option value="Women">Women</option>
+                            <option value="Couple">Couple</option>
+                            <option value="Child">Child</option>
+                            <option value="Father">Father</option>
+                            <option value="Mother">Mother</option>
+                            <option value="Family">Family</option>
+                            <option value="Festival">Festival</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="trending-image">Image Location</label>
+                        <input type="text" id="trending-image" placeholder="Enter image file location">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="trending-title">Title</label>
+                    <input type="text" id="trending-title" placeholder="Enter trending prompt title">
+                </div>
+                <div class="form-group">
+                    <label for="trending-description">Description</label>
+                    <textarea id="trending-description" placeholder="Enter trending prompt description"></textarea>
+                </div>
+                <div class="admin-actions">
+                    <button class="submit-btn" id="add-trending">Add Trending</button>
+                </div>
+            </div>
+            <div class="prompts-list">
+                <h2>Manage Trending Prompts</h2>
+                <div id="admin-trending-list">
+                    <!-- Admin trending list will be dynamically inserted here -->
+                </div>
             </div>
         </div>
     </div>
@@ -839,103 +1360,134 @@
     </footer>
 
     <script>
-        // Sample prompt data
-        const prompts = [
-            {
-                id: 1,
-                title: "Professional Man Portrait",
-                category: "Men",
-                description: "Create a professional portrait of a man in business attire with perfect lighting and composition.",
-                prompt_text: "A professional portrait of a man in business attire, studio lighting, sharp focus, professional composition, corporate background",
-                image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
-            },
-            {
-                id: 2,
-                title: "Elegant Woman Portrait",
-                category: "Women",
-                description: "Generate an elegant portrait of a woman with soft lighting and artistic composition.",
-                prompt_text: "An elegant portrait of a woman, soft natural lighting, artistic composition, subtle background, professional photo quality",
-                image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
-            },
-            {
-                id: 3,
-                title: "Romantic Couple Scene",
-                category: "Couple",
-                description: "Create a romantic scene with a couple in a beautiful outdoor setting during golden hour.",
-                prompt_text: "A romantic couple in a beautiful outdoor setting during golden hour, soft focus, warm tones, emotional connection, cinematic quality",
-                image: "https://images.unsplash.com/photo-1534308143481-c55f00be8bd7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
-            },
-            {
-                id: 4,
-                title: "Playful Child Scene",
-                category: "Child",
-                description: "Generate a joyful scene of a child playing in a garden with vibrant colors and natural lighting.",
-                prompt_text: "A joyful child playing in a colorful garden, natural lighting, vibrant colors, candid moment, happy expression",
-                image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
-            },
-            {
-                id: 5,
-                title: "Father with Child",
-                category: "Father",
-                description: "Create a heartwarming scene of a father spending quality time with his child in a cozy home setting.",
-                prompt_text: "A father spending quality time with his child in a cozy home setting, warm lighting, emotional connection, candid moment, family bond",
-                image: "https://images.unsplash.com/photo-1543269664-6473ef1f46e0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
-            },
-            {
-                id: 6,
-                title: "Mother with Baby",
-                category: "Mother",
-                description: "Generate a tender scene of a mother holding her baby with soft, warm lighting and emotional connection.",
-                prompt_text: "A tender scene of a mother holding her baby, soft warm lighting, emotional connection, gentle embrace, maternal bond",
-                image: "https://images.unsplash.com/photo-1519456264917-42d0aa2e0625?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
-            },
-            {
-                id: 7,
-                title: "Happy Family Portrait",
-                category: "Family",
-                description: "Create a joyful family portrait with parents and children in a natural outdoor setting with perfect composition.",
-                prompt_text: "A joyful family portrait with parents and children in a natural outdoor setting, perfect composition, happy expressions, golden hour lighting",
-                image: "https://images.unsplash.com/photo-1511988617509-a57c8a288659?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
-            },
-            {
-                id: 8,
-                title: "Diwali Celebration",
-                category: "Festival",
-                description: "Generate a vibrant Diwali celebration scene with diyas, fireworks, and family gatherings in traditional attire.",
-                prompt_text: "A vibrant Diwali celebration scene with diyas, fireworks, family gatherings, traditional attire, festive atmosphere, colorful decorations",
-                image: "https://images.unsplash.com/photo-1548358181-ec1efb3910ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
-            }
-        ];
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBr9aWf7RcqDOJU1lakNsP0y1Gi9i9Ry3o",
+            authDomain: "meechto-resume.firebaseapp.com",
+            databaseURL: "https://meechto-resume-default-rtdb.firebaseio.com",
+            projectId: "meechto-resume",
+            storageBucket: "meechto-resume.firebasestorage.app",
+            messagingSenderId: "50111983443",
+            appId: "1:50111983443:web:bae8f8e63701f11a537ba6",
+            measurementId: "G-L5356HBP7T"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+
+        // Default admin credentials
+        const ADMIN_EMAIL = "admin@meechto.com";
+        const ADMIN_PASSWORD = "admin123";
 
         // DOM Elements
         const mainPage = document.getElementById('main-page');
-        const submitPage = document.getElementById('submit-page');
         const promptGrid = document.getElementById('prompt-grid');
         const searchInput = document.getElementById('search-input');
         const tabs = document.querySelectorAll('.tab');
+        const tabSlider = document.getElementById('tab-slider');
         const toast = document.getElementById('toast');
-        const submitPromptBtn = document.getElementById('submit-prompt-btn');
-        const backToMainBtn = document.getElementById('back-to-main');
-        const homeLogo = document.getElementById('home-logo');
-        
-        // Slider Elements
+        const profileBtn = document.getElementById('profile-btn');
+        const profileMenu = document.getElementById('profile-menu');
+        const adminLoginBtn = document.getElementById('admin-login-btn');
+        const loginModal = document.getElementById('login-modal');
+        const cancelLoginBtn = document.getElementById('cancel-login');
+        const loginAdminBtn = document.getElementById('login-admin');
+        const adminPanel = document.getElementById('admin-panel');
+        const backToMainAdminBtn = document.getElementById('back-to-main-admin');
+        const addPromptBtn = document.getElementById('add-prompt');
+        const adminPromptList = document.getElementById('admin-prompt-list');
+        const exploreMoreBtn = document.getElementById('explore-more-btn');
+        const adminTabs = document.querySelectorAll('.admin-tab');
+        const adminTabContents = document.querySelectorAll('.admin-tab-content');
+        const addTrendingBtn = document.getElementById('add-trending');
+        const adminTrendingList = document.getElementById('admin-trending-list');
         const sliderTrack = document.getElementById('slider-track');
+        const sliderDots = document.getElementById('slider-dots');
         const prevSlideBtn = document.getElementById('prev-slide');
         const nextSlideBtn = document.getElementById('next-slide');
-        const sliderDots = document.getElementById('slider-dots');
-
+        
         // State variables
         let currentCategory = 'all';
         let searchQuery = '';
         let currentSlide = 0;
-        const totalSlides = 3;
+        let totalSlides = 0;
+        let currentUser = null;
+        let prompts = [];
+        let trendingPrompts = [];
+        let editingPromptId = null;
+        let editingTrendingId = null;
 
         // Initialize the page
         document.addEventListener('DOMContentLoaded', () => {
-            renderPrompts(prompts);
+            loadPrompts();
+            loadTrendingPrompts();
             setupEventListeners();
             startSliderAutoPlay();
+            updateTabSlider();
+            checkAuthState();
         });
+
+        // Check authentication state
+        function checkAuthState() {
+            auth.onAuthStateChanged(user => {
+                currentUser = user;
+                if (user) {
+                    // User is signed in
+                    profileMenu.innerHTML = `
+                        <button id="admin-panel-btn">Admin Panel</button>
+                        <button id="logout-btn">Logout</button>
+                    `;
+                    document.getElementById('admin-panel-btn').addEventListener('click', showAdminPanel);
+                    document.getElementById('logout-btn').addEventListener('click', logout);
+                } else {
+                    // User is signed out
+                    profileMenu.innerHTML = `<button id="admin-login-btn">Admin Login</button>`;
+                    document.getElementById('admin-login-btn').addEventListener('click', showLoginModal);
+                }
+            });
+        }
+
+        // Load prompts from Firebase
+        function loadPrompts() {
+            database.ref('prompts').on('value', snapshot => {
+                prompts = [];
+                const data = snapshot.val();
+                if (data) {
+                    Object.keys(data).forEach(key => {
+                        prompts.push({
+                            id: key,
+                            ...data[key]
+                        });
+                    });
+                }
+                renderPrompts(prompts);
+                if (currentUser) {
+                    renderAdminPromptList();
+                }
+            });
+        }
+
+        // Load trending prompts from Firebase
+        function loadTrendingPrompts() {
+            database.ref('trending').on('value', snapshot => {
+                trendingPrompts = [];
+                const data = snapshot.val();
+                if (data) {
+                    Object.keys(data).forEach(key => {
+                        trendingPrompts.push({
+                            id: key,
+                            ...data[key]
+                        });
+                    });
+                }
+                renderTrendingSlider();
+                if (currentUser) {
+                    renderAdminTrendingList();
+                }
+            });
+        }
 
         // Render prompts to the grid
         function renderPrompts(promptsToRender) {
@@ -952,12 +1504,13 @@
                 return;
             }
             
-            promptsToRender.forEach(prompt => {
+            promptsToRender.forEach((prompt, index) => {
                 const promptCard = document.createElement('div');
                 promptCard.className = 'prompt-card';
+                promptCard.style.animation = `slideIn 0.5s ease ${index * 0.1}s both`;
                 promptCard.innerHTML = `
                     <div class="card-image">
-                        <img src="${prompt.image}" alt="${prompt.title}" loading="lazy">
+                        <img src="${prompt.image}" alt="${prompt.category}" loading="lazy">
                         <div class="image-overlay"></div>
                         <div class="category-badge">${prompt.category}</div>
                         <button class="copy-btn" data-prompt-id="${prompt.id}">
@@ -965,8 +1518,8 @@
                         </button>
                     </div>
                     <div class="card-content">
-                        <h3 class="card-title">${prompt.title}</h3>
-                        <p class="card-description">${prompt.description}</p>
+                        <h3 class="card-title">${prompt.category} Prompt</h3>
+                        <p class="card-description">${prompt.prompt_text}</p>
                         <div class="card-footer">
                             <button class="copy-prompt-btn" data-prompt-id="${prompt.id}">
                                 <i class="far fa-copy"></i>
@@ -979,6 +1532,164 @@
             });
         }
 
+        // Render trending slider
+        function renderTrendingSlider() {
+            sliderTrack.innerHTML = '';
+            sliderDots.innerHTML = '';
+            
+            if (trendingPrompts.length === 0) {
+                // Default trending slides
+                const defaultSlides = [
+                    {
+                        image: "https://images.unsplash.com/photo-1519456264917-42d0aa2e0625?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
+                        category: "Mother",
+                        title: "Mother with Baby",
+                        description: "Tender moments between mother and child captured with emotional depth"
+                    },
+                    {
+                        image: "https://images.unsplash.com/photo-1534308143481-c55f00be8bd7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
+                        category: "Couple",
+                        title: "Romantic Couple Scene",
+                        description: "Create beautiful romantic scenes with perfect lighting and composition"
+                    },
+                    {
+                        image: "https://images.unsplash.com/photo-1548358181-ec1efb3910ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
+                        category: "Festival",
+                        title: "Diwali Celebration",
+                        description: "Vibrant Diwali scenes with diyas, fireworks, and traditional celebrations"
+                    }
+                ];
+                
+                defaultSlides.forEach((slide, index) => {
+                    const slideElement = document.createElement('div');
+                    slideElement.className = 'slider-slide';
+                    slideElement.innerHTML = `
+                        <img src="${slide.image}" alt="${slide.title}">
+                        <div class="slide-content">
+                            <span class="slide-category">${slide.category}</span>
+                            <h3 class="slide-title">${slide.title}</h3>
+                            <p class="slide-description">${slide.description}</p>
+                        </div>
+                    `;
+                    sliderTrack.appendChild(slideElement);
+                    
+                    const dot = document.createElement('div');
+                    dot.className = `slider-dot ${index === 0 ? 'active' : ''}`;
+                    dot.addEventListener('click', () => {
+                        currentSlide = index;
+                        updateSlider();
+                    });
+                    sliderDots.appendChild(dot);
+                });
+                
+                totalSlides = defaultSlides.length;
+            } else {
+                trendingPrompts.forEach((prompt, index) => {
+                    const slideElement = document.createElement('div');
+                    slideElement.className = 'slider-slide';
+                    slideElement.innerHTML = `
+                        <img src="${prompt.image}" alt="${prompt.title}">
+                        <div class="slide-content">
+                            <span class="slide-category">${prompt.category}</span>
+                            <h3 class="slide-title">${prompt.title}</h3>
+                            <p class="slide-description">${prompt.description}</p>
+                        </div>
+                    `;
+                    sliderTrack.appendChild(slideElement);
+                    
+                    const dot = document.createElement('div');
+                    dot.className = `slider-dot ${index === 0 ? 'active' : ''}`;
+                    dot.addEventListener('click', () => {
+                        currentSlide = index;
+                        updateSlider();
+                    });
+                    sliderDots.appendChild(dot);
+                });
+                
+                totalSlides = trendingPrompts.length;
+            }
+            
+            updateSlider();
+        }
+
+        // Render admin prompt list
+        function renderAdminPromptList() {
+            adminPromptList.innerHTML = '';
+            
+            if (prompts.length === 0) {
+                adminPromptList.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+                        <i class="fas fa-inbox" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                        <h3>No prompts added yet</h3>
+                        <p>Add your first prompt using the form above</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            prompts.forEach(prompt => {
+                const promptItem = document.createElement('div');
+                promptItem.className = 'prompt-item';
+                promptItem.innerHTML = `
+                    <div class="prompt-image">
+                        <img src="${prompt.image}" alt="${prompt.category}">
+                    </div>
+                    <div class="prompt-details">
+                        <h3>${prompt.category} Prompt</h3>
+                        <p>${prompt.prompt_text.substring(0, 100)}...</p>
+                    </div>
+                    <div class="prompt-actions">
+                        <button class="edit-btn" data-prompt-id="${prompt.id}">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="delete-btn" data-prompt-id="${prompt.id}">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                `;
+                adminPromptList.appendChild(promptItem);
+            });
+        }
+
+        // Render admin trending list
+        function renderAdminTrendingList() {
+            adminTrendingList.innerHTML = '';
+            
+            if (trendingPrompts.length === 0) {
+                adminTrendingList.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+                        <i class="fas fa-fire" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                        <h3>No trending prompts added yet</h3>
+                        <p>Add your first trending prompt using the form above</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            trendingPrompts.forEach(prompt => {
+                const promptItem = document.createElement('div');
+                promptItem.className = 'prompt-item';
+                promptItem.innerHTML = `
+                    <div class="prompt-image">
+                        <img src="${prompt.image}" alt="${prompt.title}">
+                    </div>
+                    <div class="prompt-details">
+                        <h3>${prompt.title}</h3>
+                        <p>${prompt.description.substring(0, 100)}...</p>
+                    </div>
+                    <div class="prompt-actions">
+                        <button class="edit-btn" data-trending-id="${prompt.id}">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="delete-btn" data-trending-id="${prompt.id}">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                `;
+                adminTrendingList.appendChild(promptItem);
+            });
+        }
+
         // Set up event listeners
         function setupEventListeners() {
             // Tab filtering
@@ -988,6 +1699,7 @@
                     tab.classList.add('active');
                     currentCategory = tab.getAttribute('data-category');
                     filterPrompts();
+                    updateTabSlider();
                 });
             });
             
@@ -1001,25 +1713,72 @@
             document.addEventListener('click', (e) => {
                 if (e.target.closest('.copy-btn') || e.target.closest('.copy-prompt-btn')) {
                     const button = e.target.closest('.copy-btn') || e.target.closest('.copy-prompt-btn');
-                    const promptId = parseInt(button.getAttribute('data-prompt-id'));
+                    const promptId = button.getAttribute('data-prompt-id');
                     copyPrompt(promptId);
+                }
+                
+                if (e.target.closest('.delete-btn')) {
+                    const button = e.target.closest('.delete-btn');
+                    const promptId = button.getAttribute('data-prompt-id');
+                    const trendingId = button.getAttribute('data-trending-id');
+                    
+                    if (promptId) {
+                        deletePrompt(promptId);
+                    } else if (trendingId) {
+                        deleteTrendingPrompt(trendingId);
+                    }
+                }
+                
+                if (e.target.closest('.edit-btn')) {
+                    const button = e.target.closest('.edit-btn');
+                    const promptId = button.getAttribute('data-prompt-id');
+                    const trendingId = button.getAttribute('data-trending-id');
+                    
+                    if (promptId) {
+                        editPrompt(promptId);
+                    } else if (trendingId) {
+                        editTrendingPrompt(trendingId);
+                    }
                 }
             });
             
-            // Page navigation
-            submitPromptBtn.addEventListener('click', () => {
-                mainPage.style.display = 'none';
-                submitPage.style.display = 'block';
+            // Profile menu
+            profileBtn.addEventListener('click', () => {
+                profileMenu.classList.toggle('active');
             });
             
-            backToMainBtn.addEventListener('click', () => {
-                submitPage.style.display = 'none';
-                mainPage.style.display = 'block';
+            // Admin login
+            adminLoginBtn.addEventListener('click', showLoginModal);
+            
+            // Login modal
+            cancelLoginBtn.addEventListener('click', hideLoginModal);
+            loginAdminBtn.addEventListener('click', loginAdmin);
+            
+            // Admin panel
+            backToMainAdminBtn.addEventListener('click', showMainPage);
+            
+            // Add prompt
+            addPromptBtn.addEventListener('click', addPrompt);
+            
+            // Add trending
+            addTrendingBtn.addEventListener('click', addTrendingPrompt);
+            
+            // Admin tabs
+            adminTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+                    
+                    adminTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    adminTabContents.forEach(content => content.classList.remove('active'));
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                });
             });
             
-            homeLogo.addEventListener('click', () => {
-                submitPage.style.display = 'none';
-                mainPage.style.display = 'block';
+            // Explore more button
+            exploreMoreBtn.addEventListener('click', () => {
+                document.querySelector('.filter-tabs').scrollIntoView({ behavior: 'smooth' });
             });
             
             // Slider controls
@@ -1033,13 +1792,248 @@
                 updateSlider();
             });
             
-            // Slider dots
-            sliderDots.querySelectorAll('.slider-dot').forEach((dot, index) => {
-                dot.addEventListener('click', () => {
-                    currentSlide = index;
-                    updateSlider();
-                });
+            // Close profile menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!profileBtn.contains(e.target) && !profileMenu.contains(e.target)) {
+                    profileMenu.classList.remove('active');
+                }
             });
+        }
+
+        // Show login modal
+        function showLoginModal() {
+            loginModal.classList.add('active');
+            profileMenu.classList.remove('active');
+        }
+
+        // Hide login modal
+        function hideLoginModal() {
+            loginModal.classList.remove('active');
+        }
+
+        // Login admin - FIXED VERSION
+        function loginAdmin() {
+            const email = document.getElementById('admin-email').value;
+            const password = document.getElementById('admin-password').value;
+            
+            if (!email || !password) {
+                showToast('Please enter both email and password');
+                return;
+            }
+            
+            // Try to sign in with provided credentials
+            auth.signInWithEmailAndPassword(email, password)
+                .then(() => {
+                    hideLoginModal();
+                    showToast('Admin login successful');
+                })
+                .catch(error => {
+                    // If login fails, show error message
+                    showToast('Login failed: ' + error.message);
+                });
+        }
+
+        // Logout
+        function logout() {
+            auth.signOut()
+                .then(() => {
+                    showMainPage();
+                    showToast('Logged out successfully');
+                })
+                .catch(error => {
+                    showToast('Logout failed: ' + error.message);
+                });
+        }
+
+        // Show admin panel
+        function showAdminPanel() {
+            mainPage.style.display = 'none';
+            adminPanel.style.display = 'block';
+            profileMenu.classList.remove('active');
+        }
+
+        // Show main page
+        function showMainPage() {
+            mainPage.style.display = 'block';
+            adminPanel.style.display = 'none';
+            loginModal.classList.remove('active');
+            editingPromptId = null;
+            editingTrendingId = null;
+            resetForm();
+        }
+
+        // Add prompt
+        function addPrompt() {
+            const category = document.getElementById('prompt-category').value;
+            const image = document.getElementById('prompt-image').value;
+            const promptText = document.getElementById('prompt-text').value;
+            
+            if (!category || !image || !promptText) {
+                showToast('Please fill in all fields');
+                return;
+            }
+            
+            const newPrompt = {
+                category,
+                image,
+                prompt_text: promptText,
+                created_at: Date.now()
+            };
+            
+            if (editingPromptId) {
+                // Update existing prompt
+                database.ref('prompts/' + editingPromptId).update(newPrompt)
+                    .then(() => {
+                        showToast('Prompt updated successfully');
+                        editingPromptId = null;
+                        resetForm();
+                    })
+                    .catch(error => {
+                        showToast('Error updating prompt: ' + error.message);
+                    });
+            } else {
+                // Add new prompt
+                database.ref('prompts').push(newPrompt)
+                    .then(() => {
+                        showToast('Prompt added successfully');
+                        resetForm();
+                    })
+                    .catch(error => {
+                        showToast('Error adding prompt: ' + error.message);
+                    });
+            }
+        }
+
+        // Add trending prompt
+        function addTrendingPrompt() {
+            const category = document.getElementById('trending-category').value;
+            const image = document.getElementById('trending-image').value;
+            const title = document.getElementById('trending-title').value;
+            const description = document.getElementById('trending-description').value;
+            
+            if (!category || !image || !title || !description) {
+                showToast('Please fill in all fields');
+                return;
+            }
+            
+            const newTrending = {
+                category,
+                image,
+                title,
+                description,
+                created_at: Date.now()
+            };
+            
+            if (editingTrendingId) {
+                // Update existing trending prompt
+                database.ref('trending/' + editingTrendingId).update(newTrending)
+                    .then(() => {
+                        showToast('Trending prompt updated successfully');
+                        editingTrendingId = null;
+                        resetTrendingForm();
+                    })
+                    .catch(error => {
+                        showToast('Error updating trending prompt: ' + error.message);
+                    });
+            } else {
+                // Add new trending prompt
+                database.ref('trending').push(newTrending)
+                    .then(() => {
+                        showToast('Trending prompt added successfully');
+                        resetTrendingForm();
+                    })
+                    .catch(error => {
+                        showToast('Error adding trending prompt: ' + error.message);
+                    });
+            }
+        }
+
+        // Edit prompt
+        function editPrompt(promptId) {
+            const prompt = prompts.find(p => p.id === promptId);
+            if (!prompt) return;
+            
+            document.getElementById('prompt-category').value = prompt.category;
+            document.getElementById('prompt-image').value = prompt.image;
+            document.getElementById('prompt-text').value = prompt.prompt_text;
+            
+            editingPromptId = promptId;
+            addPromptBtn.textContent = 'Update Prompt';
+            
+            // Scroll to form
+            document.querySelector('.admin-form').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Edit trending prompt
+        function editTrendingPrompt(trendingId) {
+            const prompt = trendingPrompts.find(p => p.id === trendingId);
+            if (!prompt) return;
+            
+            document.getElementById('trending-category').value = prompt.category;
+            document.getElementById('trending-image').value = prompt.image;
+            document.getElementById('trending-title').value = prompt.title;
+            document.getElementById('trending-description').value = prompt.description;
+            
+            editingTrendingId = trendingId;
+            addTrendingBtn.textContent = 'Update Trending';
+            
+            // Scroll to form
+            document.querySelector('.admin-form').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Delete prompt
+        function deletePrompt(promptId) {
+            if (confirm('Are you sure you want to delete this prompt?')) {
+                database.ref('prompts/' + promptId).remove()
+                    .then(() => {
+                        showToast('Prompt deleted successfully');
+                    })
+                    .catch(error => {
+                        showToast('Error deleting prompt: ' + error.message);
+                    });
+            }
+        }
+
+        // Delete trending prompt
+        function deleteTrendingPrompt(trendingId) {
+            if (confirm('Are you sure you want to delete this trending prompt?')) {
+                database.ref('trending/' + trendingId).remove()
+                    .then(() => {
+                        showToast('Trending prompt deleted successfully');
+                    })
+                    .catch(error => {
+                        showToast('Error deleting trending prompt: ' + error.message);
+                    });
+            }
+        }
+
+        // Reset form
+        function resetForm() {
+            document.getElementById('prompt-category').value = '';
+            document.getElementById('prompt-image').value = '';
+            document.getElementById('prompt-text').value = '';
+            addPromptBtn.textContent = 'Submit Prompt';
+        }
+
+        // Reset trending form
+        function resetTrendingForm() {
+            document.getElementById('trending-category').value = '';
+            document.getElementById('trending-image').value = '';
+            document.getElementById('trending-title').value = '';
+            document.getElementById('trending-description').value = '';
+            addTrendingBtn.textContent = 'Add Trending';
+        }
+
+        // Update tab slider position
+        function updateTabSlider() {
+            const activeTab = document.querySelector('.tab.active');
+            if (activeTab && tabSlider) {
+                const tabRect = activeTab.getBoundingClientRect();
+                const containerRect = document.querySelector('.filter-tabs-container').getBoundingClientRect();
+                
+                tabSlider.style.width = `${tabRect.width}px`;
+                tabSlider.style.left = `${tabRect.left - containerRect.left}px`;
+            }
         }
 
         // Filter prompts based on category and search query
@@ -1054,9 +2048,8 @@
             // Filter by search query
             if (searchQuery) {
                 filteredPrompts = filteredPrompts.filter(prompt => 
-                    prompt.title.toLowerCase().includes(searchQuery) ||
-                    prompt.description.toLowerCase().includes(searchQuery) ||
-                    prompt.category.toLowerCase().includes(searchQuery)
+                    prompt.category.toLowerCase().includes(searchQuery) ||
+                    prompt.prompt_text.toLowerCase().includes(searchQuery)
                 );
             }
             
@@ -1070,18 +2063,20 @@
             
             navigator.clipboard.writeText(prompt.prompt_text)
                 .then(() => {
-                    // Show toast notification
-                    toast.classList.add('show');
-                    setTimeout(() => {
-                        toast.classList.remove('show');
-                    }, 3000);
-                    
-                    // Log copy event
-                    console.log(`Prompt copied: ${prompt.title}`);
+                    showToast('Prompt copied to clipboard!');
                 })
                 .catch(err => {
                     console.error('Failed to copy prompt: ', err);
                 });
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            toast.querySelector('span').textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
         }
 
         // Update slider position
@@ -1103,5 +2098,4 @@
         }
     </script>
 </body>
-
 </html>
