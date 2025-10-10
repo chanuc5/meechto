@@ -8,21 +8,27 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
     <style>
         :root {
-            --primary: #7c3aed; 
+            --primary: #7c3aed;
             --primary-light: #8b5cf6;
             --primary-dark: #6d28d9;
             --accent-yellow: #f59e0b;
             --accent-red: #ef4444;
+            --accent-green: #10b981;
             --text-primary: #1e293b;
             --text-secondary: #64748b;
             --bg-primary: #ffffff;
             --bg-secondary: #f8fafc;
+            --bg-dark: #0f172a;
             --bg-glass: rgba(255, 255, 255, 0.8);
             --border-glass: rgba(226, 232, 240, 0.8);
             --shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.1);
             --transition: all 0.3s ease;
+            --radius: 16px;
+            --radius-lg: 24px;
         }
 
         * {
@@ -39,7 +45,7 @@
             overflow-x: hidden;
         }
 
-        /* Header Styles */
+        /* Premium Header Styles */
         header {
             padding: 1.5rem 2rem;
             display: flex;
@@ -47,8 +53,10 @@
             justify-content: space-between;
             background: var(--bg-primary);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            position: relative;
+            position: sticky;
+            top: 0;
             z-index: 100;
+            backdrop-filter: blur(10px);
         }
 
         .logo {
@@ -59,23 +67,26 @@
         }
 
         .logo-icon {
-            width: 36px;
-            height: 36px;
+            width: 42px;
+            height: 42px;
             background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            border-radius: 10px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
         }
 
         .logo-text {
             font-size: 1.5rem;
-            font-weight: 700;
+            font-weight: 800;
             background: linear-gradient(135deg, var(--primary), var(--primary-light));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
         }
 
         .header-actions {
@@ -87,21 +98,23 @@
         .icon-btn {
             background: var(--bg-secondary);
             border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             transition: var(--transition);
             color: var(--text-secondary);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
         .icon-btn:hover {
             background: var(--primary);
             color: white;
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
         }
 
         .profile-menu {
@@ -110,11 +123,11 @@
             right: 0;
             background: var(--bg-glass);
             border: 1px solid var(--border-glass);
-            border-radius: 12px;
+            border-radius: var(--radius);
             padding: 1rem;
             min-width: 200px;
-            backdrop-filter: blur(10px);
-            box-shadow: var(--shadow);
+            backdrop-filter: blur(20px);
+            box-shadow: var(--shadow-lg);
             display: none;
             z-index: 1000;
         }
@@ -134,25 +147,38 @@
             border-radius: 8px;
             transition: var(--transition);
             color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .profile-menu button:hover {
             background: var(--bg-secondary);
         }
 
-        /* Hero Section */
+        /* Premium Hero Section */
         .hero {
             text-align: center;
-            padding: 3rem 2rem;
+            padding: 5rem 2rem;
             background: linear-gradient(135deg, #f0f4ff, #fdf2ff);
-            border-radius: 0 0 30px 30px;
-            margin-bottom: 2rem;
+            border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+            margin-bottom: 3rem;
             position: relative;
             overflow: hidden;
         }
 
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%237c3aed' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
         .hero h1 {
-            font-size: 2.5rem;
+            font-size: 3rem;
             font-weight: 800;
             margin-bottom: 1rem;
             background: linear-gradient(135deg, var(--primary), var(--primary-light));
@@ -160,16 +186,18 @@
             -webkit-text-fill-color: transparent;
             position: relative;
             z-index: 2;
+            line-height: 1.1;
         }
 
         .brand-tagline {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
             color: var(--text-primary);
             position: relative;
             z-index: 2;
             animation: fadeInUp 1s ease;
+            opacity: 0.8;
         }
 
         .search-container {
@@ -243,9 +271,9 @@
             transform: translateX(5px);
         }
 
-        /* Trending Slider */
+        /* Premium Trending Slider */
         .trending-section {
-            padding: 0 2rem 2rem;
+            padding: 0 2rem 3rem;
             position: relative;
         }
 
@@ -253,12 +281,25 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
         }
 
         .section-title h2 {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 40px;
+            height: 4px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 2px;
         }
 
         .slider-controls {
@@ -269,27 +310,31 @@
         .slider-btn {
             background: var(--bg-secondary);
             border: 1px solid var(--border-glass);
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             transition: var(--transition);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
         .slider-btn:hover {
             background: var(--primary);
             color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
         }
 
         .trending-slider {
             position: relative;
             overflow: hidden;
-            border-radius: 16px;
-            height: 300px;
+            border-radius: var(--radius-lg);
+            height: 400px;
             perspective: 1000px;
+            box-shadow: var(--shadow-lg);
         }
 
         .slider-track {
@@ -302,19 +347,19 @@
             min-width: 100%;
             height: 100%;
             position: relative;
-            border-radius: 16px;
+            border-radius: var(--radius-lg);
             overflow: hidden;
             transform-style: preserve-3d;
         }
 
-        .slider-slide img {
+        .banner-img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             transition: transform 0.5s ease;
         }
 
-        .slider-slide:hover img {
+        .slider-slide:hover .banner-img {
             transform: scale(1.05);
         }
 
@@ -323,8 +368,8 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            padding: 2rem;
-            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            padding: 2.5rem;
+            background: linear-gradient(to top, rgba(15, 23, 42, 0.9), transparent);
             color: white;
             transform: translateZ(20px);
         }
@@ -332,59 +377,64 @@
         .slide-category {
             background: var(--primary);
             color: white;
-            padding: 0.25rem 0.75rem;
+            padding: 0.5rem 1rem;
             border-radius: 50px;
-            font-size: 0.75rem;
-            font-weight: 500;
+            font-size: 0.8rem;
+            font-weight: 600;
             display: inline-block;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            letter-spacing: 0.5px;
         }
 
         .slide-title {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: 700;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
         }
 
         .slide-description {
-            font-size: 0.9rem;
+            font-size: 1rem;
             opacity: 0.9;
+            max-width: 70%;
         }
 
         .slider-dots {
             display: flex;
             justify-content: center;
-            gap: 0.5rem;
-            margin-top: 1rem;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
         }
 
         .slider-dot {
-            width: 10px;
-            height: 10px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
             background: var(--bg-secondary);
             cursor: pointer;
             transition: var(--transition);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .slider-dot.active {
             background: var(--primary);
             transform: scale(1.2);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
         }
 
-        /* Filter Tabs */
+        /* Premium Filter Tabs */
         .filter-tabs-container {
             position: relative;
             padding: 0 2rem;
-            margin-bottom: 2rem;
+            margin-bottom: 3rem;
         }
 
         .filter-tabs {
             display: flex;
-            gap: 0.5rem;
+            gap: 0.75rem;
             overflow-x: auto;
             scrollbar-width: none;
             position: relative;
+            padding-bottom: 5px;
         }
 
         .filter-tabs::-webkit-scrollbar {
@@ -403,6 +453,7 @@
             white-space: nowrap;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
         .tab::before {
@@ -424,6 +475,7 @@
             background: rgba(124, 58, 237, 0.1);
             color: var(--primary);
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.1);
         }
 
         .tab.active {
@@ -442,20 +494,20 @@
             transition: all 0.3s ease;
         }
 
-        /* Prompt Grid */
+        /* Premium Prompt Grid */
         .prompt-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
             padding: 0 2rem;
-            margin-bottom: 3rem;
+            margin-bottom: 4rem;
         }
 
-        /* Prompt Card */
+        /* Premium Prompt Card */
         .prompt-card {
             background: var(--bg-glass);
             border: 1px solid var(--border-glass);
-            border-radius: 20px;
+            border-radius: var(--radius-lg);
             overflow: hidden;
             transition: var(--transition);
             backdrop-filter: blur(10px);
@@ -465,26 +517,26 @@
         }
 
         .prompt-card:hover {
-            transform: translateY(-8px) rotateX(5deg);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            transform: translateY(-10px) rotateX(5deg);
+            box-shadow: var(--shadow-lg);
         }
 
         .card-image {
             position: relative;
             width: 100%;
-            height: 200px;
+            height: 620px;
             overflow: hidden;
         }
 
-        .card-image img {
+        .prompt-card-img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             transition: var(--transition);
         }
 
-        .prompt-card:hover .card-image img {
-            transform: scale(1.05);
+        .prompt-card:hover .prompt-card-img {
+            transform: scale(1.08);
         }
 
         .image-overlay {
@@ -492,7 +544,7 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 60%;
+            height: 100%;
             background: linear-gradient(to top, rgba(30, 41, 59, 0.7), transparent);
         }
 
@@ -502,10 +554,11 @@
             left: 12px;
             background: var(--primary);
             color: white;
-            padding: 0.25rem 0.75rem;
+            padding: 0.5rem 1rem;
             border-radius: 50px;
-            font-size: 0.75rem;
-            font-weight: 500;
+            font-size: 0.8rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
 
         .copy-btn {
@@ -515,40 +568,42 @@
             background: rgba(255, 255, 255, 0.9);
             border: 1px solid rgba(255, 255, 255, 0.3);
             color: var(--primary);
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             transition: var(--transition);
             backdrop-filter: blur(10px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         .copy-btn:hover {
             background: var(--primary);
             color: white;
             transform: scale(1.1) rotate(10deg);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
         }
 
         .card-content {
-            padding: 1.25rem;
+            padding: 1.5rem;
         }
 
         .card-title {
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            font-size: 1.2rem;
             text-align: center;
         }
 
         .card-description {
             color: var(--text-secondary);
-            margin-bottom: 1rem;
-            line-height: 1.5;
+            margin-bottom: 1.5rem;
+            line-height: 1.4;
             display: -webkit-box;
-            -webkit-line-clamp: 5;
+            -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
             text-align: center;
@@ -565,9 +620,9 @@
             background: var(--primary);
             color: white;
             border: none;
-            padding: 0.5rem 1rem;
+            padding: 0.75rem 1.5rem;
             border-radius: 50px;
-            font-weight: 500;
+            font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
             display: flex;
@@ -575,6 +630,7 @@
             gap: 0.5rem;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
         }
 
         .copy-prompt-btn::before {
@@ -595,18 +651,19 @@
         .copy-prompt-btn:hover {
             background: var(--primary-light);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(124, 58, 237, 0.3);
+            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
         }
 
-        /* CTA Section */
+        /* Premium CTA Section */
         .cta-section {
             background: linear-gradient(135deg, #f0f4ff, #fdf2ff);
-            border-radius: 20px;
-            padding: 3rem 2rem;
+            border-radius: var(--radius-lg);
+            padding: 4rem 2rem;
             text-align: center;
-            margin: 0 2rem 3rem;
+            margin: 0 2rem 4rem;
             position: relative;
             overflow: hidden;
+            box-shadow: var(--shadow);
         }
 
         .cta-section::before {
@@ -621,35 +678,37 @@
         }
 
         .cta-section h2 {
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
             color: var(--text-primary);
             position: relative;
             z-index: 2;
+            font-weight: 700;
         }
 
         .cta-section p {
             color: var(--text-secondary);
             max-width: 600px;
-            margin: 0 auto 2rem;
+            margin: 0 auto 2.5rem;
             line-height: 1.6;
             position: relative;
             z-index: 2;
+            font-size: 1.1rem;
         }
 
         .cta-button {
             background: linear-gradient(135deg, var(--primary), var(--primary-light));
             color: white;
             border: none;
-            padding: 0.75rem 2rem;
+            padding: 1rem 2.5rem;
             border-radius: 50px;
             font-weight: 600;
-            font-size: 1rem;
+            font-size: 1.1rem;
             cursor: pointer;
             transition: var(--transition);
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.75rem;
             box-shadow: 0 5px 15px rgba(124, 58, 237, 0.3);
             position: relative;
             z-index: 2;
@@ -676,7 +735,7 @@
             box-shadow: 0 10px 25px rgba(124, 58, 237, 0.4);
         }
 
-        /* Toast Notification */
+        /* Premium Toast Notification */
         .toast {
             position: fixed;
             top: 2rem;
@@ -685,16 +744,16 @@
             border: 1px solid var(--border-glass);
             color: var(--text-primary);
             padding: 1rem 1.5rem;
-            border-radius: 12px;
+            border-radius: var(--radius);
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(20px);
             transform: translateX(300px);
             opacity: 0;
             transition: var(--transition);
             z-index: 1000;
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow-lg);
         }
 
         .toast.show {
@@ -703,16 +762,18 @@
         }
 
         .toast i {
-            color: var(--accent-yellow);
+            color: var(--accent-green);
+            font-size: 1.2rem;
         }
 
-        /* Footer */
+        /* Premium Footer */
         footer {
             text-align: center;
-            padding: 2rem;
+            padding: 3rem 2rem;
             color: var(--text-secondary);
             font-size: 0.9rem;
             border-top: 1px solid var(--border-glass);
+            background: var(--bg-secondary);
         }
 
         .brand {
@@ -720,7 +781,7 @@
             font-weight: 700;
         }
 
-        /* Admin Login Modal */
+        /* Premium Admin Login Modal */
         .modal {
             position: fixed;
             top: 0;
@@ -735,6 +796,7 @@
             opacity: 0;
             visibility: hidden;
             transition: var(--transition);
+            backdrop-filter: blur(5px);
         }
 
         .modal.active {
@@ -744,13 +806,25 @@
 
         .modal-content {
             background: var(--bg-primary);
-            border-radius: 16px;
-            padding: 2rem;
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
             width: 90%;
-            max-width: 400px;
-            box-shadow: var(--shadow);
+            max-width: 450px;
+            box-shadow: var(--shadow-lg);
             transform: translateY(-20px);
             transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
         }
 
         .modal.active .modal-content {
@@ -760,6 +834,8 @@
         .modal h2 {
             margin-bottom: 1.5rem;
             text-align: center;
+            font-size: 1.8rem;
+            font-weight: 700;
         }
 
         .form-group {
@@ -769,28 +845,32 @@
         .form-group label {
             display: block;
             margin-bottom: 0.5rem;
-            font-weight: 500;
+            font-weight: 600;
+            color: var(--text-primary);
         }
 
         .form-group input {
             width: 100%;
-            padding: 0.75rem;
+            padding: 0.75rem 1rem;
             border: 1px solid var(--border-glass);
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 1rem;
             transition: var(--transition);
+            background: var(--bg-secondary);
         }
 
         .form-group input:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+            background: white;
         }
 
         .form-actions {
             display: flex;
             gap: 1rem;
             justify-content: flex-end;
+            margin-top: 2rem;
         }
 
         .cancel-btn {
@@ -798,9 +878,10 @@
             color: var(--text-primary);
             border: 1px solid var(--border-glass);
             padding: 0.75rem 1.5rem;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
             transition: var(--transition);
+            font-weight: 500;
         }
 
         .cancel-btn:hover {
@@ -813,16 +894,19 @@
             color: white;
             border: none;
             padding: 0.75rem 1.5rem;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
             transition: var(--transition);
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
         }
 
         .login-btn:hover {
             background: var(--primary-light);
+            transform: translateY(-2px);
         }
 
-        /* Admin Panel */
+        /* Premium Admin Panel */
         .admin-panel {
             display: none;
             padding: 2rem;
@@ -831,12 +915,13 @@
         }
 
         .admin-panel h1 {
-            font-size: 2rem;
+            font-size: 2.5rem;
             margin-bottom: 2rem;
             text-align: center;
             background: linear-gradient(135deg, var(--primary), var(--primary-light));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            font-weight: 800;
         }
 
         .admin-tabs {
@@ -844,6 +929,7 @@
             gap: 1rem;
             margin-bottom: 2rem;
             border-bottom: 1px solid var(--border-glass);
+            padding-bottom: 1rem;
         }
 
         .admin-tab {
@@ -854,12 +940,14 @@
             cursor: pointer;
             transition: var(--transition);
             color: var(--text-secondary);
-            font-weight: 500;
+            font-weight: 600;
+            border-radius: 8px 8px 0 0;
         }
 
         .admin-tab.active {
             color: var(--primary);
             border-bottom-color: var(--primary);
+            background: rgba(124, 58, 237, 0.05);
         }
 
         .admin-tab-content {
@@ -868,24 +956,41 @@
 
         .admin-tab-content.active {
             display: block;
+            animation: fadeIn 0.5s ease;
         }
 
         .admin-form {
             background: var(--bg-secondary);
-            padding: 2rem;
-            border-radius: 16px;
+            padding: 2.5rem;
+            border-radius: var(--radius-lg);
             box-shadow: var(--shadow);
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
+            border: 1px solid var(--border-glass);
         }
 
         .admin-form h2 {
             margin-bottom: 1.5rem;
             color: var(--text-primary);
+            font-size: 1.5rem;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+
+        .admin-form h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 40px;
+            height: 4px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 2px;
         }
 
         .form-row {
             display: flex;
-            gap: 1rem;
+            gap: 1.5rem;
             margin-bottom: 1.5rem;
         }
 
@@ -896,40 +1001,46 @@
 
         .form-group textarea {
             width: 100%;
-            padding: 0.75rem;
+            padding: 0.75rem 1rem;
             border: 1px solid var(--border-glass);
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 1rem;
             transition: var(--transition);
-            min-height: 100px;
+            min-height: 120px;
             resize: vertical;
+            background: var(--bg-secondary);
+            font-family: inherit;
         }
 
         .form-group textarea:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+            background: white;
         }
 
         .form-group select {
             width: 100%;
-            padding: 0.75rem;
+            padding: 0.75rem 1rem;
             border: 1px solid var(--border-glass);
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 1rem;
             transition: var(--transition);
+            background: var(--bg-secondary);
         }
 
         .form-group select:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+            background: white;
         }
 
         .admin-actions {
             display: flex;
             gap: 1rem;
             justify-content: flex-end;
+            margin-top: 2rem;
         }
 
         .back-btn {
@@ -937,9 +1048,10 @@
             color: var(--text-primary);
             border: 1px solid var(--border-glass);
             padding: 0.75rem 1.5rem;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
             transition: var(--transition);
+            font-weight: 500;
         }
 
         .back-btn:hover {
@@ -952,53 +1064,78 @@
             color: white;
             border: none;
             padding: 0.75rem 1.5rem;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
             transition: var(--transition);
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
         }
 
         .submit-btn:hover {
             background: var(--primary-light);
+            transform: translateY(-2px);
         }
 
-        /* Prompts List */
+        /* Premium Prompts List */
         .prompts-list {
             background: var(--bg-secondary);
-            padding: 2rem;
-            border-radius: 16px;
+            padding: 2.5rem;
+            border-radius: var(--radius-lg);
             box-shadow: var(--shadow);
+            border: 1px solid var(--border-glass);
         }
 
         .prompts-list h2 {
             margin-bottom: 1.5rem;
             color: var(--text-primary);
+            font-size: 1.5rem;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+
+        .prompts-list h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 40px;
+            height: 4px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 2px;
         }
 
         .prompt-item {
             display: flex;
             align-items: center;
-            padding: 1rem;
+            padding: 1.5rem;
             border-bottom: 1px solid var(--border-glass);
             transition: var(--transition);
+            border-radius: 12px;
+            margin-bottom: 1rem;
         }
 
         .prompt-item:hover {
             background: rgba(124, 58, 237, 0.05);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
 
         .prompt-item:last-child {
             border-bottom: none;
+            margin-bottom: 0;
         }
 
         .prompt-image {
-            width: 80px;
-            height: 80px;
-            border-radius: 8px;
+            width: 100px;
+            height: 100px;
+            border-radius: 12px;
             overflow: hidden;
-            margin-right: 1rem;
+            margin-right: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-        .prompt-image img {
+        .thumbnail-img {
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -1010,11 +1147,12 @@
 
         .prompt-details h3 {
             margin-bottom: 0.5rem;
+            font-weight: 600;
         }
 
         .prompt-actions {
             display: flex;
-            gap: 0.5rem;
+            gap: 0.75rem;
         }
 
         .edit-btn {
@@ -1025,10 +1163,16 @@
             border-radius: 8px;
             cursor: pointer;
             transition: var(--transition);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3);
         }
 
         .edit-btn:hover {
             background: var(--primary-light);
+            transform: translateY(-2px);
         }
 
         .delete-btn {
@@ -1039,10 +1183,95 @@
             border-radius: 8px;
             cursor: pointer;
             transition: var(--transition);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
         }
 
         .delete-btn:hover {
             background: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        /* Premium Image Upload Styles */
+        .image-upload-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .image-option {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .image-option input[type="radio"] {
+            margin: 0;
+        }
+
+        .image-upload {
+            display: none;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .image-upload.active {
+            display: flex;
+        }
+
+        .upload-preview {
+            width: 100%;
+            max-width: 300px;
+            height: 200px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px dashed var(--border-glass);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-primary);
+        }
+
+        .upload-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .upload-placeholder {
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .upload-placeholder i {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.5;
+        }
+
+        .upload-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            max-width: 200px;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+        }
+
+        .upload-btn:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
         }
 
         /* Animations */
@@ -1089,11 +1318,11 @@
         /* Responsive Design */
         @media (max-width: 768px) {
             .prompt-grid {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             }
             
             .hero h1 {
-                font-size: 2rem;
+                font-size: 2.5rem;
             }
             
             header {
@@ -1101,7 +1330,7 @@
             }
             
             .trending-slider {
-                height: 250px;
+                height: 300px;
             }
             
             .form-row {
@@ -1123,6 +1352,10 @@
                 justify-content: flex-end;
                 margin-top: 1rem;
             }
+            
+            .admin-tabs {
+                flex-direction: column;
+            }
         }
 
         @media (max-width: 480px) {
@@ -1135,15 +1368,23 @@
             }
             
             .trending-slider {
-                height: 200px;
+                height: 250px;
             }
             
             .slide-content {
-                padding: 1rem;
+                padding: 1.5rem;
             }
             
             .slide-title {
-                font-size: 1.2rem;
+                font-size: 1.5rem;
+            }
+            
+            .hero {
+                padding: 3rem 1rem;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
             }
         }
     </style>
@@ -1160,7 +1401,7 @@
                 <i class="fas fa-user"></i>
             </button>
             <div class="profile-menu" id="profile-menu">
-                <button id="admin-login-btn">Admin Login</button>
+                <button id="admin-login-btn"><i class="fas fa-lock"></i> Admin Login</button>
             </div>
         </div>
     </header>
@@ -1281,9 +1522,42 @@
                             <option value="Festival">Festival</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label for="prompt-image">Image Location</label>
-                        <input type="text" id="prompt-image" placeholder="Enter image file location">
+                </div>
+                <div class="form-group">
+                    <label>Image Source</label>
+                    <div class="image-upload-container">
+                        <div class="image-option">
+                            <input type="radio" id="image-url" name="image-source" value="url" checked>
+                            <label for="image-url">Image URL</label>
+                        </div>
+                        <div class="image-option">
+                            <input type="radio" id="image-upload" name="image-source" value="upload">
+                            <label for="image-upload">Upload Image</label>
+                        </div>
+                        
+                        <div id="image-url-input" class="image-input">
+                            <input type="text" id="prompt-image" placeholder="Enter image URL">
+                        </div>
+                        
+                        <div id="image-upload-input" class="image-upload">
+                            <div class="upload-preview" id="upload-preview">
+                                <div class="upload-placeholder">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <p>No image selected</p>
+                                </div>
+                            </div>
+                            <input type="file" id="image-file" accept="image/*" style="display: none;">
+                            <button class="upload-btn" id="select-image">
+                                <i class="fas fa-folder-open"></i>
+                                Select Image
+                            </button>
+                            <div id="upload-progress" style="display: none;">
+                                <p>Uploading... <span id="progress-percent">0%</span></p>
+                                <div style="width: 100%; height: 5px; background: #eee; border-radius: 5px;">
+                                    <div id="progress-bar" style="width: 0%; height: 100%; background: var(--primary); border-radius: 5px;"></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
@@ -1322,9 +1596,42 @@
                             <option value="Festival">Festival</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label for="trending-image">Image Location</label>
-                        <input type="text" id="trending-image" placeholder="Enter image file location">
+                </div>
+                <div class="form-group">
+                    <label>Image Source</label>
+                    <div class="image-upload-container">
+                        <div class="image-option">
+                            <input type="radio" id="trending-image-url" name="trending-image-source" value="url" checked>
+                            <label for="trending-image-url">Image URL</label>
+                        </div>
+                        <div class="image-option">
+                            <input type="radio" id="trending-image-upload" name="trending-image-source" value="upload">
+                            <label for="trending-image-upload">Upload Image</label>
+                        </div>
+                        
+                        <div id="trending-image-url-input" class="image-input">
+                            <input type="text" id="trending-image" placeholder="Enter image URL">
+                        </div>
+                        
+                        <div id="trending-image-upload-input" class="image-upload">
+                            <div class="upload-preview" id="trending-upload-preview">
+                                <div class="upload-placeholder">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <p>No image selected</p>
+                                </div>
+                            </div>
+                            <input type="file" id="trending-image-file" accept="image/*" style="display: none;">
+                            <button class="upload-btn" id="select-trending-image">
+                                <i class="fas fa-folder-open"></i>
+                                Select Image
+                            </button>
+                            <div id="trending-upload-progress" style="display: none;">
+                                <p>Uploading... <span id="trending-progress-percent">0%</span></p>
+                                <div style="width: 100%; height: 5px; background: #eee; border-radius: 5px;">
+                                    <div id="trending-progress-bar" style="width: 0%; height: 100%; background: var(--primary); border-radius: 5px;"></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
@@ -1376,6 +1683,7 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const database = firebase.database();
+        const storage = firebase.storage();
 
         // Default admin credentials
         const ADMIN_EMAIL = "admin@meechto.com";
@@ -1408,6 +1716,29 @@
         const prevSlideBtn = document.getElementById('prev-slide');
         const nextSlideBtn = document.getElementById('next-slide');
         
+        // Image upload elements
+        const imageUrlRadio = document.getElementById('image-url');
+        const imageUploadRadio = document.getElementById('image-upload');
+        const imageUrlInput = document.getElementById('image-url-input');
+        const imageUploadInput = document.getElementById('image-upload-input');
+        const uploadPreview = document.getElementById('upload-preview');
+        const imageFileInput = document.getElementById('image-file');
+        const selectImageBtn = document.getElementById('select-image');
+        const uploadProgress = document.getElementById('upload-progress');
+        const progressBar = document.getElementById('progress-bar');
+        const progressPercent = document.getElementById('progress-percent');
+        
+        const trendingImageUrlRadio = document.getElementById('trending-image-url');
+        const trendingImageUploadRadio = document.getElementById('trending-image-upload');
+        const trendingImageUrlInput = document.getElementById('trending-image-url-input');
+        const trendingImageUploadInput = document.getElementById('trending-image-upload-input');
+        const trendingUploadPreview = document.getElementById('trending-upload-preview');
+        const trendingImageFileInput = document.getElementById('trending-image-file');
+        const selectTrendingImageBtn = document.getElementById('select-trending-image');
+        const trendingUploadProgress = document.getElementById('trending-upload-progress');
+        const trendingProgressBar = document.getElementById('trending-progress-bar');
+        const trendingProgressPercent = document.getElementById('trending-progress-percent');
+        
         // State variables
         let currentCategory = 'all';
         let searchQuery = '';
@@ -1418,6 +1749,8 @@
         let trendingPrompts = [];
         let editingPromptId = null;
         let editingTrendingId = null;
+        let uploadedImageUrl = '';
+        let uploadedTrendingImageUrl = '';
 
         // Initialize the page
         document.addEventListener('DOMContentLoaded', () => {
@@ -1427,7 +1760,127 @@
             startSliderAutoPlay();
             updateTabSlider();
             checkAuthState();
+            setupImageUpload();
         });
+
+        // Setup image upload functionality
+        function setupImageUpload() {
+            // Regular prompt image upload
+            imageUploadRadio.addEventListener('change', () => {
+                if (imageUploadRadio.checked) {
+                    imageUrlInput.style.display = 'none';
+                    imageUploadInput.style.display = 'flex';
+                }
+            });
+            
+            imageUrlRadio.addEventListener('change', () => {
+                if (imageUrlRadio.checked) {
+                    imageUrlInput.style.display = 'block';
+                    imageUploadInput.style.display = 'none';
+                }
+            });
+            
+            selectImageBtn.addEventListener('click', () => {
+                imageFileInput.click();
+            });
+            
+            imageFileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    const file = e.target.files[0];
+                    const reader = new FileReader();
+                    
+                    reader.onload = (event) => {
+                        uploadPreview.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
+                    };
+                    
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Trending prompt image upload
+            trendingImageUploadRadio.addEventListener('change', () => {
+                if (trendingImageUploadRadio.checked) {
+                    trendingImageUrlInput.style.display = 'none';
+                    trendingImageUploadInput.style.display = 'flex';
+                }
+            });
+            
+            trendingImageUrlRadio.addEventListener('change', () => {
+                if (trendingImageUrlRadio.checked) {
+                    trendingImageUrlInput.style.display = 'block';
+                    trendingImageUploadInput.style.display = 'none';
+                }
+            });
+            
+            selectTrendingImageBtn.addEventListener('click', () => {
+                trendingImageFileInput.click();
+            });
+            
+            trendingImageFileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    const file = e.target.files[0];
+                    const reader = new FileReader();
+                    
+                    reader.onload = (event) => {
+                        trendingUploadPreview.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
+                    };
+                    
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        // Upload image to Firebase Storage
+        function uploadImage(file, isTrending = false) {
+            return new Promise((resolve, reject) => {
+                const storageRef = storage.ref();
+                const imageRef = storageRef.child('prompt-images/' + Date.now() + '-' + file.name);
+                const uploadTask = imageRef.put(file);
+                
+                // Show progress
+                if (isTrending) {
+                    trendingUploadProgress.style.display = 'block';
+                } else {
+                    uploadProgress.style.display = 'block';
+                }
+                
+                uploadTask.on('state_changed',
+                    (snapshot) => {
+                        // Progress
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        if (isTrending) {
+                            trendingProgressBar.style.width = progress + '%';
+                            trendingProgressPercent.textContent = Math.round(progress) + '%';
+                        } else {
+                            progressBar.style.width = progress + '%';
+                            progressPercent.textContent = Math.round(progress) + '%';
+                        }
+                    },
+                    (error) => {
+                        // Error
+                        if (isTrending) {
+                            trendingUploadProgress.style.display = 'none';
+                        } else {
+                            uploadProgress.style.display = 'none';
+                        }
+                        reject(error);
+                    },
+                    () => {
+                        // Complete
+                        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                            if (isTrending) {
+                                trendingUploadProgress.style.display = 'none';
+                                uploadedTrendingImageUrl = downloadURL;
+                            } else {
+                                uploadProgress.style.display = 'none';
+                                uploadedImageUrl = downloadURL;
+                            }
+                            resolve(downloadURL);
+                        });
+                    }
+                );
+            });
+        }
 
         // Check authentication state
         function checkAuthState() {
@@ -1436,14 +1889,14 @@
                 if (user) {
                     // User is signed in
                     profileMenu.innerHTML = `
-                        <button id="admin-panel-btn">Admin Panel</button>
-                        <button id="logout-btn">Logout</button>
+                        <button id="admin-panel-btn"><i class="fas fa-cog"></i> Admin Panel</button>
+                        <button id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
                     `;
                     document.getElementById('admin-panel-btn').addEventListener('click', showAdminPanel);
                     document.getElementById('logout-btn').addEventListener('click', logout);
                 } else {
                     // User is signed out
-                    profileMenu.innerHTML = `<button id="admin-login-btn">Admin Login</button>`;
+                    profileMenu.innerHTML = `<button id="admin-login-btn"><i class="fas fa-lock"></i> Admin Login</button>`;
                     document.getElementById('admin-login-btn').addEventListener('click', showLoginModal);
                 }
             });
@@ -1510,7 +1963,7 @@
                 promptCard.style.animation = `slideIn 0.5s ease ${index * 0.1}s both`;
                 promptCard.innerHTML = `
                     <div class="card-image">
-                        <img src="${prompt.image}" alt="${prompt.category}" loading="lazy">
+                        <img src="${prompt.image}" alt="${prompt.category}" class="prompt-card-img" loading="lazy">
                         <div class="image-overlay"></div>
                         <div class="category-badge">${prompt.category}</div>
                         <button class="copy-btn" data-prompt-id="${prompt.id}">
@@ -1564,7 +2017,7 @@
                     const slideElement = document.createElement('div');
                     slideElement.className = 'slider-slide';
                     slideElement.innerHTML = `
-                        <img src="${slide.image}" alt="${slide.title}">
+                        <img src="${slide.image}" alt="${slide.title}" class="banner-img">
                         <div class="slide-content">
                             <span class="slide-category">${slide.category}</span>
                             <h3 class="slide-title">${slide.title}</h3>
@@ -1588,7 +2041,7 @@
                     const slideElement = document.createElement('div');
                     slideElement.className = 'slider-slide';
                     slideElement.innerHTML = `
-                        <img src="${prompt.image}" alt="${prompt.title}">
+                        <img src="${prompt.image}" alt="${prompt.title}" class="banner-img">
                         <div class="slide-content">
                             <span class="slide-category">${prompt.category}</span>
                             <h3 class="slide-title">${prompt.title}</h3>
@@ -1632,7 +2085,7 @@
                 promptItem.className = 'prompt-item';
                 promptItem.innerHTML = `
                     <div class="prompt-image">
-                        <img src="${prompt.image}" alt="${prompt.category}">
+                        <img src="${prompt.image}" alt="${prompt.category}" class="thumbnail-img">
                     </div>
                     <div class="prompt-details">
                         <h3>${prompt.category} Prompt</h3>
@@ -1671,7 +2124,7 @@
                 promptItem.className = 'prompt-item';
                 promptItem.innerHTML = `
                     <div class="prompt-image">
-                        <img src="${prompt.image}" alt="${prompt.title}">
+                        <img src="${prompt.image}" alt="${prompt.title}" class="thumbnail-img">
                     </div>
                     <div class="prompt-details">
                         <h3>${prompt.title}</h3>
@@ -1811,7 +2264,7 @@
             loginModal.classList.remove('active');
         }
 
-        // Login admin - FIXED VERSION
+        // Login admin
         function loginAdmin() {
             const email = document.getElementById('admin-email').value;
             const password = document.getElementById('admin-password').value;
@@ -1860,22 +2313,45 @@
             editingPromptId = null;
             editingTrendingId = null;
             resetForm();
+            resetTrendingForm();
         }
 
         // Add prompt
-        function addPrompt() {
+        async function addPrompt() {
             const category = document.getElementById('prompt-category').value;
-            const image = document.getElementById('prompt-image').value;
             const promptText = document.getElementById('prompt-text').value;
             
-            if (!category || !image || !promptText) {
+            if (!category || !promptText) {
                 showToast('Please fill in all fields');
                 return;
             }
             
+            let imageUrl = '';
+            
+            // Handle image source
+            if (imageUrlRadio.checked) {
+                imageUrl = document.getElementById('prompt-image').value;
+                if (!imageUrl) {
+                    showToast('Please enter an image URL');
+                    return;
+                }
+            } else if (imageUploadRadio.checked) {
+                if (imageFileInput.files.length === 0) {
+                    showToast('Please select an image to upload');
+                    return;
+                }
+                
+                try {
+                    imageUrl = await uploadImage(imageFileInput.files[0], false);
+                } catch (error) {
+                    showToast('Error uploading image: ' + error.message);
+                    return;
+                }
+            }
+            
             const newPrompt = {
                 category,
-                image,
+                image: imageUrl,
                 prompt_text: promptText,
                 created_at: Date.now()
             };
@@ -1905,20 +2381,42 @@
         }
 
         // Add trending prompt
-        function addTrendingPrompt() {
+        async function addTrendingPrompt() {
             const category = document.getElementById('trending-category').value;
-            const image = document.getElementById('trending-image').value;
             const title = document.getElementById('trending-title').value;
             const description = document.getElementById('trending-description').value;
             
-            if (!category || !image || !title || !description) {
+            if (!category || !title || !description) {
                 showToast('Please fill in all fields');
                 return;
             }
             
+            let imageUrl = '';
+            
+            // Handle image source
+            if (trendingImageUrlRadio.checked) {
+                imageUrl = document.getElementById('trending-image').value;
+                if (!imageUrl) {
+                    showToast('Please enter an image URL');
+                    return;
+                }
+            } else if (trendingImageUploadRadio.checked) {
+                if (trendingImageFileInput.files.length === 0) {
+                    showToast('Please select an image to upload');
+                    return;
+                }
+                
+                try {
+                    imageUrl = await uploadImage(trendingImageFileInput.files[0], true);
+                } catch (error) {
+                    showToast('Error uploading image: ' + error.message);
+                    return;
+                }
+            }
+            
             const newTrending = {
                 category,
-                image,
+                image: imageUrl,
                 title,
                 description,
                 created_at: Date.now()
@@ -1954,8 +2452,14 @@
             if (!prompt) return;
             
             document.getElementById('prompt-category').value = prompt.category;
-            document.getElementById('prompt-image').value = prompt.image;
             document.getElementById('prompt-text').value = prompt.prompt_text;
+            
+            // Set image source to URL and populate the field
+            imageUrlRadio.checked = true;
+            imageUploadRadio.checked = false;
+            imageUrlInput.style.display = 'block';
+            imageUploadInput.style.display = 'none';
+            document.getElementById('prompt-image').value = prompt.image;
             
             editingPromptId = promptId;
             addPromptBtn.textContent = 'Update Prompt';
@@ -1970,9 +2474,15 @@
             if (!prompt) return;
             
             document.getElementById('trending-category').value = prompt.category;
-            document.getElementById('trending-image').value = prompt.image;
             document.getElementById('trending-title').value = prompt.title;
             document.getElementById('trending-description').value = prompt.description;
+            
+            // Set image source to URL and populate the field
+            trendingImageUrlRadio.checked = true;
+            trendingImageUploadRadio.checked = false;
+            trendingImageUrlInput.style.display = 'block';
+            trendingImageUploadInput.style.display = 'none';
+            document.getElementById('trending-image').value = prompt.image;
             
             editingTrendingId = trendingId;
             addTrendingBtn.textContent = 'Update Trending';
@@ -2010,17 +2520,39 @@
         // Reset form
         function resetForm() {
             document.getElementById('prompt-category').value = '';
-            document.getElementById('prompt-image').value = '';
             document.getElementById('prompt-text').value = '';
+            document.getElementById('prompt-image').value = '';
+            imageUrlRadio.checked = true;
+            imageUploadRadio.checked = false;
+            imageUrlInput.style.display = 'block';
+            imageUploadInput.style.display = 'none';
+            uploadPreview.innerHTML = `
+                <div class="upload-placeholder">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>No image selected</p>
+                </div>
+            `;
+            imageFileInput.value = '';
             addPromptBtn.textContent = 'Submit Prompt';
         }
 
         // Reset trending form
         function resetTrendingForm() {
             document.getElementById('trending-category').value = '';
-            document.getElementById('trending-image').value = '';
             document.getElementById('trending-title').value = '';
             document.getElementById('trending-description').value = '';
+            document.getElementById('trending-image').value = '';
+            trendingImageUrlRadio.checked = true;
+            trendingImageUploadRadio.checked = false;
+            trendingImageUrlInput.style.display = 'block';
+            trendingImageUploadInput.style.display = 'none';
+            trendingUploadPreview.innerHTML = `
+                <div class="upload-placeholder">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>No image selected</p>
+                </div>
+            `;
+            trendingImageFileInput.value = '';
             addTrendingBtn.textContent = 'Add Trending';
         }
 
@@ -2099,4 +2631,3 @@
     </script>
 </body>
 </html>
-
