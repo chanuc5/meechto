@@ -271,7 +271,7 @@
             transform: translateX(5px);
         }
 
-        /* Premium Trending Slider */
+        /* Updated Premium Trending Slider */
         .trending-section {
             padding: 0 2rem 3rem;
             position: relative;
@@ -328,74 +328,71 @@
             box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
         }
 
-        .trending-slider {
+        .circular-slider-container {
             position: relative;
-            overflow: hidden;
-            border-radius: var(--radius-lg);
             height: 400px;
-            perspective: 1000px;
-            box-shadow: var(--shadow-lg);
-        }
-
-        .slider-track {
             display: flex;
-            transition: transform 0.5s ease;
-            height: 100%;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px;
+            overflow: hidden;
         }
 
-        .slider-slide {
-            min-width: 100%;
-            height: 100%;
+        .circular-slider {
             position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slide-item {
+            position: absolute;
+            width: 280px;
+            height: 350px;
             border-radius: var(--radius-lg);
             overflow: hidden;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-lg);
             transform-style: preserve-3d;
         }
 
-        .banner-img {
+        .slide-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             transition: transform 0.5s ease;
         }
 
-        .slider-slide:hover .banner-img {
+        .slide-item:hover img {
             transform: scale(1.05);
         }
 
-        .slide-content {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            padding: 2.5rem;
-            background: linear-gradient(to top, rgba(15, 23, 42, 0.9), transparent);
-            color: white;
-            transform: translateZ(20px);
+        .slide-item.left {
+            transform: translateX(-70%) scale(0.85) rotateY(10deg);
+            z-index: 1;
+            opacity: 0.7;
+            filter: brightness(0.8);
         }
 
-        .slide-category {
-            background: var(--primary);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            display: inline-block;
-            margin-bottom: 1rem;
-            letter-spacing: 0.5px;
+        .slide-item.center {
+            transform: translateX(0) scale(1);
+            z-index: 3;
+            opacity: 1;
         }
 
-        .slide-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 0.75rem;
+        .slide-item.right {
+            transform: translateX(70%) scale(0.85) rotateY(-10deg);
+            z-index: 1;
+            opacity: 0.7;
+            filter: brightness(0.8);
         }
 
-        .slide-description {
-            font-size: 1rem;
-            opacity: 0.9;
-            max-width: 70%;
+        .slide-item.hidden {
+            opacity: 0;
+            transform: translateY(100%) scale(0.8);
+            z-index: 0;
         }
 
         .slider-dots {
@@ -421,24 +418,39 @@
             box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
         }
 
-        /* Premium Filter Tabs */
+        /* Updated Premium Filter Tabs */
         .filter-tabs-container {
             position: relative;
             padding: 0 2rem;
             margin-bottom: 3rem;
         }
 
+        .filter-tabs-wrapper {
+            position: relative;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary) var(--bg-secondary);
+        }
+
+        .filter-tabs-wrapper::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .filter-tabs-wrapper::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+            border-radius: 10px;
+        }
+
+        .filter-tabs-wrapper::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
         .filter-tabs {
             display: flex;
             gap: 0.75rem;
-            overflow-x: auto;
-            scrollbar-width: none;
-            position: relative;
-            padding-bottom: 5px;
-        }
-
-        .filter-tabs::-webkit-scrollbar {
-            display: none;
+            min-width: max-content;
         }
 
         .tab {
@@ -483,15 +495,6 @@
             color: white;
             border-color: var(--primary);
             box-shadow: 0 5px 15px rgba(124, 58, 237, 0.3);
-        }
-
-        .tab-slider {
-            position: absolute;
-            bottom: 0;
-            height: 3px;
-            background: var(--primary);
-            border-radius: 3px;
-            transition: all 0.3s ease;
         }
 
         /* Premium Prompt Grid */
@@ -1329,8 +1332,13 @@
                 padding: 1rem;
             }
             
-            .trending-slider {
+            .circular-slider-container {
                 height: 300px;
+            }
+            
+            .slide-item {
+                width: 220px;
+                height: 280px;
             }
             
             .form-row {
@@ -1367,16 +1375,13 @@
                 justify-content: flex-start;
             }
             
-            .trending-slider {
+            .circular-slider-container {
                 height: 250px;
             }
             
-            .slide-content {
-                padding: 1.5rem;
-            }
-            
-            .slide-title {
-                font-size: 1.5rem;
+            .slide-item {
+                width: 180px;
+                height: 220px;
             }
             
             .hero {
@@ -1420,7 +1425,7 @@
             </div>
         </section>
 
-        <!-- Trending Slider -->
+        <!-- Updated Trending Slider -->
         <section class="trending-section">
             <div class="section-title">
                 <h2>Trending Prompts</h2>
@@ -1433,8 +1438,8 @@
                     </button>
                 </div>
             </div>
-            <div class="trending-slider">
-                <div class="slider-track" id="slider-track">
+            <div class="circular-slider-container">
+                <div class="circular-slider" id="circular-slider">
                     <!-- Trending slides will be dynamically inserted here -->
                 </div>
             </div>
@@ -1443,20 +1448,21 @@
             </div>
         </section>
 
-        <!-- Filter Tabs -->
+        <!-- Updated Filter Tabs -->
         <div class="filter-tabs-container">
-            <div class="filter-tabs" id="filter-tabs">
-                <div class="tab active" data-category="all">All Prompts</div>
-                <div class="tab" data-category="Men">Men</div>
-                <div class="tab" data-category="Women">Women</div>
-                <div class="tab" data-category="Couple">Couple</div>
-                <div class="tab" data-category="Child">Child</div>
-                <div class="tab" data-category="Father">Father</div>
-                <div class="tab" data-category="Mother">Mother</div>
-                <div class="tab" data-category="Family">Family</div>
-                <div class="tab" data-category="Festival">Festival</div>
+            <div class="filter-tabs-wrapper">
+                <div class="filter-tabs" id="filter-tabs">
+                    <div class="tab active" data-category="all">All Prompts</div>
+                    <div class="tab" data-category="Men">Men</div>
+                    <div class="tab" data-category="Women">Women</div>
+                    <div class="tab" data-category="Couple">Couple</div>
+                    <div class="tab" data-category="Child">Child</div>
+                    <div class="tab" data-category="Father">Father</div>
+                    <div class="tab" data-category="Mother">Mother</div>
+                    <div class="tab" data-category="Family">Family</div>
+                    <div class="tab" data-category="Festival">Festival</div>
+                </div>
             </div>
-            <div class="tab-slider" id="tab-slider"></div>
         </div>
 
         <!-- Prompt Grid -->
@@ -1694,7 +1700,6 @@
         const promptGrid = document.getElementById('prompt-grid');
         const searchInput = document.getElementById('search-input');
         const tabs = document.querySelectorAll('.tab');
-        const tabSlider = document.getElementById('tab-slider');
         const toast = document.getElementById('toast');
         const profileBtn = document.getElementById('profile-btn');
         const profileMenu = document.getElementById('profile-menu');
@@ -1711,7 +1716,7 @@
         const adminTabContents = document.querySelectorAll('.admin-tab-content');
         const addTrendingBtn = document.getElementById('add-trending');
         const adminTrendingList = document.getElementById('admin-trending-list');
-        const sliderTrack = document.getElementById('slider-track');
+        const circularSlider = document.getElementById('circular-slider');
         const sliderDots = document.getElementById('slider-dots');
         const prevSlideBtn = document.getElementById('prev-slide');
         const nextSlideBtn = document.getElementById('next-slide');
@@ -1751,6 +1756,7 @@
         let editingTrendingId = null;
         let uploadedImageUrl = '';
         let uploadedTrendingImageUrl = '';
+        let autoSlideInterval;
 
         // Initialize the page
         document.addEventListener('DOMContentLoaded', () => {
@@ -1758,7 +1764,6 @@
             loadTrendingPrompts();
             setupEventListeners();
             startSliderAutoPlay();
-            updateTabSlider();
             checkAuthState();
             setupImageUpload();
         });
@@ -1935,7 +1940,7 @@
                         });
                     });
                 }
-                renderTrendingSlider();
+                renderCircularSlider();
                 if (currentUser) {
                     renderAdminTrendingList();
                 }
@@ -1985,9 +1990,9 @@
             });
         }
 
-        // Render trending slider
-        function renderTrendingSlider() {
-            sliderTrack.innerHTML = '';
+        // Render circular slider
+        function renderCircularSlider() {
+            circularSlider.innerHTML = '';
             sliderDots.innerHTML = '';
             
             if (trendingPrompts.length === 0) {
@@ -2010,27 +2015,34 @@
                         category: "Festival",
                         title: "Diwali Celebration",
                         description: "Vibrant Diwali scenes with diyas, fireworks, and traditional celebrations"
+                    },
+                    {
+                        image: "https://images.unsplash.com/photo-1511988617509-a57c8a288659?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
+                        category: "Family",
+                        title: "Family Portrait",
+                        description: "Beautiful family portraits with natural expressions and perfect composition"
+                    },
+                    {
+                        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
+                        category: "Men",
+                        title: "Professional Portrait",
+                        description: "Professional male portraits with perfect lighting and composition"
                     }
                 ];
                 
                 defaultSlides.forEach((slide, index) => {
                     const slideElement = document.createElement('div');
-                    slideElement.className = 'slider-slide';
+                    slideElement.className = 'slide-item';
                     slideElement.innerHTML = `
-                        <img src="${slide.image}" alt="${slide.title}" class="banner-img">
-                        <div class="slide-content">
-                            <span class="slide-category">${slide.category}</span>
-                            <h3 class="slide-title">${slide.title}</h3>
-                            <p class="slide-description">${slide.description}</p>
-                        </div>
+                        <img src="${slide.image}" alt="${slide.title}">
                     `;
-                    sliderTrack.appendChild(slideElement);
+                    circularSlider.appendChild(slideElement);
                     
                     const dot = document.createElement('div');
                     dot.className = `slider-dot ${index === 0 ? 'active' : ''}`;
                     dot.addEventListener('click', () => {
                         currentSlide = index;
-                        updateSlider();
+                        updateCircularSlider();
                     });
                     sliderDots.appendChild(dot);
                 });
@@ -2039,22 +2051,17 @@
             } else {
                 trendingPrompts.forEach((prompt, index) => {
                     const slideElement = document.createElement('div');
-                    slideElement.className = 'slider-slide';
+                    slideElement.className = 'slide-item';
                     slideElement.innerHTML = `
-                        <img src="${prompt.image}" alt="${prompt.title}" class="banner-img">
-                        <div class="slide-content">
-                            <span class="slide-category">${prompt.category}</span>
-                            <h3 class="slide-title">${prompt.title}</h3>
-                            <p class="slide-description">${prompt.description}</p>
-                        </div>
+                        <img src="${prompt.image}" alt="${prompt.title}">
                     `;
-                    sliderTrack.appendChild(slideElement);
+                    circularSlider.appendChild(slideElement);
                     
                     const dot = document.createElement('div');
                     dot.className = `slider-dot ${index === 0 ? 'active' : ''}`;
                     dot.addEventListener('click', () => {
                         currentSlide = index;
-                        updateSlider();
+                        updateCircularSlider();
                     });
                     sliderDots.appendChild(dot);
                 });
@@ -2062,7 +2069,34 @@
                 totalSlides = trendingPrompts.length;
             }
             
-            updateSlider();
+            updateCircularSlider();
+        }
+
+        // Update circular slider positions
+        function updateCircularSlider() {
+            const slides = circularSlider.querySelectorAll('.slide-item');
+            
+            slides.forEach((slide, index) => {
+                slide.classList.remove('left', 'center', 'right', 'hidden');
+                
+                // Calculate position based on current slide
+                let position = (index - currentSlide + totalSlides) % totalSlides;
+                
+                if (position === 0) {
+                    slide.classList.add('center');
+                } else if (position === 1 || (currentSlide === totalSlides - 1 && index === 0)) {
+                    slide.classList.add('right');
+                } else if (position === totalSlides - 1 || (currentSlide === 0 && index === totalSlides - 1)) {
+                    slide.classList.add('left');
+                } else {
+                    slide.classList.add('hidden');
+                }
+            });
+            
+            // Update dots
+            sliderDots.querySelectorAll('.slider-dot').forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
         }
 
         // Render admin prompt list
@@ -2152,7 +2186,6 @@
                     tab.classList.add('active');
                     currentCategory = tab.getAttribute('data-category');
                     filterPrompts();
-                    updateTabSlider();
                 });
             });
             
@@ -2237,12 +2270,14 @@
             // Slider controls
             prevSlideBtn.addEventListener('click', () => {
                 currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-                updateSlider();
+                updateCircularSlider();
+                resetAutoPlay();
             });
             
             nextSlideBtn.addEventListener('click', () => {
                 currentSlide = (currentSlide + 1) % totalSlides;
-                updateSlider();
+                updateCircularSlider();
+                resetAutoPlay();
             });
             
             // Close profile menu when clicking outside
@@ -2556,18 +2591,6 @@
             addTrendingBtn.textContent = 'Add Trending';
         }
 
-        // Update tab slider position
-        function updateTabSlider() {
-            const activeTab = document.querySelector('.tab.active');
-            if (activeTab && tabSlider) {
-                const tabRect = activeTab.getBoundingClientRect();
-                const containerRect = document.querySelector('.filter-tabs-container').getBoundingClientRect();
-                
-                tabSlider.style.width = `${tabRect.width}px`;
-                tabSlider.style.left = `${tabRect.left - containerRect.left}px`;
-            }
-        }
-
         // Filter prompts based on category and search query
         function filterPrompts() {
             let filteredPrompts = prompts;
@@ -2611,22 +2634,18 @@
             }, 3000);
         }
 
-        // Update slider position
-        function updateSlider() {
-            sliderTrack.style.transform = `translateX(-${currentSlide * 100}%)`;
-            
-            // Update dots
-            sliderDots.querySelectorAll('.slider-dot').forEach((dot, index) => {
-                dot.classList.toggle('active', index === currentSlide);
-            });
-        }
-
         // Auto-play slider
         function startSliderAutoPlay() {
-            setInterval(() => {
+            autoSlideInterval = setInterval(() => {
                 currentSlide = (currentSlide + 1) % totalSlides;
-                updateSlider();
-            }, 5000);
+                updateCircularSlider();
+            }, 4000);
+        }
+
+        // Reset auto-play when user interacts with slider
+        function resetAutoPlay() {
+            clearInterval(autoSlideInterval);
+            startSliderAutoPlay();
         }
     </script>
 </body>
