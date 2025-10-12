@@ -1,54 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prompt Store</title>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Meechto Prompts</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
             background-color: #000000;
-            min-height: 100vh;
-            position: relative;
         }
-        #video-bg {
-            position: fixed;
-            right: 0;
-            bottom: 0;
-            min-width: 100%;
-            min-height: 100%;
-            width: auto;
-            height: auto;
-            z-index: -100;
-            background-size: cover;
-            opacity: 0.1;
+        body {
+            overflow-y: scroll;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
-        .content-wrapper {
+        body::-webkit-scrollbar {
+            display: none;
+        }
+        .hero-section {
+            height: 100vh;
+            width: 100%;
             position: relative;
-            z-index: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .slideshow-container {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .hero-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
+        .hero-image.active {
+            opacity: 1;
+        }
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.9) 100%);
+        }
+        .content-container {
+            position: relative;
+            width: 100%;
+            background-color: #000000;
+        }
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            cursor: pointer;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translate(-50%, 0); }
+            40% { transform: translate(-50%, -15px); }
+            60% { transform: translate(-50%, -7px); }
         }
         .gradient-text {
             background: linear-gradient(90deg, #FF8A00, #E52E71);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .category-scrollbar::-webkit-scrollbar {
-            display: none;
+        .gradient-bg {
+            background: linear-gradient(90deg, #FF8A00, #E52E71);
         }
-        .category-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        .flip-card {
-            perspective: 1000px;
-        }
+        .category-scrollbar::-webkit-scrollbar { display: none; }
+        .category-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .flip-card { perspective: 1000px; }
         .flip-card-inner {
             position: relative;
             width: 100%;
@@ -56,21 +99,18 @@
             transition: transform 0.8s;
             transform-style: preserve-3d;
         }
-        .flip-card:hover .flip-card-inner {
-            transform: rotateY(180deg);
-        }
-        .flip-card-front,
-        .flip-card-back {
+        .flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
+        .flip-card-front, .flip-card-back {
             position: absolute;
             width: 100%;
             height: 100%;
             -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
-            border-radius: 1.5rem;
+            border-radius: 1rem;
             overflow: hidden;
         }
         .flip-card-back {
-            background-color: #1f1f1f;
+            background-color: #1F2937;
             color: white;
             transform: rotateY(180deg);
             display: flex;
@@ -79,50 +119,35 @@
             align-items: center;
             padding: 1rem;
         }
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .prompt-text {
+            display: -webkit-box;
+            -webkit-line-clamp: 7;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex-grow: 1;
+            margin-bottom: 1rem;
         }
-        .fade-in {
-            animation: fadeIn 1s ease-out forwards;
+        .copy-btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            background: linear-gradient(90deg, #FF8A00, #E52E71);
+            z-index: 1;
         }
-        .search-bar {
-            display: none;
+        .copy-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: all 0.6s ease;
+            z-index: -1;
         }
-        .search-bar.active {
-            display: flex;
-        }
-        dialog {
-            background-color: transparent;
-        }
-        dialog::backdrop {
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
-        }
-        .active-action {
-            background-color: hsla(0,0%,100%,.2);
-            color: white;
-        }
-        .inactive-action {
-             background-color: hsla(0,0%,100%,.1);
-             color: white;
-        }
-        .active-category {
-            background-color: hsla(0,0%,100%,.1);
-            color: white;
-            border: none;
-        }
-        .inactive-category {
-             background-color: transparent;
-            border: 1px solid hsla(0,0%,100%,.2);
-            color: hsla(0,0%,100%,.7);
-        }
+        .copy-btn:hover::before { left: 100%; }
+        .copy-btn:active { transform: scale(0.95); }
         .toast {
             position: fixed;
             top: 2rem;
@@ -141,178 +166,425 @@
             z-index: 1000;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
         }
-        .toast.show {
-            transform: translateX(0);
-            opacity: 1;
+        .toast.show { transform: translateX(0); opacity: 1; }
+        .active-action { background-color: hsla(0, 0%, 100%, .2); color: white; }
+        .inactive-action { background-color: hsla(0, 0%, 100%, .1); color: white; }
+        .active-category { background-color: hsla(0, 0%, 100%, .1); color: white; border: none; }
+        .inactive-category { background-color: transparent; border: 1px solid hsla(0, 0%, 100%, .2); color: hsla(0, 0%, 100%, .7); }
+        
+        /* Image centering styles */
+        .hero-image {
+            object-position: center center;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-image {
+                object-position: center center;
+            }
+        }
+        
+        /* Modal styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: #1F2937;
+            padding: 2rem;
+            border-radius: 1rem;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        /* Success Animation */
+        @keyframes successPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .success-animation {
+            animation: successPulse 0.6s ease-in-out;
+        }
+        
+        /* Trend Button Styles */
+        .trend-btn {
+            background: linear-gradient(90deg, #FF8A00, #E52E71);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .trend-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 138, 0, 0.3);
+        }
+        
+        .remove-trend-btn {
+            background: linear-gradient(90deg, #EF4444, #DC2626);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .remove-trend-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+        
+        /* Prompt Item Animation */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .prompt-item {
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @media (min-width: 1024px) { 
+            .flip-card-back { padding: 1.5rem; } 
         }
     </style>
 </head>
 <body class="text-white">
-    <video autoplay="" id="video-bg" loop="" muted="" playsinline=""></video>
-    
     <!-- Main Page -->
-    <div class="p-6 content-wrapper" id="main-page">
-        <header class="flex justify-between items-center fade-in">
-            <h1 class="text-2xl font-bold">Prompt<span class="gradient-text">Store</span></h1>
-            <div class="flex items-center space-x-4">
-                <button id="search-button"><span class="material-symbols-outlined">search</span></button>
-                <button id="profile-button"><span class="material-symbols-outlined">person</span></button>
+    <div class="hero-section" id="main-page">
+        <div class="slideshow-container" id="hero-slideshow">
+            <!-- Trending images will be dynamically inserted here -->
+        </div>
+        <div class="hero-overlay"></div>
+        <header class="absolute top-0 left-0 w-full p-6 lg:p-8 flex justify-between items-center z-10">
+            <h1 class="text-3xl lg:text-4xl font-bold">Meechto<span class="gradient-text">Prompts</span></h1>
+            <div class="flex items-center space-x-2 lg:space-x-4">
+                <button class="p-2 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors" id="search-button">
+                    <span class="material-symbols-outlined">search</span>
+                </button>
+                <button class="p-2 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors" id="profile-button">
+                    <span class="material-symbols-outlined">person</span>
+                </button>
             </div>
         </header>
-
-        <div class="search-bar mt-4 fade-in" id="search-bar">
-            <input class="w-full bg-white/10 text-white rounded-full py-2 px-4 focus:outline-none focus:ring-2 focus:ring-pink-500" 
-                   placeholder="Search prompts..." type="text" id="search-input"/>
+        <div class="absolute bottom-0 left-0 w-full p-8 text-center z-10">
+            <h2 class="text-4xl lg:text-6xl font-bold mb-4">Turn Ideas Into Reality</h2>
+            <p class="text-lg lg:text-xl text-white/80 mb-8 max-w-2xl mx-auto">Find prompts that inspire action and creativity</p>
+            <div class="scroll-indicator text-white" id="scroll-indicator">
+                <span class="material-symbols-outlined text-4xl">keyboard_arrow_down</span>
+            </div>
         </div>
+    </div>
 
-        <main class="mt-8 pb-16">
-            <section class="fade-in" style="animation-delay: 0.2s;">
-                <div class="category-scrollbar flex space-x-4 overflow-x-auto pb-4" id="filter-tabs">
-                    <button class="category-btn active-category py-2 px-4 rounded-full text-sm shrink-0" data-category="all">All Prompts</button>
-                    <button class="category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Men">Men</button>
-                    <button class="category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Women">Women</button>
-                    <button class="category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Couple">Couple</button>
-                    <button class="category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Child">Child</button>
-                    <button class="category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Father">Father</button>
-                    <button class="category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Mother">Mother</button>
-                    <button class="category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Family">Family</button>
-                    <button class="category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Festival">Festival</button>
-                </div>
-            </section>
+    <div class="content-container bg-black" id="main-content">
+        <div class="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto">
+            <main class="pb-16">
+                <section id="category-section">
+                    <div class="category-scrollbar flex justify-center space-x-2 md:space-x-3 overflow-x-auto py-4" id="filter-tabs">
+                        <button class="category-btn active-category bg-white/10 text-white py-2 px-4 rounded-full text-sm shrink-0 transition-colors" data-category="all">All</button>
+                        <button class="category-btn bg-transparent border border-white/20 text-white/60 hover:bg-white/10 hover:text-white py-2 px-4 rounded-full text-sm shrink-0 transition-colors" data-category="Men">Men</button>
+                        <button class="category-btn bg-transparent border border-white/20 text-white/60 hover:bg-white/10 hover:text-white py-2 px-4 rounded-full text-sm shrink-0 transition-colors" data-category="Women">Women</button>
+                        <button class="category-btn bg-transparent border border-white/20 text-white/60 hover:bg-white/10 hover:text-white py-2 px-4 rounded-full text-sm shrink-0 transition-colors" data-category="Couple">Couple</button>
+                        <button class="category-btn bg-transparent border border-white/20 text-white/60 hover:bg-white/10 hover:text-white py-2 px-4 rounded-full text-sm shrink-0 transition-colors" data-category="Child">Child</button>
+                        <button class="category-btn bg-transparent border border-white/20 text-white/60 hover:bg-white/10 hover:text-white py-2 px-4 rounded-full text-sm shrink-0 transition-colors" data-category="Family">Family</button>
+                    </div>
+                </section>
 
-            <section class="mt-8 fade-in" style="animation-delay: 0.4s;">
-                <h2 class="text-2xl font-bold">Trending Prompts</h2>
-                <div class="grid grid-cols-2 gap-4 mt-4" id="trending-prompts-grid">
-                    <!-- Trending prompts will be dynamically inserted here -->
-                </div>
-            </section>
-
-            <section class="mt-8 fade-in" style="animation-delay: 0.6s;">
-                <h2 class="text-2xl font-bold">All Prompts</h2>
-                <div class="grid grid-cols-2 gap-4 mt-4" id="prompts-grid">
-                    <!-- Prompts will be dynamically inserted here -->
-                </div>
-            </section>
-        </main>
+                <section class="mt-6" id="prompts-grid-section">
+                    <h2 class="text-2xl font-semibold px-2 sm:px-0">All Prompts</h2>
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mt-4" id="prompts-grid">
+                        <!-- Prompts will be dynamically inserted here -->
+                    </div>
+                </section>
+            </main>
+        </div>
     </div>
 
     <!-- Admin Panel -->
-    <div class="p-6 content-wrapper hidden" id="admin-panel">
-        <header class="flex justify-between items-center fade-in">
-            <h1 class="text-2xl font-bold">Admin <span class="gradient-text">Panel</span></h1>
-            <button class="bg-white/10 text-white py-2 px-4 rounded-full text-sm flex items-center gap-2" id="back-to-main">
-                <span class="material-symbols-outlined">arrow_back</span>
-                Back to Main
-            </button>
-        </header>
+    <div class="content-container bg-black hidden" id="admin-panel">
+        <div class="p-6">
+            <header class="flex justify-between items-center fade-in">
+                <h1 class="text-2xl font-bold">Admin <span class="gradient-text">Panel</span></h1>
+                <div class="flex items-center space-x-3">
+                    <button class="bg-white/10 text-white py-2 px-4 rounded-full text-sm flex items-center gap-2 hover:bg-white/20 transition-colors" id="logout-btn">
+                        <span class="material-symbols-outlined">logout</span> Logout
+                    </button>
+                    <button class="bg-white/10 text-white py-2 px-4 rounded-full text-sm flex items-center gap-2" id="back-to-main">
+                        <span class="material-symbols-outlined">arrow_back</span> Back to Main
+                    </button>
+                </div>
+            </header>
 
-        <main class="mt-8 pb-16">
-            <section class="fade-in" style="animation-delay: 0.2s;">
-                <h2 class="text-xl font-bold">Manage Prompts</h2>
-                <form class="mt-4 space-y-6" id="prompt-form">
-                    <div>
-                        <label class="font-semibold text-white/80">Action</label>
-                        <div class="grid grid-cols-2 gap-4 mt-2">
-                            <button class="action-btn inactive-action p-3 rounded-lg flex items-center justify-center space-x-2" data-action="add" type="button">
-                                <span class="material-symbols-outlined">add_circle</span>
-                                <span>Add New Prompt</span>
-                            </button>
-                            <button class="action-btn inactive-action p-3 rounded-lg flex items-center justify-center space-x-2" data-action="trending" type="button">
-                                <span class="material-symbols-outlined">trending_up</span>
-                                <span>Add Trending Prompt</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="font-semibold text-white/80" for="category-selection">Category Selection</label>
-                        <div class="category-scrollbar flex space-x-3 overflow-x-auto pb-2 mt-2" id="admin-category-tabs">
-                            <button class="category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Men" type="button">Men</button>
-                            <button class="category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Women" type="button">Women</button>
-                            <button class="category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Couple" type="button">Couple</button>
-                            <button class="category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Child" type="button">Child</button>
-                            <button class="category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Father" type="button">Father</button>
-                            <button class="category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Mother" type="button">Mother</button>
-                            <button class="category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Family" type="button">Family</button>
-                            <button class="category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Festival" type="button">Festival</button>
-                        </div>
-                        <input id="category-selection" name="category" type="hidden" value=""/>
-                    </div>
-
-                    <div id="trending-title-field" class="hidden">
-                        <label class="font-semibold text-white/80" for="trending-title">Title</label>
-                        <input class="w-full mt-2 bg-white/10 text-white rounded-full py-3 px-5 focus:outline-none focus:ring-2 focus:ring-pink-500" 
-                               id="trending-title" name="trending_title" placeholder="Enter trending title" type="text"/>
-                    </div>
-
-                    <div id="trending-description-field" class="hidden">
-                        <label class="font-semibold text-white/80" for="trending-description">Description</label>
-                        <textarea class="w-full mt-2 bg-white/10 text-white rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-pink-500" 
-                                  id="trending-description" name="trending_description" placeholder="Enter trending description" rows="3"></textarea>
-                    </div>
-
-                    <div>
-                        <label class="font-semibold text-white/80">Image Source</label>
-                        <div class="mt-2 space-y-3">
-                            <input class="w-full bg-white/10 text-white rounded-full py-3 px-5 focus:outline-none focus:ring-2 focus:ring-pink-500" 
-                                   name="image_url" placeholder="Image URL" type="text" id="image-url-input"/>
-                            <div class="flex items-center justify-center w-full">
-                                <label class="flex flex-col items-center justify-center w-full h-32 border-2 border-white/30 border-dashed rounded-lg cursor-pointer bg-white/5 hover:bg-white/10" for="dropzone-file">
-                                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                                        <span class="material-symbols-outlined text-4xl text-white/50">cloud_upload</span>
-                                        <p class="mb-2 text-sm text-white/50"><span class="font-semibold">Click to upload</span> or drag and drop</p>
-                                        <p class="text-xs text-white/50">SVG, PNG, JPG or GIF</p>
-                                    </div>
-                                    <input class="hidden" id="dropzone-file" name="image_upload" type="file"/>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="font-semibold text-white/80" for="prompt-text">Prompt Text</label>
-                        <textarea class="w-full mt-2 bg-white/10 text-white rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-pink-500" 
-                                  id="prompt-text" name="prompt_text" placeholder="Enter the prompt text here..." required rows="4"></textarea>
-                    </div>
-
-                    <div class="pt-4">
-                        <button class="w-full bg-gradient-to-r from-pink-500 to-orange-500 text-white font-bold py-3 px-4 rounded-full flex items-center justify-center gap-2 active:scale-95 transition-transform" type="submit" id="submit-prompt">
-                            <span class="material-symbols-outlined">send</span>
-                            Submit Prompt
+            <main class="mt-8 pb-16">
+                <section class="fade-in" style="animation-delay: 0.2s;">
+                    <div class="grid grid-cols-3 gap-4">
+                        <button class="action-btn active-action p-3 rounded-lg flex items-center justify-center space-x-2 text-sm" id="add-prompt-btn">
+                            <span class="material-symbols-outlined">add_circle</span>
+                            <span>Add Prompt</span>
+                        </button>
+                        <button class="action-btn inactive-action p-3 rounded-lg flex items-center justify-center space-x-2 text-sm" id="add-trending-btn">
+                            <span class="material-symbols-outlined">trending_up</span>
+                            <span>Add Trending</span>
+                        </button>
+                        <button class="action-btn inactive-action p-3 rounded-lg flex items-center justify-center space-x-2 text-sm" id="edit-prompts-btn">
+                            <span class="material-symbols-outlined">dashboard</span>
+                            <span>Manage Prompts</span>
                         </button>
                     </div>
-                </form>
-            </section>
+                </section>
 
-            <section class="mt-8 fade-in" style="animation-delay: 0.4s;">
-                <h2 class="text-xl font-bold">Existing Prompts</h2>
-                <div class="mt-4 space-y-4" id="admin-prompts-list">
-                    <!-- Existing prompts will be listed here -->
-                </div>
-            </section>
-        </main>
+                <!-- Add Prompt Section -->
+                <section class="fade-in mt-8" id="add-prompt-section" style="animation-delay: 0.4s;">
+                    <h2 class="text-xl font-bold">Add New Prompt</h2>
+                    <form class="mt-4 space-y-6" id="prompt-form">
+                        <div>
+                            <label class="font-semibold text-white/80" for="category-selection">Category Selection</label>
+                            <div class="category-scrollbar flex space-x-3 overflow-x-auto pb-2 mt-2">
+                                <button class="category-btn active-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Men" type="button">Men</button>
+                                <button class="category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Women" type="button">Women</button>
+                                <button class="category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Couple" type="button">Couple</button>
+                                <button class="category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Child" type="button">Child</button>
+                                <button class="category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Father" type="button">Father</button>
+                                <button class="category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Mother" type="button">Mother</button>
+                                <button class="category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Family" type="button">Family</button>
+                            </div>
+                            <input id="category-selection" name="category" type="hidden" value="Men"/>
+                        </div>
+
+                        <div>
+                            <label class="font-semibold text-white/80">Image Source</label>
+                            <div class="mt-2 space-y-3">
+                                <input class="w-full bg-white/10 text-white rounded-full py-3 px-5 focus:outline-none focus:ring-2 focus:ring-orange-500" name="image_url" placeholder="Image URL" type="text" id="image-url-input"/>
+                                <div class="flex items-center justify-center w-full">
+                                    <label class="flex flex-col items-center justify-center w-full h-32 border-2 border-white/30 border-dashed rounded-lg cursor-pointer bg-white/5 hover:bg-white/10" for="dropzone-file">
+                                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                            <span class="material-symbols-outlined text-4xl text-white/50">cloud_upload</span>
+                                            <p class="mb-2 text-sm text-white/50"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                                            <p class="text-xs text-white/50">SVG, PNG, JPG or GIF</p>
+                                        </div>
+                                        <input class="hidden" id="dropzone-file" name="image_upload" type="file" accept="image/*"/>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="font-semibold text-white/80" for="prompt-text">Prompt Text</label>
+                            <textarea class="w-full mt-2 bg-white/10 text-white rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-orange-500" id="prompt-text" name="prompt_text" placeholder="Enter the prompt text here..." required rows="4"></textarea>
+                        </div>
+
+                        <div class="pt-4">
+                            <button class="w-full gradient-bg text-white font-bold py-3 px-4 rounded-full flex items-center justify-center gap-2 active:scale-95 transition-transform" type="submit">
+                                <span class="material-symbols-outlined">send</span> Submit Prompt
+                            </button>
+                        </div>
+                    </form>
+                </section>
+
+                <!-- Add Trending Section -->
+                <section class="fade-in mt-8 hidden" id="add-trending-section" style="animation-delay: 0.4s;">
+                    <h2 class="text-xl font-bold">Add Trending Prompt</h2>
+                    <form class="mt-4 space-y-6" id="trending-form">
+                        <div>
+                            <label class="font-semibold text-white/80" for="trending-category-selection">Category Selection</label>
+                            <div class="category-scrollbar flex space-x-3 overflow-x-auto pb-2 mt-2">
+                                <button class="trending-category-btn active-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Men" type="button">Men</button>
+                                <button class="trending-category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Women" type="button">Women</button>
+                                <button class="trending-category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Couple" type="button">Couple</button>
+                                <button class="trending-category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Child" type="button">Child</button>
+                                <button class="trending-category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Father" type="button">Father</button>
+                                <button class="trending-category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Mother" type="button">Mother</button>
+                                <button class="trending-category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Family" type="button">Family</button>
+                            </div>
+                            <input id="trending-category-selection" name="category" type="hidden" value="Men"/>
+                        </div>
+
+                        <div>
+                            <label class="font-semibold text-white/80">Image Source</label>
+                            <div class="mt-2 space-y-3">
+                                <input class="w-full bg-white/10 text-white rounded-full py-3 px-5 focus:outline-none focus:ring-2 focus:ring-orange-500" name="image_url" placeholder="Image URL" type="text" id="trending-image-url-input"/>
+                                <div class="flex items-center justify-center w-full">
+                                    <label class="flex flex-col items-center justify-center w-full h-32 border-2 border-white/30 border-dashed rounded-lg cursor-pointer bg-white/5 hover:bg-white/10" for="trending-dropzone-file">
+                                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                            <span class="material-symbols-outlined text-4xl text-white/50">cloud_upload</span>
+                                            <p class="mb-2 text-sm text-white/50"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                                            <p class="text-xs text-white/50">SVG, PNG, JPG or GIF</p>
+                                        </div>
+                                        <input class="hidden" id="trending-dropzone-file" name="image_upload" type="file" accept="image/*"/>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="font-semibold text-white/80" for="trending-title">Title</label>
+                            <input class="w-full mt-2 bg-white/10 text-white rounded-full py-3 px-5 focus:outline-none focus:ring-2 focus:ring-orange-500" id="trending-title" name="title" placeholder="Enter trending title" type="text"/>
+                        </div>
+
+                        <div>
+                            <label class="font-semibold text-white/80" for="trending-description">Description</label>
+                            <textarea class="w-full mt-2 bg-white/10 text-white rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-orange-500" id="trending-description" name="description" placeholder="Enter trending description" rows="3"></textarea>
+                        </div>
+
+                        <div>
+                            <label class="font-semibold text-white/80" for="trending-prompt-text">Prompt Text</label>
+                            <textarea class="w-full mt-2 bg-white/10 text-white rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-orange-500" id="trending-prompt-text" name="prompt_text" placeholder="Enter the prompt text here..." required rows="4"></textarea>
+                        </div>
+
+                        <div class="pt-4">
+                            <button class="w-full gradient-bg text-white font-bold py-3 px-4 rounded-full flex items-center justify-center gap-2 active:scale-95 transition-transform" type="submit">
+                                <span class="material-symbols-outlined">trending_up</span> Add Trending
+                            </button>
+                        </div>
+                    </form>
+                </section>
+
+                <!-- Edit Prompts Section -->
+                <section class="fade-in mt-8 hidden" id="edit-prompts-section" style="animation-delay: 0.4s;">
+                    <h2 class="text-xl font-bold">Manage Prompts</h2>
+                    <div class="mt-4">
+                        <div class="category-scrollbar flex space-x-3 overflow-x-auto pb-2 mt-2">
+                            <button class="category-filter-btn active-category py-2 px-4 rounded-full text-sm shrink-0" data-category="All" type="button">All</button>
+                            <button class="category-filter-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Men" type="button">Men</button>
+                            <button class="category-filter-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Women" type="button">Women</button>
+                            <button class="category-filter-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Couple" type="button">Couple</button>
+                            <button class="category-filter-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Child" type="button">Child</button>
+                            <button class="category-filter-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Father" type="button">Father</button>
+                            <button class="category-filter-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Mother" type="button">Mother</button>
+                            <button class="category-filter-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Family" type="button">Family</button>
+                        </div>
+                    </div>
+                    <div class="mt-6 space-y-4" id="prompt-list">
+                        <!-- Prompts will be dynamically inserted here -->
+                    </div>
+                </section>
+            </main>
+        </div>
     </div>
 
-    <!-- Login Dialog -->
-    <dialog class="w-full max-w-sm p-0 rounded-2xl bg-[#1f1f1f] text-white" id="login-dialog">
-        <div class="p-6 text-center" id="login-form-container">
-            <h2 class="text-xl font-bold mb-4">Admin Login</h2>
-            <form id="login-form">
+    <!-- Edit Modal -->
+    <div class="modal-overlay hidden" id="edit-modal">
+        <div class="modal-content">
+            <h2 class="text-xl font-bold mb-4">Edit Prompt</h2>
+            <form class="space-y-4" id="edit-prompt-form">
+                <input type="hidden" id="edit-prompt-id">
+                <input type="hidden" id="edit-prompt-type">
+                
+                <div>
+                    <label class="font-semibold text-white/80">Category Selection</label>
+                    <div class="category-scrollbar flex space-x-3 overflow-x-auto pb-2 mt-2">
+                        <button class="edit-category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Men" type="button">Men</button>
+                        <button class="edit-category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Women" type="button">Women</button>
+                        <button class="edit-category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Couple" type="button">Couple</button>
+                        <button class="edit-category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Child" type="button">Child</button>
+                        <button class="edit-category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Father" type="button">Father</button>
+                        <button class="edit-category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Mother" type="button">Mother</button>
+                        <button class="edit-category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Family" type="button">Family</button>
+                    </div>
+                    <input id="edit-category-selection" name="category" type="hidden" value=""/>
+                </div>
+
+                <div>
+                    <label class="font-semibold text-white/80">Image URL</label>
+                    <input class="w-full bg-white/10 text-white rounded-full py-3 px-5 focus:outline-none focus:ring-2 focus:ring-orange-500" 
+                           id="edit-image-url" name="image_url" placeholder="Image URL" type="text"/>
+                </div>
+
+                <div id="edit-title-field" class="hidden">
+                    <label class="font-semibold text-white/80">Title</label>
+                    <input class="w-full bg-white/10 text-white rounded-full py-3 px-5 focus:outline-none focus:ring-2 focus:ring-orange-500" 
+                           id="edit-title" name="title" placeholder="Title" type="text"/>
+                </div>
+
+                <div id="edit-description-field" class="hidden">
+                    <label class="font-semibold text-white/80">Description</label>
+                    <textarea class="w-full bg-white/10 text-white rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-orange-500" 
+                              id="edit-description" name="description" placeholder="Description" rows="2"></textarea>
+                </div>
+
+                <div>
+                    <label class="font-semibold text-white/80">Prompt Text</label>
+                    <textarea class="w-full bg-white/10 text-white rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-orange-500" 
+                              id="edit-prompt-text" name="prompt_text" placeholder="Prompt Text" rows="4"></textarea>
+                </div>
+
+                <div class="flex gap-3 pt-4">
+                    <button type="button" class="flex-1 bg-white/10 text-white font-bold py-3 px-4 rounded-full active:scale-95 transition-transform" id="cancel-edit">
+                        Cancel
+                    </button>
+                    <button type="submit" class="flex-1 gradient-bg text-white font-bold py-3 px-4 rounded-full flex items-center justify-center gap-2 active:scale-95 transition-transform">
+                        <span class="material-symbols-outlined">save</span> Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Dialog -->
+    <div class="modal-overlay hidden" id="success-dialog">
+        <div class="modal-content text-center">
+            <div class="success-animation mb-4">
+                <span class="material-symbols-outlined text-6xl gradient-text">check_circle</span>
+            </div>
+            <h2 class="text-2xl font-bold mb-2" id="success-title">Success!</h2>
+            <p class="text-white/80 mb-6" id="success-message">Operation completed successfully</p>
+            <button class="gradient-bg text-white font-bold py-3 px-6 rounded-full active:scale-95 transition-transform" id="success-ok">
+                OK
+            </button>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden" id="login-modal">
+        <div class="bg-[#1F2937] p-8 rounded-lg shadow-xl w-full max-w-sm">
+            <h2 class="text-2xl font-bold text-center mb-6 gradient-text">Admin Login</h2>
+            <form id="admin-login-form">
                 <div class="mb-4">
-                    <input class="w-full bg-white/10 text-white rounded-full py-2 px-4 focus:outline-none focus:ring-2 focus:ring-pink-500 placeholder-white/50" 
-                           placeholder="Email" type="email" id="admin-email"/>
+                    <label class="block text-white/80 text-sm font-medium mb-2" for="admin-email">Email</label>
+                    <input class="w-full bg-white/10 text-white rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-orange-500" 
+                           id="admin-email" name="email" required type="email" placeholder="admin@example.com"/>
                 </div>
                 <div class="mb-6">
-                    <input class="w-full bg-white/10 text-white rounded-full py-2 px-4 focus:outline-none focus:ring-2 focus:ring-pink-500 placeholder-white/50" 
-                           placeholder="Password" type="password" id="admin-password"/>
+                    <label class="block text-white/80 text-sm font-medium mb-2" for="admin-password">Password</label>
+                    <input class="w-full bg-white/10 text-white rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-orange-500" 
+                           id="admin-password" name="password" required type="password" placeholder="Enter password"/>
                 </div>
-                <button class="w-full bg-gradient-to-r from-pink-500 to-orange-500 text-white font-bold py-2 px-4 rounded-full" type="submit">
-                    Login
-                </button>
+                <button class="w-full gradient-bg text-white font-semibold py-3 px-6 rounded-full text-base flex items-center justify-center gap-2" type="submit">Login</button>
             </form>
-            <button class="mt-4 text-white/50" id="close-dialog">Close</button>
+            <button class="absolute top-4 right-4 text-white/60 hover:text-white transition-colors" id="close-modal">
+                <span class="material-symbols-outlined">close</span>
+            </button>
         </div>
-    </dialog>
+    </div>
 
     <!-- Toast Notification -->
     <div class="toast" id="toast">
@@ -341,44 +613,44 @@
 
         // DOM Elements
         const mainPage = document.getElementById('main-page');
+        const mainContent = document.getElementById('main-content');
         const adminPanel = document.getElementById('admin-panel');
         const searchButton = document.getElementById('search-button');
-        const searchBar = document.getElementById('search-bar');
-        const searchInput = document.getElementById('search-input');
-        const filterTabs = document.getElementById('filter-tabs');
-        const trendingPromptsGrid = document.getElementById('trending-prompts-grid');
-        const promptsGrid = document.getElementById('prompts-grid');
         const profileButton = document.getElementById('profile-button');
-        const loginDialog = document.getElementById('login-dialog');
-        const loginForm = document.getElementById('login-form');
-        const closeDialogButton = document.getElementById('close-dialog');
+        const scrollIndicator = document.getElementById('scroll-indicator');
+        const filterTabs = document.getElementById('filter-tabs');
+        const promptsGrid = document.getElementById('prompts-grid');
+        const loginModal = document.getElementById('login-modal');
+        const closeModalButton = document.getElementById('close-modal');
+        const adminLoginForm = document.getElementById('admin-login-form');
         const backToMainButton = document.getElementById('back-to-main');
+        const logoutBtn = document.getElementById('logout-btn');
         const toast = document.getElementById('toast');
+        const heroSlideshow = document.getElementById('hero-slideshow');
+        const successDialog = document.getElementById('success-dialog');
+        const successOk = document.getElementById('success-ok');
         
         // Admin elements
+        const addPromptBtn = document.getElementById('add-prompt-btn');
+        const addTrendingBtn = document.getElementById('add-trending-btn');
+        const editPromptsBtn = document.getElementById('edit-prompts-btn');
+        const addPromptSection = document.getElementById('add-prompt-section');
+        const addTrendingSection = document.getElementById('add-trending-section');
+        const editPromptsSection = document.getElementById('edit-prompts-section');
         const promptForm = document.getElementById('prompt-form');
-        const actionButtons = document.querySelectorAll('.action-btn');
-        const adminCategoryTabs = document.getElementById('admin-category-tabs');
-        const categorySelection = document.getElementById('category-selection');
-        const imageUrlInput = document.getElementById('image-url-input');
-        const dropzoneFile = document.getElementById('dropzone-file');
-        const promptText = document.getElementById('prompt-text');
-        const submitPrompt = document.getElementById('submit-prompt');
-        const adminPromptsList = document.getElementById('admin-prompts-list');
-        const trendingTitleField = document.getElementById('trending-title-field');
-        const trendingDescriptionField = document.getElementById('trending-description-field');
-        const trendingTitle = document.getElementById('trending-title');
-        const trendingDescription = document.getElementById('trending-description');
+        const trendingForm = document.getElementById('trending-form');
+        const promptList = document.getElementById('prompt-list');
+        
+        // Edit modal elements
+        const editModal = document.getElementById('edit-modal');
+        const editPromptForm = document.getElementById('edit-prompt-form');
+        const cancelEditBtn = document.getElementById('cancel-edit');
 
         // State variables
         let currentCategory = 'all';
-        let searchQuery = '';
         let currentUser = null;
         let prompts = [];
         let trendingPrompts = [];
-        let currentAction = 'add';
-        let selectedCategory = '';
-        let uploadedImageUrl = '';
 
         // Initialize the page
         document.addEventListener('DOMContentLoaded', () => {
@@ -393,10 +665,8 @@
             auth.onAuthStateChanged(user => {
                 currentUser = user;
                 if (user) {
-                    // User is signed in as admin
                     profileButton.innerHTML = '<span class="material-symbols-outlined">admin_panel_settings</span>';
                 } else {
-                    // User is signed out
                     profileButton.innerHTML = '<span class="material-symbols-outlined">person</span>';
                 }
             });
@@ -411,7 +681,8 @@
                     Object.keys(data).forEach(key => {
                         prompts.push({
                             id: key,
-                            ...data[key]
+                            ...data[key],
+                            isTrending: false
                         });
                     });
                 }
@@ -431,12 +702,64 @@
                     Object.keys(data).forEach(key => {
                         trendingPrompts.push({
                             id: key,
-                            ...data[key]
+                            ...data[key],
+                            isTrending: true
                         });
                     });
                 }
-                renderTrendingPrompts(trendingPrompts);
+                renderHeroSlideshow();
+                if (currentUser) {
+                    renderAdminPromptsList();
+                }
             });
+        }
+
+        // Render hero slideshow with trending images
+        function renderHeroSlideshow() {
+            heroSlideshow.innerHTML = '';
+            
+            if (trendingPrompts.length === 0) {
+                // Default images if no trending prompts
+                const defaultImages = [
+                    'https://images.unsplash.com/photo-1519456264917-42d0aa2e0625?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80',
+                    'https://images.unsplash.com/photo-1534308143481-c55f00be8bd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80',
+                    'https://images.unsplash.com/photo-1548358181-ec1efb3910ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80'
+                ];
+                
+                defaultImages.forEach((src, index) => {
+                    const img = document.createElement('img');
+                    img.className = `hero-image ${index === 0 ? 'active' : ''}`;
+                    img.src = src;
+                    img.alt = `Trending Image ${index + 1}`;
+                    heroSlideshow.appendChild(img);
+                });
+            } else {
+                trendingPrompts.forEach((prompt, index) => {
+                    const img = document.createElement('img');
+                    img.className = `hero-image ${index === 0 ? 'active' : ''}`;
+                    img.src = prompt.image;
+                    img.alt = prompt.title || 'Trending Prompt';
+                    heroSlideshow.appendChild(img);
+                });
+            }
+            
+            initializeSlideshow();
+        }
+
+        // Initialize slideshow
+        function initializeSlideshow() {
+            const images = document.querySelectorAll('.hero-image');
+            let currentImageIndex = 0;
+            
+            function showNextImage() {
+                images[currentImageIndex].classList.remove('active');
+                currentImageIndex = (currentImageIndex + 1) % images.length;
+                images[currentImageIndex].classList.add('active');
+            }
+            
+            if (images.length > 1) {
+                setInterval(showNextImage, 5000);
+            }
         }
 
         // Render prompts to the grid
@@ -445,7 +768,7 @@
             
             if (promptsToRender.length === 0) {
                 promptsGrid.innerHTML = `
-                    <div class="col-span-2 text-center py-8 text-white/50">
+                    <div class="col-span-2 md:col-span-3 lg:col-span-4 xl:col-span-5 text-center py-8 text-white/50">
                         <span class="material-symbols-outlined text-4xl mb-2">search_off</span>
                         <p>No prompts found</p>
                     </div>
@@ -453,21 +776,22 @@
                 return;
             }
             
-            const filteredPrompts = filterPromptsByCategoryAndSearch(promptsToRender);
+            const filteredPrompts = filterPromptsByCategory(promptsToRender);
             
             filteredPrompts.forEach((prompt, index) => {
                 const promptCard = document.createElement('div');
-                promptCard.className = 'flip-card aspect-[3/4]';
-                promptCard.style.animation = `fadeIn 0.5s ease ${index * 0.1}s both`;
+                promptCard.className = 'flip-card aspect-[9/16]';
+                promptCard.setAttribute('data-category', prompt.category);
                 promptCard.innerHTML = `
                     <div class="flip-card-inner">
                         <div class="flip-card-front">
-                            <img alt="${prompt.category}" class="w-full h-full object-cover" src="${prompt.image || 'https://via.placeholder.com/300x400/1f1f1f/666666?text=No+Image'}"/>
+                            <img alt="${prompt.category}" class="w-full h-full object-cover rounded-2xl" 
+                                 src="${prompt.image || 'https://via.placeholder.com/300x400/1f1f1f/666666?text=No+Image'}"/>
                         </div>
                         <div class="flip-card-back">
-                            <p class="prompt-text text-xs text-center mb-4">${prompt.prompt_text}</p>
-                            <button class="copy-btn bg-white/20 text-white py-2 px-4 rounded-full text-xs flex items-center gap-2" data-prompt-id="${prompt.id}">
-                                Copy <span class="material-symbols-outlined text-sm">content_copy</span>
+                            <p class="prompt-text text-sm text-center">${prompt.prompt_text}</p>
+                            <button class="copy-btn text-white font-semibold py-2.5 px-6 rounded-full text-sm flex items-center gap-2" data-prompt-id="${prompt.id}">
+                                Copy <span class="material-symbols-outlined text-base">content_copy</span>
                             </button>
                         </div>
                     </div>
@@ -476,75 +800,14 @@
             });
         }
 
-        // Render trending prompts
-        function renderTrendingPrompts(trendingToRender) {
-            trendingPromptsGrid.innerHTML = '';
-            
-            if (trendingToRender.length === 0) {
-                // Default trending prompts if none exist
-                const defaultTrending = [
-                    {
-                        image: "https://via.placeholder.com/300x400/1f1f1f/666666?text=Trending+1",
-                        title: "Sample Trending",
-                        description: "This is a sample trending prompt description",
-                        prompt_text: "Sample trending prompt text for demonstration"
-                    },
-                    {
-                        image: "https://via.placeholder.com/300x400/1f1f1f/666666?text=Trending+2", 
-                        title: "Another Trending",
-                        description: "Another sample trending prompt",
-                        prompt_text: "Another sample trending prompt text"
-                    }
-                ];
-                
-                defaultTrending.forEach((prompt, index) => {
-                    const promptCard = document.createElement('div');
-                    promptCard.className = 'flip-card aspect-[3/4]';
-                    promptCard.innerHTML = `
-                        <div class="flip-card-inner">
-                            <div class="flip-card-front">
-                                <img alt="Trending" class="w-full h-full object-cover" src="${prompt.image}"/>
-                            </div>
-                            <div class="flip-card-back">
-                                <p class="prompt-text text-xs text-center mb-4">${prompt.prompt_text}</p>
-                                <button class="copy-btn bg-white/20 text-white py-2 px-4 rounded-full text-xs flex items-center gap-2">
-                                    Copy <span class="material-symbols-outlined text-sm">content_copy</span>
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                    trendingPromptsGrid.appendChild(promptCard);
-                });
-                return;
-            }
-            
-            trendingToRender.forEach((prompt, index) => {
-                const promptCard = document.createElement('div');
-                promptCard.className = 'flip-card aspect-[3/4]';
-                promptCard.style.animation = `fadeIn 0.5s ease ${index * 0.1}s both`;
-                promptCard.innerHTML = `
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <img alt="${prompt.title}" class="w-full h-full object-cover" src="${prompt.image || 'https://via.placeholder.com/300x400/1f1f1f/666666?text=No+Image'}"/>
-                        </div>
-                        <div class="flip-card-back">
-                            <p class="prompt-text text-xs text-center mb-4">${prompt.description || prompt.prompt_text}</p>
-                            <button class="copy-btn bg-white/20 text-white py-2 px-4 rounded-full text-xs flex items-center gap-2" data-prompt-id="${prompt.id}">
-                                Copy <span class="material-symbols-outlined text-sm">content_copy</span>
-                            </button>
-                        </div>
-                    </div>
-                `;
-                trendingPromptsGrid.appendChild(promptCard);
-            });
-        }
-
         // Render admin prompts list
         function renderAdminPromptsList() {
-            adminPromptsList.innerHTML = '';
+            promptList.innerHTML = '';
             
-            if (prompts.length === 0) {
-                adminPromptsList.innerHTML = `
+            const allPrompts = [...prompts, ...trendingPrompts];
+            
+            if (allPrompts.length === 0) {
+                promptList.innerHTML = `
                     <div class="text-center py-8 text-white/50">
                         <span class="material-symbols-outlined text-4xl mb-2">inbox</span>
                         <p>No prompts added yet</p>
@@ -553,53 +816,72 @@
                 return;
             }
             
-            prompts.forEach(prompt => {
+            allPrompts.forEach((prompt, index) => {
                 const promptItem = document.createElement('div');
-                promptItem.className = 'bg-white/10 rounded-lg p-4';
+                promptItem.className = 'bg-white/10 p-4 rounded-lg prompt-item prompt-item';
+                promptItem.setAttribute('data-category', prompt.category);
+                promptItem.style.animationDelay = `${index * 0.1}s`;
                 promptItem.innerHTML = `
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-4">
-                            <img src="${prompt.image || 'https://via.placeholder.com/60x60/1f1f1f/666666?text=No+Img'}" 
-                                 alt="${prompt.category}" class="w-12 h-12 rounded-lg object-cover">
-                            <div>
-                                <h3 class="font-semibold">${prompt.category} Prompt</h3>
-                                <p class="text-sm text-white/70 truncate max-w-xs">${prompt.prompt_text}</p>
-                            </div>
+                    <div class="flex items-start space-x-4">
+                        <img alt="${prompt.category} Prompt Image" class="w-20 h-20 object-cover rounded-lg" 
+                             src="${prompt.image || 'https://via.placeholder.com/80x80/1f1f1f/666666?text=No+Img'}"/>
+                        <div class="flex-1">
+                            <p class="text-xs text-white/70 mb-1">Category: ${prompt.category}</p>
+                            <p class="text-xs text-white/50 mb-2">${prompt.prompt_text.substring(0, 100)}...</p>
                         </div>
-                        <button class="delete-prompt bg-red-500/20 text-red-400 py-1 px-3 rounded-full text-sm flex items-center gap-1" data-prompt-id="${prompt.id}">
-                            <span class="material-symbols-outlined text-sm">delete</span>
-                            Delete
+                    </div>
+                    <div class="mt-4 flex justify-end space-x-2">
+                        ${prompt.isTrending ? 
+                            `<button class="remove-trend-btn text-white py-1 px-3 rounded-full text-sm flex items-center gap-1 remove-trend-btn" 
+                                data-prompt-id="${prompt.id}">
+                                <span class="material-symbols-outlined text-base">trending_down</span>Remove Trend
+                            </button>` :
+                            `<button class="trend-btn text-white py-1 px-3 rounded-full text-sm flex items-center gap-1 set-trend-btn" 
+                                data-prompt-id="${prompt.id}">
+                                <span class="material-symbols-outlined text-base">trending_up</span>Set as Trend
+                            </button>`
+                        }
+                        <button class="bg-blue-500/80 text-white py-1 px-3 rounded-full text-sm flex items-center gap-1 edit-prompt-btn" 
+                                data-prompt-id="${prompt.id}" data-prompt-type="${prompt.isTrending ? 'trending' : 'regular'}">
+                            <span class="material-symbols-outlined text-base">edit</span>Edit
+                        </button>
+                        <button class="bg-red-500/80 text-white py-1 px-3 rounded-full text-sm flex items-center gap-1 delete-prompt-btn" 
+                                data-prompt-id="${prompt.id}" data-prompt-type="${prompt.isTrending ? 'trending' : 'regular'}">
+                            <span class="material-symbols-outlined text-base">delete</span>Delete
                         </button>
                     </div>
                 `;
-                adminPromptsList.appendChild(promptItem);
+                promptList.appendChild(promptItem);
             });
         }
 
         // Set up event listeners
         function setupEventListeners() {
+            // Smooth scroll to content
+            if (scrollIndicator && mainContent) {
+                scrollIndicator.addEventListener('click', () => {
+                    mainContent.scrollIntoView({ behavior: 'smooth' });
+                });
+            }
+
             // Search functionality
             searchButton.addEventListener('click', () => {
-                searchBar.classList.toggle('active');
-            });
-
-            searchInput.addEventListener('input', (e) => {
-                searchQuery = e.target.value.toLowerCase().trim();
-                filterPrompts();
+                const query = prompt("Enter your search query:");
+                if (query) {
+                    filterPromptsBySearch(query);
+                }
             });
 
             // Category filtering
             filterTabs.addEventListener('click', (e) => {
                 if (e.target.classList.contains('category-btn')) {
-                    // Update UI
                     filterTabs.querySelectorAll('.category-btn').forEach(btn => {
-                        btn.classList.remove('active-category');
-                        btn.classList.add('inactive-category');
+                        btn.classList.remove('active-category', 'bg-white/10', 'text-white');
+                        btn.classList.add('bg-transparent', 'border', 'border-white/20', 'text-white/60', 'hover:bg-white/10', 'hover:text-white');
                     });
-                    e.target.classList.add('active-category');
-                    e.target.classList.remove('inactive-category');
+                    e.target.classList.add('active-category', 'bg-white/10', 'text-white');
+                    e.target.classList.remove('bg-transparent', 'border', 'border-white/20', 'text-white/60');
                     
-                    // Update category
                     currentCategory = e.target.getAttribute('data-category');
                     filterPrompts();
                 }
@@ -613,26 +895,56 @@
                     copyPrompt(promptId);
                 }
 
-                if (e.target.closest('.delete-prompt')) {
-                    const button = e.target.closest('.delete-prompt');
+                if (e.target.closest('.delete-prompt-btn')) {
+                    const button = e.target.closest('.delete-prompt-btn');
                     const promptId = button.getAttribute('data-prompt-id');
-                    deletePrompt(promptId);
+                    const promptType = button.getAttribute('data-prompt-type');
+                    deletePrompt(promptId, promptType);
+                }
+
+                if (e.target.closest('.edit-prompt-btn')) {
+                    const button = e.target.closest('.edit-prompt-btn');
+                    const promptId = button.getAttribute('data-prompt-id');
+                    const promptType = button.getAttribute('data-prompt-type');
+                    openEditModal(promptId, promptType);
+                }
+
+                if (e.target.closest('.set-trend-btn')) {
+                    const button = e.target.closest('.set-trend-btn');
+                    const promptId = button.getAttribute('data-prompt-id');
+                    setAsTrending(promptId);
+                }
+
+                if (e.target.closest('.remove-trend-btn')) {
+                    const button = e.target.closest('.remove-trend-btn');
+                    const promptId = button.getAttribute('data-prompt-id');
+                    removeFromTrending(promptId);
                 }
             });
 
             // Profile and login
             profileButton.addEventListener('click', () => {
                 if (currentUser) {
-                    // User is admin, show admin panel
                     showAdminPanel();
                 } else {
-                    // Show login dialog
-                    loginDialog.showModal();
+                    loginModal.classList.remove('hidden');
                 }
             });
 
+            // Logout functionality
+            logoutBtn.addEventListener('click', () => {
+                auth.signOut()
+                    .then(() => {
+                        showToast('Logged out successfully');
+                        showMainPage();
+                    })
+                    .catch(error => {
+                        showToast('Logout failed: ' + error.message);
+                    });
+            });
+
             // Login form
-            loginForm.addEventListener('submit', (e) => {
+            adminLoginForm.addEventListener('submit', (e) => {
                 e.preventDefault();
                 const email = document.getElementById('admin-email').value;
                 const password = document.getElementById('admin-password').value;
@@ -642,130 +954,164 @@
                     return;
                 }
                 
-                // Try to sign in
                 auth.signInWithEmailAndPassword(email, password)
                     .then(() => {
-                        loginDialog.close();
-                        showToast('Admin login successful');
+                        loginModal.classList.add('hidden');
+                        showSuccessDialog('Login Successful', 'Welcome to Meechto Prompts Admin Panel');
                     })
                     .catch(error => {
                         showToast('Login failed: ' + error.message);
                     });
             });
 
-            closeDialogButton.addEventListener('click', () => {
-                loginDialog.close();
+            closeModalButton.addEventListener('click', () => {
+                loginModal.classList.add('hidden');
             });
 
             // Back to main from admin
             backToMainButton.addEventListener('click', showMainPage);
 
+            // Success dialog
+            successOk.addEventListener('click', () => {
+                successDialog.classList.add('hidden');
+            });
+
+            // Admin section switching
+            addPromptBtn.addEventListener('click', () => {
+                setActiveSection('add-prompt');
+            });
+
+            addTrendingBtn.addEventListener('click', () => {
+                setActiveSection('add-trending');
+            });
+
+            editPromptsBtn.addEventListener('click', () => {
+                setActiveSection('edit-prompts');
+            });
+
             // Admin category tabs
-            adminCategoryTabs.addEventListener('click', (e) => {
-                if (e.target.classList.contains('category-btn')) {
-                    adminCategoryTabs.querySelectorAll('.category-btn').forEach(btn => {
+            setupCategoryButtons('category-btn', 'category-selection');
+            setupCategoryButtons('trending-category-btn', 'trending-category-selection');
+
+            // Admin category filter
+            document.querySelectorAll('.category-filter-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    document.querySelectorAll('.category-filter-btn').forEach(btn => {
                         btn.classList.remove('active-category');
                         btn.classList.add('inactive-category');
                     });
-                    e.target.classList.add('active-category');
-                    e.target.classList.remove('inactive-category');
+                    button.classList.add('active-category');
+                    button.classList.remove('inactive-category');
                     
-                    selectedCategory = e.target.getAttribute('data-category');
-                    categorySelection.value = selectedCategory;
-                }
-            });
-
-            // Admin action buttons
-            actionButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    actionButtons.forEach(btn => {
-                        btn.classList.remove('active-action');
-                        btn.classList.add('inactive-action');
+                    const filterCategory = button.dataset.category;
+                    const promptItems = document.querySelectorAll('.prompt-item');
+                    
+                    promptItems.forEach(item => {
+                        if (filterCategory === 'All' || item.dataset.category === filterCategory) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
                     });
-                    button.classList.add('active-action');
-                    button.classList.remove('inactive-action');
-                    
-                    currentAction = button.getAttribute('data-action');
-                    updateFormForAction();
                 });
             });
 
-            // Image upload
-            dropzoneFile.addEventListener('change', handleImageUpload);
+            // Form submissions
+            promptForm.addEventListener('submit', handlePromptSubmit);
+            trendingForm.addEventListener('submit', handleTrendingSubmit);
+            editPromptForm.addEventListener('submit', handleEditSubmit);
 
-            // Admin form submission
-            promptForm.addEventListener('submit', handleFormSubmission);
+            // Edit modal
+            cancelEditBtn.addEventListener('click', closeEditModal);
+            editModal.addEventListener('click', (e) => {
+                if (e.target === editModal) {
+                    closeEditModal();
+                }
+            });
 
-            // Close dialog when clicking outside
-            loginDialog.addEventListener('click', (event) => {
-                if (event.target === loginDialog) {
-                    loginDialog.close();
+            // Close modal when clicking outside
+            loginModal.addEventListener('click', (event) => {
+                if (event.target === loginModal) {
+                    loginModal.classList.add('hidden');
+                }
+            });
+
+            successDialog.addEventListener('click', (event) => {
+                if (event.target === successDialog) {
+                    successDialog.classList.add('hidden');
                 }
             });
         }
 
-        // Handle image upload
-        function handleImageUpload(e) {
-            if (e.target.files.length > 0) {
-                const file = e.target.files[0];
-                const reader = new FileReader();
-                
-                reader.onload = (event) => {
-                    // You can show preview here if needed
-                    console.log('File selected:', file.name);
-                };
-                
-                reader.readAsDataURL(file);
+        function setupCategoryButtons(buttonClass, inputId) {
+            document.querySelectorAll(`.${buttonClass}`).forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.querySelectorAll(`.${buttonClass}`).forEach(btn => {
+                        btn.classList.remove('active-category');
+                        btn.classList.add('inactive-category');
+                    });
+                    button.classList.add('active-category');
+                    button.classList.remove('inactive-category');
+                    document.getElementById(inputId).value = button.dataset.category;
+                });
+            });
+        }
+
+        function setActiveSection(section) {
+            // Reset all buttons
+            [addPromptBtn, addTrendingBtn, editPromptsBtn].forEach(btn => {
+                btn.classList.remove('active-action');
+                btn.classList.add('inactive-action');
+            });
+
+            // Hide all sections
+            [addPromptSection, addTrendingSection, editPromptsSection].forEach(section => {
+                section.classList.add('hidden');
+            });
+
+            // Activate selected section
+            if (section === 'add-prompt') {
+                addPromptBtn.classList.add('active-action');
+                addPromptSection.classList.remove('hidden');
+            } else if (section === 'add-trending') {
+                addTrendingBtn.classList.add('active-action');
+                addTrendingSection.classList.remove('hidden');
+            } else if (section === 'edit-prompts') {
+                editPromptsBtn.classList.add('active-action');
+                editPromptsSection.classList.remove('hidden');
+                renderAdminPromptsList();
             }
         }
 
-        // Update form based on action
-        function updateFormForAction() {
-            if (currentAction === 'trending') {
-                trendingTitleField.classList.remove('hidden');
-                trendingDescriptionField.classList.remove('hidden');
-                submitPrompt.innerHTML = '<span class="material-symbols-outlined">trending_up</span> Add Trending Prompt';
-            } else {
-                trendingTitleField.classList.add('hidden');
-                trendingDescriptionField.classList.add('hidden');
-                submitPrompt.innerHTML = '<span class="material-symbols-outlined">send</span> Submit Prompt';
-            }
-        }
-
-        // Handle form submission
-        function handleFormSubmission(e) {
+        function handlePromptSubmit(e) {
             e.preventDefault();
-            
-            if (!selectedCategory) {
-                showToast('Please select a category');
+            const category = document.getElementById('category-selection').value;
+            const promptTextValue = document.getElementById('prompt-text').value.trim();
+            const imageUrl = document.getElementById('image-url-input').value.trim();
+
+            if (!category || !promptTextValue || !imageUrl) {
+                showToast('Please fill in all fields');
                 return;
             }
 
-            const promptTextValue = promptText.value.trim();
-            if (!promptTextValue) {
-                showToast('Please enter prompt text');
+            addPrompt(category, imageUrl, promptTextValue);
+        }
+
+        function handleTrendingSubmit(e) {
+            e.preventDefault();
+            const category = document.getElementById('trending-category-selection').value;
+            const title = document.getElementById('trending-title').value.trim();
+            const description = document.getElementById('trending-description').value.trim();
+            const promptTextValue = document.getElementById('trending-prompt-text').value.trim();
+            const imageUrl = document.getElementById('trending-image-url-input').value.trim();
+
+            if (!category || !title || !description || !promptTextValue || !imageUrl) {
+                showToast('Please fill in all fields');
                 return;
             }
 
-            const imageUrl = imageUrlInput.value.trim();
-            if (!imageUrl && (!dropzoneFile.files || dropzoneFile.files.length === 0)) {
-                showToast('Please provide an image URL or upload an image');
-                return;
-            }
-
-            if (currentAction === 'trending') {
-                const title = trendingTitle.value.trim();
-                const description = trendingDescription.value.trim();
-                
-                if (!title || !description) {
-                    showToast('Please enter both title and description for trending prompt');
-                    return;
-                }
-
-                addTrendingPrompt(selectedCategory, imageUrl, title, description, promptTextValue);
-            } else {
-                addPrompt(selectedCategory, imageUrl, promptTextValue);
-            }
+            addTrendingPrompt(category, imageUrl, title, description, promptTextValue);
         }
 
         // Add prompt to Firebase
@@ -779,8 +1125,8 @@
 
             database.ref('prompts').push(newPrompt)
                 .then(() => {
-                    showToast('Prompt added successfully');
-                    resetForm();
+                    showSuccessDialog('Prompt Added', 'Your prompt has been successfully added!');
+                    promptForm.reset();
                 })
                 .catch(error => {
                     showToast('Error adding prompt: ' + error.message);
@@ -800,8 +1146,8 @@
 
             database.ref('trending').push(newTrending)
                 .then(() => {
-                    showToast('Trending prompt added successfully');
-                    resetForm();
+                    showSuccessDialog('Trending Prompt Added', 'Your trending prompt has been successfully added!');
+                    trendingForm.reset();
                 })
                 .catch(error => {
                     showToast('Error adding trending prompt: ' + error.message);
@@ -809,11 +1155,13 @@
         }
 
         // Delete prompt
-        function deletePrompt(promptId) {
+        function deletePrompt(promptId, promptType) {
             if (confirm('Are you sure you want to delete this prompt?')) {
-                database.ref('prompts/' + promptId).remove()
+                const ref = promptType === 'trending' ? database.ref('trending/' + promptId) : database.ref('prompts/' + promptId);
+                
+                ref.remove()
                     .then(() => {
-                        showToast('Prompt deleted successfully');
+                        showSuccessDialog('Prompt Deleted', 'The prompt has been successfully deleted!');
                     })
                     .catch(error => {
                         showToast('Error deleting prompt: ' + error.message);
@@ -821,75 +1169,170 @@
             }
         }
 
-        // Reset form
-        function resetForm() {
-            promptForm.reset();
-            imageUrlInput.value = '';
-            dropzoneFile.value = '';
-            selectedCategory = '';
-            categorySelection.value = '';
-            
-            // Reset category tabs
-            adminCategoryTabs.querySelectorAll('.category-btn').forEach(btn => {
-                btn.classList.remove('active-category');
-                btn.classList.add('inactive-category');
-            });
-            
-            // Reset action buttons
-            actionButtons.forEach(btn => {
-                btn.classList.remove('active-action');
-                btn.classList.add('inactive-action');
-            });
-            
-            currentAction = 'add';
-            updateFormForAction();
+        // Set as trending
+        function setAsTrending(promptId) {
+            const prompt = prompts.find(p => p.id === promptId);
+            if (!prompt) {
+                showToast('Prompt not found');
+                return;
+            }
+
+            const trendingData = {
+                ...prompt,
+                isTrending: true,
+                created_at: Date.now()
+            };
+
+            // Add to trending
+            database.ref('trending').push(trendingData)
+                .then(() => {
+                    showSuccessDialog('Set as Trending', 'The prompt has been set as trending!');
+                })
+                .catch(error => {
+                    showToast('Error setting as trending: ' + error.message);
+                });
         }
 
-        // Filter prompts based on category and search query
+        // Remove from trending
+        function removeFromTrending(promptId) {
+            if (confirm('Are you sure you want to remove this prompt from trending?')) {
+                database.ref('trending/' + promptId).remove()
+                    .then(() => {
+                        showSuccessDialog('Removed from Trending', 'The prompt has been removed from trending!');
+                    })
+                    .catch(error => {
+                        showToast('Error removing from trending: ' + error.message);
+                    });
+            }
+        }
+
+        // Open edit modal
+        function openEditModal(promptId, promptType) {
+            const promptsArray = promptType === 'trending' ? trendingPrompts : prompts;
+            const prompt = promptsArray.find(p => p.id === promptId);
+            
+            if (!prompt) {
+                showToast('Prompt not found');
+                return;
+            }
+
+            // Fill form data
+            document.getElementById('edit-prompt-id').value = promptId;
+            document.getElementById('edit-prompt-type').value = promptType;
+            document.getElementById('edit-image-url').value = prompt.image;
+            document.getElementById('edit-prompt-text').value = prompt.prompt_text;
+
+            // Set category
+            document.getElementById('edit-category-selection').value = prompt.category;
+            document.querySelectorAll('.edit-category-btn').forEach(btn => {
+                if (btn.dataset.category === prompt.category) {
+                    btn.classList.add('active-category');
+                    btn.classList.remove('inactive-category');
+                } else {
+                    btn.classList.remove('active-category');
+                    btn.classList.add('inactive-category');
+                }
+            });
+
+            // Show/hide trending fields
+            const titleField = document.getElementById('edit-title-field');
+            const descriptionField = document.getElementById('edit-description-field');
+            
+            if (promptType === 'trending') {
+                titleField.classList.remove('hidden');
+                descriptionField.classList.remove('hidden');
+                document.getElementById('edit-title').value = prompt.title || '';
+                document.getElementById('edit-description').value = prompt.description || '';
+            } else {
+                titleField.classList.add('hidden');
+                descriptionField.classList.add('hidden');
+            }
+
+            editModal.classList.remove('hidden');
+        }
+
+        function closeEditModal() {
+            editModal.classList.add('hidden');
+        }
+
+        function handleEditSubmit(e) {
+            e.preventDefault();
+            const promptId = document.getElementById('edit-prompt-id').value;
+            const promptType = document.getElementById('edit-prompt-type').value;
+            const category = document.getElementById('edit-category-selection').value;
+            const imageUrl = document.getElementById('edit-image-url').value.trim();
+            const promptText = document.getElementById('edit-prompt-text').value.trim();
+
+            if (!category || !imageUrl || !promptText) {
+                showToast('Please fill in all required fields');
+                return;
+            }
+
+            const updateData = {
+                category,
+                image: imageUrl,
+                prompt_text: promptText,
+                updated_at: Date.now()
+            };
+
+            // Add trending-specific fields if needed
+            if (promptType === 'trending') {
+                updateData.title = document.getElementById('edit-title').value.trim();
+                updateData.description = document.getElementById('edit-description').value.trim();
+            }
+
+            const ref = promptType === 'trending' ? database.ref('trending/' + promptId) : database.ref('prompts/' + promptId);
+            
+            ref.update(updateData)
+                .then(() => {
+                    showSuccessDialog('Prompt Updated', 'The prompt has been successfully updated!');
+                    closeEditModal();
+                })
+                .catch(error => {
+                    showToast('Error updating prompt: ' + error.message);
+                });
+        }
+
+        // Show success dialog
+        function showSuccessDialog(title, message) {
+            document.getElementById('success-title').textContent = title;
+            document.getElementById('success-message').textContent = message;
+            successDialog.classList.remove('hidden');
+        }
+
+        // Filter prompts based on category
         function filterPrompts() {
-            const filteredPrompts = filterPromptsByCategoryAndSearch(prompts);
+            const filteredPrompts = filterPromptsByCategory(prompts);
             renderPrompts(filteredPrompts);
         }
 
         // Filter helper function
-        function filterPromptsByCategoryAndSearch(promptsArray) {
-            let filtered = promptsArray;
-            
-            // Filter by category
-            if (currentCategory !== 'all') {
-                filtered = filtered.filter(prompt => prompt.category === currentCategory);
+        function filterPromptsByCategory(promptsArray) {
+            if (currentCategory === 'all') {
+                return promptsArray;
             }
-            
-            // Filter by search query
-            if (searchQuery) {
-                filtered = filtered.filter(prompt => 
-                    prompt.category.toLowerCase().includes(searchQuery) ||
-                    (prompt.prompt_text && prompt.prompt_text.toLowerCase().includes(searchQuery)) ||
-                    (prompt.title && prompt.title.toLowerCase().includes(searchQuery)) ||
-                    (prompt.description && prompt.description.toLowerCase().includes(searchQuery))
-                );
-            }
-            
-            return filtered;
+            return promptsArray.filter(prompt => prompt.category === currentCategory);
+        }
+
+        // Filter prompts by search
+        function filterPromptsBySearch(query) {
+            const filteredPrompts = prompts.filter(prompt => 
+                prompt.category.toLowerCase().includes(query.toLowerCase()) ||
+                prompt.prompt_text.toLowerCase().includes(query.toLowerCase())
+            );
+            renderPrompts(filteredPrompts);
         }
 
         // Copy prompt text to clipboard
         function copyPrompt(promptId) {
-            let promptText = '';
-            
-            // Find prompt in either regular prompts or trending prompts
             const prompt = prompts.find(p => p.id === promptId) || trendingPrompts.find(p => p.id === promptId);
             
-            if (prompt) {
-                promptText = prompt.prompt_text;
-            }
-            
-            if (!promptText) {
-                showToast('Prompt text not found');
+            if (!prompt) {
+                showToast('Prompt not found');
                 return;
             }
             
-            navigator.clipboard.writeText(promptText)
+            navigator.clipboard.writeText(prompt.prompt_text)
                 .then(() => {
                     showToast('Prompt copied to clipboard!');
                 })
@@ -902,13 +1345,15 @@
         // Show admin panel
         function showAdminPanel() {
             mainPage.classList.add('hidden');
+            mainContent.classList.add('hidden');
             adminPanel.classList.remove('hidden');
-            renderAdminPromptsList();
+            setActiveSection('add-prompt');
         }
 
         // Show main page
         function showMainPage() {
             mainPage.classList.remove('hidden');
+            mainContent.classList.remove('hidden');
             adminPanel.classList.add('hidden');
         }
 
