@@ -220,7 +220,7 @@
         
         /* Trend Button Styles */
         .trend-btn {
-            background: linear-gradient(90deg, #FF8A00, #E52E71);
+            background: linear-gradient(90deg, #10B981, #059669);
             color: white;
             border: none;
             padding: 0.5rem 1rem;
@@ -236,7 +236,7 @@
         
         .trend-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 138, 0, 0.3);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         }
         
         .remove-trend-btn {
@@ -411,6 +411,62 @@
         
         .remove-trend-animation {
             animation: removeTrendAnimation 0.8s ease-in-out;
+        }
+        
+        /* Confirmation Dialog */
+        .confirmation-dialog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .confirmation-content {
+            background: #1F2937;
+            padding: 2rem;
+            border-radius: 1rem;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+        
+        .confirmation-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+        
+        .confirm-btn {
+            background: linear-gradient(90deg, #EF4444, #DC2626);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            flex: 1;
+        }
+        
+        .cancel-btn {
+            background: #6B7280;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            flex: 1;
+        }
+        
+        .confirm-btn:hover, .cancel-btn:hover {
+            transform: translateY(-2px);
         }
     </style>
 </head>
@@ -602,6 +658,19 @@
         </div>
     </div>
 
+    <!-- Confirmation Dialog -->
+    <div class="confirmation-dialog hidden" id="confirmation-dialog">
+        <div class="confirmation-content">
+            <span class="material-symbols-outlined text-4xl text-red-500 mb-4">warning</span>
+            <h2 class="text-xl font-bold mb-2" id="confirmation-title">Remove from Trending</h2>
+            <p class="text-white/80 mb-4" id="confirmation-message">Are you sure you want to remove this prompt from trending?</p>
+            <div class="confirmation-buttons">
+                <button class="cancel-btn" id="confirmation-cancel">Cancel</button>
+                <button class="confirm-btn" id="confirmation-confirm">Remove</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Login Modal -->
     <div class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden" id="login-modal">
         <div class="bg-[#1F2937] p-8 rounded-lg shadow-xl w-full max-w-sm">
@@ -668,6 +737,9 @@
         const heroSlideshow = document.getElementById('hero-slideshow');
         const successDialog = document.getElementById('success-dialog');
         const successOk = document.getElementById('success-ok');
+        const confirmationDialog = document.getElementById('confirmation-dialog');
+        const confirmationCancel = document.getElementById('confirmation-cancel');
+        const confirmationConfirm = document.getElementById('confirmation-confirm');
         
         // Admin elements
         const addPromptBtn = document.getElementById('add-prompt-btn');
@@ -685,6 +757,7 @@
         let currentUser = null;
         let prompts = [];
         let trendingPrompts = [];
+        let currentPromptToRemove = null;
 
         // Initialize the page
         document.addEventListener('DOMContentLoaded', () => {
@@ -999,10 +1072,21 @@
                 if (e.target.closest('.trending-action-btn.remove-trend-btn')) {
                     const button = e.target.closest('.trending-action-btn');
                     const promptId = button.getAttribute('data-prompt-id');
-                    button.classList.add('remove-trend-animation');
-                    setTimeout(() => {
-                        removeFromTrending(promptId);
-                    }, 800);
+                    showRemoveTrendingConfirmation(promptId);
+                }
+            });
+
+            // Confirmation dialog events
+            confirmationCancel.addEventListener('click', () => {
+                confirmationDialog.classList.add('hidden');
+                currentPromptToRemove = null;
+            });
+
+            confirmationConfirm.addEventListener('click', () => {
+                if (currentPromptToRemove) {
+                    removeFromTrending(currentPromptToRemove);
+                    confirmationDialog.classList.add('hidden');
+                    currentPromptToRemove = null;
                 }
             });
 
@@ -1128,6 +1212,13 @@
                     successDialog.classList.add('hidden');
                 }
             });
+
+            confirmationDialog.addEventListener('click', (event) => {
+                if (event.target === confirmationDialog) {
+                    confirmationDialog.classList.add('hidden');
+                    currentPromptToRemove = null;
+                }
+            });
         }
 
         function setupCategoryButtons(buttonClass, inputId) {
@@ -1244,23 +1335,38 @@
                 });
         }
 
+        // Show remove trending confirmation
+        function showRemoveTrendingConfirmation(promptId) {
+            currentPromptToRemove = promptId;
+            confirmationDialog.classList.remove('hidden');
+        }
+
         // Remove from trending
         function removeFromTrending(promptId) {
-            const trendingPrompt = trendingPrompts.find(p => p.id === promptId);
+            // Find the trending prompt by matching the original prompt data
+            const trendingPrompt = trendingPrompts.find(trending => {
+                // Check if this trending prompt matches the original prompt by content
+                const originalPrompt = prompts.find(p => p.id === promptId);
+                if (!originalPrompt) return false;
+                
+                return trending.image === originalPrompt.image && 
+                       trending.prompt_text === originalPrompt.prompt_text &&
+                       trending.category === originalPrompt.category;
+            });
+
             if (!trendingPrompt) {
                 showToast('Trending prompt not found');
                 return;
             }
 
-            if (confirm('Are you sure you want to remove this prompt from trending?')) {
-                database.ref('trending/' + promptId).remove()
-                    .then(() => {
-                        showSuccessDialog('Removed from Trending', 'The prompt has been successfully removed from trending!');
-                    })
-                    .catch(error => {
-                        showToast('Error removing from trending: ' + error.message);
-                    });
-            }
+            // Remove from trending using the trending prompt's ID
+            database.ref('trending/' + trendingPrompt.id).remove()
+                .then(() => {
+                    showSuccessDialog('Removed from Trending', 'The prompt has been successfully removed from trending!');
+                })
+                .catch(error => {
+                    showToast('Error removing from trending: ' + error.message);
+                });
         }
 
         // Show success dialog
