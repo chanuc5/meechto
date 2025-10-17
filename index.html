@@ -181,6 +181,49 @@
             .hero-image {
                 object-position: center center;
             }
+            
+            .category-scrollbar {
+                padding-left: 1rem;
+                padding-right: 1rem;
+                justify-content: flex-start;
+            }
+            
+            .flip-card {
+                aspect-ratio: 9/16;
+            }
+            
+            .prompts-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+                padding: 0 0.5rem;
+            }
+            
+            .hero-text {
+                font-size: 2.5rem;
+                padding: 0 1rem;
+            }
+            
+            .hero-subtext {
+                font-size: 1rem;
+                padding: 0 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .prompts-grid {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+            
+            .category-scrollbar {
+                padding-left: 0.5rem;
+                padding-right: 0.5rem;
+            }
+            
+            .category-btn {
+                font-size: 0.7rem;
+                padding: 0.5rem 0.75rem;
+            }
         }
         
         /* Modal styles */
@@ -369,6 +412,28 @@
             margin-bottom: 2rem;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
+        
+        /* Mobile Admin Styles */
+        @media (max-width: 768px) {
+            .admin-panel {
+                padding: 1rem;
+            }
+            
+            .action-buttons {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+            
+            .hero-section-admin {
+                padding: 1rem;
+                margin-bottom: 1rem;
+            }
+            
+            .modal-content {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+        }
     </style>
 </head>
 <body class="text-white">
@@ -387,8 +452,8 @@
             </div>
         </header>
         <div class="absolute bottom-0 left-0 w-full p-8 text-center z-10">
-            <h2 class="text-4xl lg:text-6xl font-bold mb-4">Turn Ideas Into Reality</h2>
-            <p class="text-lg lg:text-xl text-white/80 mb-8 max-w-2xl mx-auto">Find prompts that inspire action and creativity</p>
+            <h2 class="hero-text text-4xl lg:text-6xl font-bold mb-4">Turn Ideas Into Reality</h2>
+            <p class="hero-subtext text-lg lg:text-xl text-white/80 mb-8 max-w-2xl mx-auto">Find prompts that inspire action and creativity</p>
             <div class="scroll-indicator text-white" id="scroll-indicator">
                 <span class="material-symbols-outlined text-4xl">keyboard_arrow_down</span>
             </div>
@@ -399,19 +464,21 @@
         <div class="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto">
             <main class="pb-16">
                 <section id="category-section">
-                    <div class="category-scrollbar flex justify-center space-x-2 md:space-x-3 overflow-x-auto py-4" id="filter-tabs">
+                    <div class="category-scrollbar flex space-x-2 md:space-x-3 overflow-x-auto py-4" id="filter-tabs">
                         <button class="category-btn active-category bg-white/10 text-white py-2 px-4 rounded-full text-sm shrink-0 transition-colors" data-category="all">All</button>
                         <button class="category-btn bg-transparent border border-white/20 text-white/60 hover:bg-white/10 hover:text-white py-2 px-4 rounded-full text-sm shrink-0 transition-colors" data-category="Men">Men</button>
                         <button class="category-btn bg-transparent border border-white/20 text-white/60 hover:bg-white/10 hover:text-white py-2 px-4 rounded-full text-sm shrink-0 transition-colors" data-category="Women">Women</button>
                         <button class="category-btn bg-transparent border border-white/20 text-white/60 hover:bg-white/10 hover:text-white py-2 px-4 rounded-full text-sm shrink-0 transition-colors" data-category="Couple">Couple</button>
                         <button class="category-btn bg-transparent border border-white/20 text-white/60 hover:bg-white/10 hover:text-white py-2 px-4 rounded-full text-sm shrink-0 transition-colors" data-category="Child">Child</button>
+                        <button class="category-btn bg-transparent border border-white/20 text-white/60 hover:bg-white/10 hover:text-white py-2 px-4 rounded-full text-sm shrink-0 transition-colors" data-category="Father">Father</button>
+                        <button class="category-btn bg-transparent border border-white/20 text-white/60 hover:bg-white/10 hover:text-white py-2 px-4 rounded-full text-sm shrink-0 transition-colors" data-category="Mother">Mother</button>
                         <button class="category-btn bg-transparent border border-white/20 text-white/60 hover:bg-white/10 hover:text-white py-2 px-4 rounded-full text-sm shrink-0 transition-colors" data-category="Family">Family</button>
                     </div>
                 </section>
 
                 <section class="mt-6" id="prompts-grid-section">
                     <h2 class="text-2xl font-semibold px-2 sm:px-0">All Prompts</h2>
-                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mt-4" id="prompts-grid">
+                    <div class="prompts-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mt-4" id="prompts-grid">
                         <!-- Prompts will be dynamically inserted here -->
                     </div>
                 </section>
@@ -421,22 +488,22 @@
 
     <!-- Admin Panel -->
     <div class="content-container bg-black hidden" id="admin-panel">
-        <div class="p-6">
+        <div class="admin-panel p-4 md:p-6">
             <header class="flex justify-between items-center fade-in">
                 <h1 class="text-2xl font-bold">Admin <span class="gradient-text">Panel</span></h1>
-                <div class="flex items-center space-x-3">
-                    <button class="bg-white/10 text-white py-2 px-4 rounded-full text-sm flex items-center gap-2 hover:bg-white/20 transition-colors" id="logout-btn">
-                        <span class="material-symbols-outlined">logout</span> Logout
+                <div class="flex items-center space-x-2 md:space-x-3">
+                    <button class="bg-white/10 text-white py-2 px-3 md:px-4 rounded-full text-sm flex items-center gap-2 hover:bg-white/20 transition-colors" id="logout-btn">
+                        <span class="material-symbols-outlined text-base">logout</span> <span class="hidden md:inline">Logout</span>
                     </button>
-                    <button class="bg-white/10 text-white py-2 px-4 rounded-full text-sm flex items-center gap-2" id="back-to-main">
-                        <span class="material-symbols-outlined">arrow_back</span> Back to Main
+                    <button class="bg-white/10 text-white py-2 px-3 md:px-4 rounded-full text-sm flex items-center gap-2" id="back-to-main">
+                        <span class="material-symbols-outlined text-base">arrow_back</span> <span class="hidden md:inline">Back to Main</span>
                     </button>
                 </div>
             </header>
 
-            <main class="mt-8 pb-16">
+            <main class="mt-6 md:mt-8 pb-16">
                 <section class="fade-in" style="animation-delay: 0.2s;">
-                    <div class="grid grid-cols-3 gap-4">
+                    <div class="action-buttons grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
                         <button class="action-btn active-action p-3 rounded-lg flex items-center justify-center space-x-2 text-sm" id="add-prompt-btn">
                             <span class="material-symbols-outlined">add_circle</span>
                             <span>Add Prompt</span>
@@ -453,19 +520,19 @@
                 </section>
 
                 <!-- Add Prompt Section -->
-                <section class="fade-in mt-8" id="add-prompt-section" style="animation-delay: 0.4s;">
+                <section class="fade-in mt-6 md:mt-8" id="add-prompt-section" style="animation-delay: 0.4s;">
                     <h2 class="text-xl font-bold">Add New Prompt</h2>
                     <form class="mt-4 space-y-6" id="prompt-form">
                         <div>
                             <label class="font-semibold text-white/80" for="category-selection">Category Selection</label>
-                            <div class="category-scrollbar flex space-x-3 overflow-x-auto pb-2 mt-2" id="add-category-buttons">
-                                <button class="category-btn active-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Men" type="button">Men</button>
-                                <button class="category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Women" type="button">Women</button>
-                                <button class="category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Couple" type="button">Couple</button>
-                                <button class="category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Child" type="button">Child</button>
-                                <button class="category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Father" type="button">Father</button>
-                                <button class="category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Mother" type="button">Mother</button>
-                                <button class="category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Family" type="button">Family</button>
+                            <div class="category-scrollbar flex space-x-2 md:space-x-3 overflow-x-auto pb-2 mt-2" id="add-category-buttons">
+                                <button class="category-btn active-category py-2 px-3 md:px-4 rounded-full text-sm shrink-0" data-category="Men" type="button">Men</button>
+                                <button class="category-btn inactive-category py-2 px-3 md:px-4 rounded-full text-sm shrink-0" data-category="Women" type="button">Women</button>
+                                <button class="category-btn inactive-category py-2 px-3 md:px-4 rounded-full text-sm shrink-0" data-category="Couple" type="button">Couple</button>
+                                <button class="category-btn inactive-category py-2 px-3 md:px-4 rounded-full text-sm shrink-0" data-category="Child" type="button">Child</button>
+                                <button class="category-btn inactive-category py-2 px-3 md:px-4 rounded-full text-sm shrink-0" data-category="Father" type="button">Father</button>
+                                <button class="category-btn inactive-category py-2 px-3 md:px-4 rounded-full text-sm shrink-0" data-category="Mother" type="button">Mother</button>
+                                <button class="category-btn inactive-category py-2 px-3 md:px-4 rounded-full text-sm shrink-0" data-category="Family" type="button">Family</button>
                             </div>
                             <input id="category-selection" name="category" type="hidden" value="Men"/>
                             
@@ -479,7 +546,7 @@
                         <div>
                             <label class="font-semibold text-white/80">Image Source</label>
                             <div class="mt-2 space-y-3">
-                                <input class="w-full bg-white/10 text-white rounded-full py-3 px-5 focus:outline-none focus:ring-2 focus:ring-orange-500" 
+                                <input class="w-full bg-white/10 text-white rounded-full py-3 px-4 md:px-5 focus:outline-none focus:ring-2 focus:ring-orange-500" 
                                        name="image_url" placeholder="Image URL" type="text" id="image-url-input" value="assets/Men/"/>
                                 <div class="flex items-center justify-center w-full">
                                     <label class="flex flex-col items-center justify-center w-full h-32 border-2 border-white/30 border-dashed rounded-lg cursor-pointer bg-white/5 hover:bg-white/10" for="dropzone-file">
@@ -508,18 +575,18 @@
                 </section>
 
                 <!-- Edit Prompts Section -->
-                <section class="fade-in mt-8 hidden" id="edit-prompts-section" style="animation-delay: 0.4s;">
+                <section class="fade-in mt-6 md:mt-8 hidden" id="edit-prompts-section" style="animation-delay: 0.4s;">
                     <h2 class="text-xl font-bold">Manage Prompts</h2>
                     <div class="mt-4">
-                        <div class="category-scrollbar flex space-x-3 overflow-x-auto pb-2 mt-2" id="filter-category-buttons">
-                            <button class="category-filter-btn active-category py-2 px-4 rounded-full text-sm shrink-0" data-category="All" type="button">All</button>
-                            <button class="category-filter-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Men" type="button">Men</button>
-                            <button class="category-filter-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Women" type="button">Women</button>
-                            <button class="category-filter-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Couple" type="button">Couple</button>
-                            <button class="category-filter-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Child" type="button">Child</button>
-                            <button class="category-filter-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Father" type="button">Father</button>
-                            <button class="category-filter-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Mother" type="button">Mother</button>
-                            <button class="category-filter-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Family" type="button">Family</button>
+                        <div class="category-scrollbar flex space-x-2 md:space-x-3 overflow-x-auto pb-2 mt-2" id="filter-category-buttons">
+                            <button class="category-filter-btn active-category py-2 px-3 md:px-4 rounded-full text-sm shrink-0" data-category="All" type="button">All</button>
+                            <button class="category-filter-btn inactive-category py-2 px-3 md:px-4 rounded-full text-sm shrink-0" data-category="Men" type="button">Men</button>
+                            <button class="category-filter-btn inactive-category py-2 px-3 md:px-4 rounded-full text-sm shrink-0" data-category="Women" type="button">Women</button>
+                            <button class="category-filter-btn inactive-category py-2 px-3 md:px-4 rounded-full text-sm shrink-0" data-category="Couple" type="button">Couple</button>
+                            <button class="category-filter-btn inactive-category py-2 px-3 md:px-4 rounded-full text-sm shrink-0" data-category="Child" type="button">Child</button>
+                            <button class="category-filter-btn inactive-category py-2 px-3 md:px-4 rounded-full text-sm shrink-0" data-category="Father" type="button">Father</button>
+                            <button class="category-filter-btn inactive-category py-2 px-3 md:px-4 rounded-full text-sm shrink-0" data-category="Mother" type="button">Mother</button>
+                            <button class="category-filter-btn inactive-category py-2 px-3 md:px-4 rounded-full text-sm shrink-0" data-category="Family" type="button">Family</button>
                         </div>
                     </div>
                     <div class="mt-6 space-y-4" id="prompt-list">
@@ -528,7 +595,7 @@
                 </section>
 
                 <!-- Hero Images Section -->
-                <section class="fade-in mt-8 hidden" id="hero-images-section" style="animation-delay: 0.4s;">
+                <section class="fade-in mt-6 md:mt-8 hidden" id="hero-images-section" style="animation-delay: 0.4s;">
                     <div class="hero-section-admin">
                         <h2 class="text-xl font-bold">Manage Hero Images</h2>
                         <p class="text-white/70 mt-2">Add and manage images for the hero section slideshow</p>
@@ -540,7 +607,7 @@
                             <div>
                                 <label class="font-semibold text-white/80">Image Source</label>
                                 <div class="mt-2 space-y-3">
-                                    <input class="w-full bg-white/10 text-white rounded-full py-3 px-5 focus:outline-none focus:ring-2 focus:ring-orange-500" 
+                                    <input class="w-full bg-white/10 text-white rounded-full py-3 px-4 md:px-5 focus:outline-none focus:ring-2 focus:ring-orange-500" 
                                            id="hero-image-url" placeholder="Image URL" type="text"/>
                                     <div class="flex items-center justify-center w-full">
                                         <label class="flex flex-col items-center justify-center w-full h-32 border-2 border-white/30 border-dashed rounded-lg cursor-pointer bg-white/5 hover:bg-white/10" for="hero-dropzone-file">
@@ -587,27 +654,21 @@
                 
                 <div>
                     <label class="font-semibold text-white/80">Category Selection</label>
-                    <div class="category-scrollbar flex space-x-3 overflow-x-auto pb-2 mt-2" id="edit-category-buttons">
-                        <button class="edit-category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Men" type="button">Men</button>
-                        <button class="edit-category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Women" type="button">Women</button>
-                        <button class="edit-category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Couple" type="button">Couple</button>
-                        <button class="edit-category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Child" type="button">Child</button>
-                        <button class="edit-category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Father" type="button">Father</button>
-                        <button class="edit-category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Mother" type="button">Mother</button>
-                        <button class="edit-category-btn inactive-category py-2 px-4 rounded-full text-sm shrink-0" data-category="Family" type="button">Family</button>
+                    <div class="category-scrollbar flex space-x-2 md:space-x-3 overflow-x-auto pb-2 mt-2" id="edit-category-buttons">
+                        <button class="edit-category-btn inactive-category py-2 px-3 md:px-4 rounded-full text-sm shrink-0" data-category="Men" type="button">Men</button>
+                        <button class="edit-category-btn inactive-category py-2 px-3 md:px-4 rounded-full text-sm shrink-0" data-category="Women" type="button">Women</button>
+                        <button class="edit-category-btn inactive-category py-2 px-3 md:px-4 rounded-full text-sm shrink-0" data-category="Couple" type="button">Couple</button>
+                        <button class="edit-category-btn inactive-category py-2 px-3 md:px-4 rounded-full text-sm shrink-0" data-category="Child" type="button">Child</button>
+                        <button class="edit-category-btn inactive-category py-2 px-3 md:px-4 rounded-full text-sm shrink-0" data-category="Father" type="button">Father</button>
+                        <button class="edit-category-btn inactive-category py-2 px-3 md:px-4 rounded-full text-sm shrink-0" data-category="Mother" type="button">Mother</button>
+                        <button class="edit-category-btn inactive-category py-2 px-3 md:px-4 rounded-full text-sm shrink-0" data-category="Family" type="button">Family</button>
                     </div>
                     <input id="edit-category-selection" name="category" type="hidden" value=""/>
-                    
-                    <!-- Auto URL Preview for Edit -->
-                    <div class="url-preview">
-                        <div class="url-preview-label">Auto-generated Image URL:</div>
-                        <div class="url-preview-value" id="edit-auto-url-preview">assets/Men/</div>
-                    </div>
                 </div>
 
                 <div>
                     <label class="font-semibold text-white/80">Image URL</label>
-                    <input class="w-full bg-white/10 text-white rounded-full py-3 px-5 focus:outline-none focus:ring-2 focus:ring-orange-500" 
+                    <input class="w-full bg-white/10 text-white rounded-full py-3 px-4 md:px-5 focus:outline-none focus:ring-2 focus:ring-orange-500" 
                            id="edit-image-url" name="image_url" placeholder="Image URL" type="text"/>
                 </div>
 
@@ -645,7 +706,7 @@
 
     <!-- Login Modal -->
     <div class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden" id="login-modal">
-        <div class="bg-[#1F2937] p-8 rounded-lg shadow-xl w-full max-w-sm">
+        <div class="bg-[#1F2937] p-6 md:p-8 rounded-lg shadow-xl w-full max-w-sm mx-4">
             <h2 class="text-2xl font-bold text-center mb-6 gradient-text">Admin Login</h2>
             <form id="admin-login-form">
                 <div class="mb-4">
@@ -737,7 +798,6 @@
 
         // Auto URL elements
         const autoUrlPreview = document.getElementById('auto-url-preview');
-        const editAutoUrlPreview = document.getElementById('edit-auto-url-preview');
         const imageUrlInput = document.getElementById('image-url-input');
         const editImageUrlInput = document.getElementById('edit-image-url');
         const categorySelectionInput = document.getElementById('category-selection');
@@ -784,7 +844,6 @@
         // Update edit auto URL preview
         function updateEditAutoUrlPreview(category) {
             const baseUrl = `assets/${category}/`;
-            editAutoUrlPreview.textContent = baseUrl;
             editImageUrlInput.value = baseUrl;
             document.getElementById('edit-category-selection').value = category;
         }
@@ -1049,13 +1108,15 @@
                 }
             });
 
-            // Category filtering
+            // Category filtering - Home Page
             filterTabs.addEventListener('click', (e) => {
                 if (e.target.classList.contains('category-btn')) {
+                    // Update button styles
                     filterTabs.querySelectorAll('.category-btn').forEach(btn => {
                         btn.classList.remove('active-category', 'bg-white/10', 'text-white');
                         btn.classList.add('bg-transparent', 'border', 'border-white/20', 'text-white/60', 'hover:bg-white/10', 'hover:text-white');
                     });
+                    
                     e.target.classList.add('active-category', 'bg-white/10', 'text-white');
                     e.target.classList.remove('bg-transparent', 'border', 'border-white/20', 'text-white/60');
                     
