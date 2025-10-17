@@ -444,12 +444,8 @@
         </div>
         <div class="hero-overlay"></div>
         <header class="absolute top-0 left-0 w-full p-6 lg:p-8 flex justify-between items-center z-10">
-            <h1 class="text-3xl lg:text-4xl font-bold">Meechto<span class="gradient-text">Prompts</span></h1>
-            <div class="flex items-center space-x-2 lg:space-x-4">
-                <div class="brand-btn p-2 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors" id="admin-access-btn">
-                    <span class="text-sm font-semibold">Admin</span>
-                </div>
-            </div>
+            <h1 class="text-3xl lg:text-4xl font-bold cursor-pointer brand-btn" id="meechto-logo">Meechto<span class="gradient-text">Prompts</span></h1>
+            <!-- Admin Panel button removed as requested -->
         </header>
         <div class="absolute bottom-0 left-0 w-full p-8 text-center z-10">
             <h2 class="hero-text text-4xl lg:text-6xl font-bold mb-4">Turn Ideas Into Reality</h2>
@@ -536,7 +532,7 @@
                             </div>
                             <input id="category-selection" name="category" type="hidden" value="Men"/>
                             
-                            <!-- Auto URL Preview -->
+                            <!-- Auto URL Preview - ONLY IN ADD PROMPT SECTION -->
                             <div class="url-preview">
                                 <div class="url-preview-label">Auto-generated Image URL:</div>
                                 <div class="url-preview-value" id="auto-url-preview">assets/Men/</div>
@@ -664,6 +660,8 @@
                         <button class="edit-category-btn inactive-category py-2 px-3 md:px-4 rounded-full text-sm shrink-0" data-category="Family" type="button">Family</button>
                     </div>
                     <input id="edit-category-selection" name="category" type="hidden" value=""/>
+                    
+                    <!-- NO AUTO URL PREVIEW IN EDIT MODAL - Only shows actual image URL -->
                 </div>
 
                 <div>
@@ -756,7 +754,7 @@
         const mainPage = document.getElementById('main-page');
         const mainContent = document.getElementById('main-content');
         const adminPanel = document.getElementById('admin-panel');
-        const adminAccessBtn = document.getElementById('admin-access-btn');
+        const meechtoLogo = document.getElementById('meechto-logo');
         const scrollIndicator = document.getElementById('scroll-indicator');
         const filterTabs = document.getElementById('filter-tabs');
         const promptsGrid = document.getElementById('prompts-grid');
@@ -796,7 +794,7 @@
         const addCategoryButtons = document.getElementById('add-category-buttons');
         const filterCategoryButtons = document.getElementById('filter-category-buttons');
 
-        // Auto URL elements
+        // Auto URL elements - ONLY FOR ADD PROMPT SECTION
         const autoUrlPreview = document.getElementById('auto-url-preview');
         const imageUrlInput = document.getElementById('image-url-input');
         const editImageUrlInput = document.getElementById('edit-image-url');
@@ -817,7 +815,7 @@
             setupEventListeners();
             checkAuthState();
             
-            // Initialize auto URL preview
+            // Initialize auto URL preview - ONLY IN ADD PROMPT SECTION
             updateAutoUrlPreview('Men');
         });
 
@@ -825,27 +823,15 @@
         function checkAuthState() {
             auth.onAuthStateChanged(user => {
                 currentUser = user;
-                if (user) {
-                    adminAccessBtn.innerHTML = '<span class="text-sm font-semibold">Admin Panel</span>';
-                } else {
-                    adminAccessBtn.innerHTML = '<span class="text-sm font-semibold">Admin</span>';
-                }
             });
         }
 
-        // Update auto URL preview based on category
+        // Update auto URL preview based on category - ONLY FOR ADD PROMPT SECTION
         function updateAutoUrlPreview(category) {
             const baseUrl = `assets/${category}/`;
             autoUrlPreview.textContent = baseUrl;
             imageUrlInput.value = baseUrl;
             categorySelectionInput.value = category;
-        }
-
-        // Update edit auto URL preview
-        function updateEditAutoUrlPreview(category) {
-            const baseUrl = `assets/${category}/`;
-            editImageUrlInput.value = baseUrl;
-            document.getElementById('edit-category-selection').value = category;
         }
 
         // Load prompts from Firebase
@@ -1099,8 +1085,8 @@
                 });
             }
 
-            // Admin access button
-            adminAccessBtn.addEventListener('click', () => {
+            // Meechto Logo click - opens Admin Panel
+            meechtoLogo.addEventListener('click', () => {
                 if (currentUser) {
                     showAdminPanel();
                 } else {
@@ -1125,7 +1111,7 @@
                 }
             });
 
-            // Add category buttons - Auto URL update
+            // Add category buttons - Auto URL update (ONLY IN ADD PROMPT SECTION)
             addCategoryButtons.addEventListener('click', (e) => {
                 if (e.target.classList.contains('category-btn')) {
                     const category = e.target.dataset.category;
@@ -1138,12 +1124,12 @@
                     e.target.classList.add('active-category');
                     e.target.classList.remove('inactive-category');
                     
-                    // Update URL preview and input
+                    // Update URL preview and input - ONLY IN ADD PROMPT SECTION
                     updateAutoUrlPreview(category);
                 }
             });
 
-            // Edit category buttons - Auto URL update
+            // Edit category buttons - NO AUTO URL UPDATE IN EDIT MODAL
             editCategoryButtons.addEventListener('click', (e) => {
                 if (e.target.classList.contains('edit-category-btn')) {
                     const category = e.target.dataset.category;
@@ -1156,8 +1142,8 @@
                     e.target.classList.add('active-category');
                     e.target.classList.remove('inactive-category');
                     
-                    // Update URL preview and input
-                    updateEditAutoUrlPreview(category);
+                    // Update hidden input only - NO AUTO URL
+                    document.getElementById('edit-category-selection').value = category;
                 }
             });
 
@@ -1396,14 +1382,14 @@
                 return;
             }
 
-            // Fill form data
+            // Fill form data - SHOW ACTUAL IMAGE URL FROM DATABASE
             document.getElementById('edit-prompt-id').value = promptId;
             document.getElementById('edit-prompt-type').value = promptType;
-            document.getElementById('edit-image-url').value = prompt.image;
+            document.getElementById('edit-image-url').value = prompt.image; // Actual image URL from Firebase
             document.getElementById('edit-prompt-text').value = prompt.prompt_text;
 
             // Set category
-            updateEditAutoUrlPreview(prompt.category);
+            document.getElementById('edit-category-selection').value = prompt.category;
             
             // Update category buttons
             editCategoryButtons.querySelectorAll('.edit-category-btn').forEach(btn => {
