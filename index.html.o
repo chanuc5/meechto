@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Communication Hub</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font 'Inter' -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f7f6; /* थोडा वेगळा राखाडी रंग */
+        }
+        
+        /* लोडिंग स्पिनरसाठी CSS */
+        #loading-overlay {
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(4px);
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #4f46e5; /* इंडिगो रंग */
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* चॅट बबल्स (नवीन स्टाईल) */
+        .chat-bubble {
+            max-width: 75%;
+            padding: 12px 16px;
+            border-radius: 20px;
+            word-wrap: break-word;
+            line-height: 1.4;
+        }
+        .sent {
+            background-color: #4f46e5; /* इंडिगो */
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+        .received {
+            background-color: #e5e7eb; /* राखाडी */
+            color: #1f2937;
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+
+        /* चॅट मेसेज एरियासाठी स्मूथ स्क्रोलिंग */
+        #chat-messages {
+            scroll-behavior: smooth;
+        }
+
+        /* चॅट इनपुटला स्टिकी करण्यासाठी */
+        #chat-view {
+            display: flex;
+            flex-direction: column;
+            height: 100%; /* पूर्ण उंची घेणे */
+        }
+        #chat-messages {
+            flex-grow: 1; /* उपलब्ध जागा घेणे */
+            overflow-y: auto;
+        }
+        #message-form {
+            flex-shrink: 0; /* संकुचित न होणे */
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen">
+
+    <!-- ॲप कंटेनर -->
+    <div class="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden" style="height: 95vh;">
+
+        <!-- 1. लोडिंग ओव्हरले (सुरुवातीला दिसेल) -->
+        <div id="loading-overlay" class="absolute inset-0 z-50 flex flex-col items-center justify-center">
+            <div class="spinner"></div>
+            <p class="mt-4 text-gray-600 font-medium">कनेक्ट होत आहे...</p>
+        </div>
+
+        <!-- 2. मुख्य व्ह्यू (सुरुवातीला लपलेला) -->
+        <div id="main-view" class="h-full flex flex-col hidden">
+            <!-- हेडर -->
+            <header class="bg-white p-4 border-b border-gray-200">
+                <h1 class="text-2xl font-bold text-center text-gray-800">Office Hub</h1>
+            </header>
+
+            <!-- मेनू बटणे -->
+            <main class="flex-1 p-6 flex flex-col justify-center space-y-5">
+                <p class="text-center text-gray-600 mb-4">तुम्हाला काय करायचे आहे ते निवडा:</p>
+                
+                <button id="video-btn" class="flex items-center justify-center w-full bg-green-500 text-white font-semibold py-4 px-5 rounded-xl shadow-lg hover:bg-green-600 transition duration-300 transform hover:scale-105">
+                    <!-- व्हिडिओ आयकॉन (SVG) -->
+                    <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M4 8h11a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1V9a1 1 0 011-1z"></path></svg>
+                    सुरक्षित व्हिडिओ कॉल करा
+                </button>
+                
+                <button id="open-chat-btn" class="flex items-center justify-center w-full bg-indigo-600 text-white font-semibold py-4 px-5 rounded-xl shadow-lg hover:bg-indigo-700 transition duration-300 transform hover:scale-105">
+                    <!-- चॅट आयकॉन (SVG) -->
+                    <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 21l1.757-3.693A9.968 9.968 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                    लाइव्ह चॅट उघडा
+                </button>
+
+                <!-- व्हिडिओ कॉल माहिती (लपलेली) -->
+                <div id="video-info" class="hidden p-4 bg-green-50 rounded-lg border border-green-200 mt-4">
+                    <h3 class="text-lg font-semibold text-green-800">व्हिडिओ कॉल सूचना</h3>
+                    <p class="text-green-700 mt-2 text-sm">
+                        कॉल नवीन टॅबमध्ये उघडेल.
+                        तुमच्या मैत्रिणीला हाच रूम 'Code' सांगा: 
+                        <strong class="font-mono">MySecureOfficeRoom987</strong>
+                    </p>
+                </div>
+            </main>
+        </div>
+
+        <!-- 3. चॅट व्ह्यू (सुरुवातीला लपलेला) -->
+        <div id="chat-view" class="h-full hidden">
+            <!-- चॅट हेडर -->
+            <header class="bg-indigo-600 text-white p-4 flex items-center shadow-md">
+                <button id="back-to-main-btn" class="p-2 rounded-full hover:bg-indigo-700 transition-all">
+                    <!-- मागे जाण्यासाठी आयकॉन (SVG) -->
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                </button>
+                <h2 class="text-xl font-semibold ml-4">लाइव्ह चॅट</h2>
+            </header>
+
+            <!-- मेसेज दाखवण्याची जागा -->
+            <div id="chat-messages" class="flex-1 p-4 overflow-y-auto bg-gray-50 flex flex-col space-y-3">
+                <!-- चॅट लोड होत असतानाचा मेसेज -->
+                <div id="chat-loading-msg" class="text-center text-gray-500 mt-4">
+                    <div class="spinner mx-auto"></div>
+                    <p class="mt-2">चॅट लोड होत आहे...</p>
+                </div>
+            </div>
+
+            <!-- मेसेज पाठवण्याचा फॉर्म -->
+            <form id="message-form" class="flex space-x-2 p-4 bg-white border-t border-gray-200">
+                <input
+                    type="text"
+                    id="message-input"
+                    placeholder="मेसेज टाईप करा..."
+                    autocomplete="off"
+                    class="flex-1 p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    required
+                />
+                <button type="submit" class="bg-indigo-600 text-white p-3 rounded-xl font-semibold hover:bg-indigo-700 transition duration-300 w-20">
+                    पाठवा
+                </button>
+            </form>
+        </div>
+
+        <!-- फूटर - User ID -->
+        <footer class="bg-gray-100 p-3 border-t text-center fixed bottom-0 left-0 right-0 max-w-md mx-auto rounded-b-2xl">
+            <p class="text-xs text-gray-600">
+                तुमचा User ID: <span id="user-id-display" class="font-mono font-semibold">...</span>
+            </p>
+        </footer>
+    </div>
+
+    <!-- Firebase SDK (Software Development Kit) -->
+    <script type="module">
+        // Firebase मॉड्यूल्स इम्पोर्ट करणे
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged }
+            from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { 
+            getFirestore, 
+            addDoc, 
+            collection, 
+            query, 
+            onSnapshot, 
+            serverTimestamp 
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- 1. व्हेरिएबल्स आणि कॉन्फिगरेशन ---
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        let db, auth, currentUserId;
+        let chatListenerUnsubscribe = null; // चॅट लिसनर बंद करण्यासाठी
+
+        // --- 2. HTML एलिमेंट्सना पकडणे ---
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const mainView = document.getElementById('main-view');
+        const chatView = document.getElementById('chat-view');
+        
+        const videoBtn = document.getElementById('video-btn');
+        const openChatBtn = document.getElementById('open-chat-btn');
+        const videoInfo = document.getElementById('video-info');
+        const backToMainBtn = document.getElementById('back-to-main-btn');
+
+        const chatMessages = document.getElementById('chat-messages');
+        const chatLoadingMsg = document.getElementById('chat-loading-msg');
+        const messageForm = document.getElementById('message-form');
+        const messageInput = document.getElementById('message-input');
+        const userIdDisplay = document.getElementById('user-id-display');
+
+        // --- 3. मुख्य ॲप सुरू करणे ---
+        try {
+            const app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+            setupAuthListener();
+        } catch (error) {
+            console.error("Firebase सुरू करताना एरर:", error);
+            loadingOverlay.innerHTML = `<p class="text-red-500">ॲप सुरू होऊ शकले नाही. कृपया पेज रिफ्रेश करा.</p>`;
+        }
+
+        // --- 4. ऑथेंटिकेशन (Authentication) ---
+        async function setupAuthListener() {
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    currentUserId = user.uid;
+                    userIdDisplay.textContent = currentUserId;
+                    // ऑथेंटिकेशन यशस्वी, लोडिंग लपवा आणि ॲप दाखवा
+                    loadingOverlay.classList.add('hidden');
+                    mainView.classList.remove('hidden');
+                } else {
+                    await loginUser();
+                }
+            });
+        }
+
+        async function loginUser() {
+            try {
+                if (initialAuthToken) {
+                    await signInWithCustomToken(auth, initialAuthToken);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (error) {
+                console.error("लॉग इन करताना एरर:", error);
+                loadingOverlay.innerHTML = `<p class="text-red-500">लॉग इन करता आले नाही.</p>`;
+            }
+        }
+
+        // --- 5. UI (User Interface) इव्हेंट्स ---
+
+        // व्हिडिओ बटण
+        videoBtn.addEventListener('click', () => {
+            const videoRoomUrl = "https://meet.jit.si/MySecureOfficeRoom987";
+            window.open(videoRoomUrl, '_blank');
+            videoInfo.classList.remove('hidden'); // माहिती दाखवणे
+        });
+
+        // चॅट व्ह्यू उघडणे
+        openChatBtn.addEventListener('click', () => {
+            mainView.classList.add('hidden');
+            chatView.classList.add('flex'); // 'flex' वापरणे कारण तो flex container आहे
+            chatView.classList.remove('hidden');
+            videoInfo.classList.add('hidden'); // व्हिडिओ माहिती लपवणे
+            // चॅट लिसनर सुरू करणे
+            setupChatListener();
+            scrollToBottom();
+        });
+
+        // मुख्य व्ह्यूवर परत जाणे
+        backToMainBtn.addEventListener('click', () => {
+            chatView.classList.add('hidden');
+            chatView.classList.remove('flex');
+            mainView.classList.remove('hidden');
+            // चॅट लिसनर बंद करणे (बॅटरी आणि डेटा वाचवण्यासाठी)
+            if (chatListenerUnsubscribe) {
+                chatListenerUnsubscribe();
+                chatListenerUnsubscribe = null;
+            }
+        });
+
+        // मेसेज फॉर्म सबमिट करणे
+        messageForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const messageText = messageInput.value.trim();
+
+            if (messageText && currentUserId && db) {
+                try {
+                    const chatCollectionPath = `/artifacts/${appId}/public/data/messages`;
+                    await addDoc(collection(db, chatCollectionPath), {
+                        text: messageText,
+                        userId: currentUserId,
+                        timestamp: serverTimestamp()
+                    });
+                    messageInput.value = '';
+                    scrollToBottom();
+                } catch (error) {
+                    console.error("मेसेज पाठवताना एरर:", error);
+                }
+            }
+        });
+
+        // --- 6. Firestore चॅट लॉजिक ---
+        function setupChatListener() {
+            if (!db || chatListenerUnsubscribe) return; // लिसनर आधीच चालू असल्यास, नवीन न बनवणे
+
+            const chatCollectionPath = `/artifacts/${appId}/public/data/messages`;
+            const q = query(collection(db, chatCollectionPath));
+
+            chatListenerUnsubscribe = onSnapshot(q, (snapshot) => {
+                chatLoadingMsg.classList.add('hidden'); // लोडिंग मेसेज लपवणे
+                
+                let messages = [];
+                snapshot.forEach((doc) => {
+                    messages.push({ id: doc.id, ...doc.data() });
+                });
+
+                // JavaScript मध्ये वेळेनुसार सॉर्ट करणे
+                messages.sort((a, b) => (a.timestamp?.seconds || 0) - (b.timestamp?.seconds || 0));
+
+                renderMessages(messages);
+
+            }, (error) => {
+                console.error("चॅट मेसेज आणताना एरर:", error);
+                chatMessages.innerHTML = `<p class="text-red-500 p-4">चॅट लोड होऊ शकले नाही.</p>`;
+            });
+        }
+
+        // --- 7. मेसेजेस रेंडर करणे (Render) ---
+        function renderMessages(messages) {
+            // फक्त चॅट मेसेजच ठेवणे, लोडिंग मेसेज नाही
+            chatMessages.innerHTML = ''; 
+
+            if (messages.length === 0) {
+                chatMessages.innerHTML = '<p class="text-center text-gray-500 p-4">अजून मेसेज नाहीत. बोलणे सुरू करा!</p>';
+                return;
+            }
+
+            messages.forEach(msg => {
+                const msgDiv = document.createElement('div');
+                msgDiv.textContent = msg.text;
+                
+                if (msg.userId === currentUserId) {
+                    msgDiv.className = 'chat-bubble sent';
+                } else {
+                    msgDiv.className = 'chat-bubble received';
+                }
+                chatMessages.appendChild(msgDiv);
+            });
+
+            scrollToBottom();
+        }
+
+        // --- 8. मदतनीस (Helper) फंक्शन ---
+        function scrollToBottom() {
+            setTimeout(() => {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 50); // थोडा उशीर देणे
+        }
+
+    </script>
+</body>
+</html>
+
+
