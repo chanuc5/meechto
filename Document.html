@@ -373,6 +373,7 @@
             overflow: hidden;
             box-shadow: var(--card-shadow);
             transition: var(--transition);
+            position: relative;
         }
 
         .dark-mode .document-card {
@@ -383,6 +384,24 @@
             transform: translateY(-5px);
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
         }
+
+        .source-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            z-index: 1;
+        }
+
+        .source-scan { background-color: #34a853; color: white; }
+        .source-upload { background-color: #4285f4; color: white; }
+        .source-download { background-color: #fbbc05; color: #202124; }
+        .source-email { background-color: #8e44ad; color: white; }
 
         .document-preview {
             height: 160px;
@@ -642,6 +661,44 @@
             background-color: #e1e5e9;
         }
 
+        /* Source Type Options */
+        .source-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .source-option {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border: 2px solid var(--light-gray);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .source-option:hover {
+            border-color: var(--primary);
+            background-color: rgba(66, 133, 244, 0.05);
+        }
+
+        .source-option.selected {
+            border-color: var(--primary);
+            background-color: rgba(66, 133, 244, 0.1);
+        }
+
+        .source-option i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+
+        .source-option span {
+            font-weight: 500;
+        }
+
         /* Empty State */
         .empty-state {
             text-align: center;
@@ -697,6 +754,10 @@
             .search-container {
                 width: 200px;
             }
+
+            .source-options {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 576px) {
@@ -741,6 +802,30 @@
 
         .dark-mode .footer {
             border-top-color: #3d4050;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 10000;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
         }
     </style>
 </head>
@@ -899,6 +984,7 @@
                     <label for="documentName">Document Name</label>
                     <input type="text" id="documentName" class="form-control" placeholder="Enter document name" required>
                 </div>
+                
                 <div class="form-group">
                     <label for="documentCategory">Category</label>
                     <select id="documentCategory" class="form-control" required>
@@ -912,7 +998,31 @@
                         <option value="Word / Excel">Word / Excel</option>
                     </select>
                 </div>
+                
                 <div class="form-group">
+                    <label>Document Source Type</label>
+                    <div class="source-options" id="sourceOptions">
+                        <div class="source-option selected" data-source="upload">
+                            <i class="material-icons">cloud_upload</i>
+                            <span>File Upload</span>
+                        </div>
+                        <div class="source-option" data-source="scan">
+                            <i class="material-icons">scanner</i>
+                            <span>Mobile Scan</span>
+                        </div>
+                        <div class="source-option" data-source="download">
+                            <i class="material-icons">download</i>
+                            <span>Web Download</span>
+                        </div>
+                        <div class="source-option" data-source="email">
+                            <i class="material-icons">email</i>
+                            <span>Email Attachment</span>
+                        </div>
+                    </div>
+                    <input type="hidden" id="documentSource" value="upload" required>
+                </div>
+                
+                <div class="form-group" id="fileUploadSection">
                     <label>Upload File</label>
                     <div class="file-input-wrapper">
                         <label for="fileInput" class="file-input-label">
@@ -924,6 +1034,12 @@
                         <input type="file" id="fileInput" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.xls,.xlsx" required>
                     </div>
                 </div>
+                
+                <div class="form-group" id="urlInputSection" style="display: none;">
+                    <label for="documentUrl">Document URL</label>
+                    <input type="url" id="documentUrl" class="form-control" placeholder="Enter document URL">
+                </div>
+                
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" id="cancelUploadBtn">Cancel</button>
                     <button type="submit" class="btn btn-primary">Upload Document</button>
@@ -954,6 +1070,11 @@
             const totalCategoriesEl = document.getElementById('totalCategories');
             const recentUploadsEl = document.getElementById('recentUploads');
             const emptyState = document.getElementById('emptyState');
+            const sourceOptions = document.getElementById('sourceOptions');
+            const documentSource = document.getElementById('documentSource');
+            const fileUploadSection = document.getElementById('fileUploadSection');
+            const urlInputSection = document.getElementById('urlInputSection');
+            const documentUrl = document.getElementById('documentUrl');
 
             // Application State
             let documents = JSON.parse(localStorage.getItem('documents')) || [];
@@ -998,6 +1119,52 @@
                 }
             });
 
+            // Source Type Selection
+            sourceOptions.addEventListener('click', (e) => {
+                const sourceOption = e.target.closest('.source-option');
+                if (sourceOption) {
+                    // Remove selected class from all options
+                    document.querySelectorAll('.source-option').forEach(option => {
+                        option.classList.remove('selected');
+                    });
+                    
+                    // Add selected class to clicked option
+                    sourceOption.classList.add('selected');
+                    
+                    // Update hidden input value
+                    const sourceValue = sourceOption.dataset.source;
+                    documentSource.value = sourceValue;
+                    
+                    // Show/hide relevant sections
+                    if (sourceValue === 'upload') {
+                        fileUploadSection.style.display = 'block';
+                        urlInputSection.style.display = 'none';
+                        fileInput.required = true;
+                        documentUrl.required = false;
+                    } else {
+                        fileUploadSection.style.display = 'none';
+                        urlInputSection.style.display = 'block';
+                        fileInput.required = false;
+                        documentUrl.required = true;
+                        
+                        // Update placeholder based on source type
+                        let placeholder = '';
+                        switch(sourceValue) {
+                            case 'scan':
+                                placeholder = 'Enter URL of scanned document';
+                                break;
+                            case 'download':
+                                placeholder = 'Enter download URL';
+                                break;
+                            case 'email':
+                                placeholder = 'Enter email attachment URL';
+                                break;
+                        }
+                        documentUrl.placeholder = placeholder;
+                    }
+                }
+            });
+
             // Upload Form Submission
             uploadForm.addEventListener('submit', handleUpload);
 
@@ -1035,7 +1202,8 @@
                         fileType: 'image/jpeg',
                         size: '2.4 MB',
                         uploadDate: new Date().toISOString(),
-                        dataUrl: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0xODIuMzU1IDEzNC43NDNDMTgwLjU4MiAxNDYuMDQ0IDE3Mi4wOTcgMTU2LjIwOSAxNjAuMjE4IDE1OS40OTJDMTQ5LjM2NSAxNjIuNTAyIDEzNy41MzIgMTYxLjMwMyAxMjcuMDQ5IDE1Ni4xMjVDMTE1LjI3NyAxNTAuNDA0IDEwNS4wMzYgMTQxLjMzIDk3Ljg1OTcgMTI5Ljc5MUM4OC45MTA1IDExNS45NzcgODQuMzQ1MSA5OS44MTM5IDg1LjIxNDYgODMuMzU3NkM4Ni4xNjE0IDY1LjMyOTcgOTQuOTI5IDQ4LjQ3NjIgMTA5Ljc4NiAzNi44MjU5QzEyNC44NjEgMjUuMDAxIDE0NC42MTUgMTkuNDQ3MSAxNjQuMDI4IDIxLjQxNjJDMTc3Ljk3NCAyMi44Nzc5IDE5MS4xNjYgMjkuOTU4NSAyMDAuMzU0IDQxLjk0MzZDMjA5LjM4IDUzLjczMDggMjEzLjU3IDY4Ljc3MzYgMjEyLjE1IDgzLjU3MTJDMjEwLjUzMyAxMDAuOTQ2IDIwMi40OTIgMTE3LjY1NSAxODkuOTIgMTI5LjM2M0MxODYuNjg1IDEzMi4zNjQgMTgzLjExNyAxMzQuOTQ2IDE3OS4zMDUgMTM3LjA0M0MxODEuMTA5IDEzNi4xMjcgMTgyLjY3MiAxMzUuNTI0IDE4Mi4zNTUgMTM0Ljc0M1oiIGZpbGw9IiNFQkVERUMiLz4KPHBhdGggZD0iTTEyNi44NTUgNzQuNTY5OUMxMjkuNjQyIDc2Ljg3NzYgMTMxLjMxNSA4MC41Njk1IDEzMC43NzIgODQuMjU2NkMxMzAuMjY4IDg3LjY5NjEgMTI3LjkyOCA5MC41MzkxIDEyNC43OTUgOTEuNDg2OUMxMjEuNDMyIDkyLjUwOTUgMTE3LjcxNyA5MS42MzE5IDExNC45NTIgODkuMjQxQzExMi4xNjUgODYuOTMzMyAxMTAuNDkyIDgzLjIzNDIgMTExLjAzNiA3OS41NDcxQzExMS41NCA3Ni4xMDc2IDExMy44OCA3My4yNjQ2IDExNy4wMTMgNzIuMzE2OEMxMjAuMzc2IDcxLjI5NDIgMTI0LjA5MSA3Mi4xNzE4IDEyNi44NTUgNzQuNTY5OVoiIGZpbGw9IiM0Mjg1RjQiLz4KPHBhdGggZD0iTTEwMi4zMjggOTguNzgwM0MxMDQuMDk1IDEwMS4zODkgMTA1Ljc2NiAxMDQuNDUxIDEwNS4wNzQgMTA3LjU5N0MxMDQuNDMxIDExMC41MDMgMTAyLjM4MSAxMTIuOTc0IDk5LjYzOTcgMTE0LjE3NkM5Ni42NTMzIDExNS40NzUgOTMuMTQ0MiAxMTUuMTU0IDkwLjQxNTMgMTEzLjMzNEM4Ny42NDgzIDExMS40ODkgODUuOTc3MSAxMDguNDI3IDg2LjY2OTMgMTA1LjI4MUM4Ny4zMTI0IDEwMi4zNzUgODkuMzYyNCA5OS45MDQ0IDkyLjEwMzcgOTguNzAyM0M5NS4wODk3IDk3LjQwMzcgOTguNTk4NyA5Ny43MjUxIDEwMS4zMjggOTkuNTQ1M1oiIGZpbGw9IiMzNEE4NTMiLz4KPC9zdmc+'
+                        dataUrl: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0xODIuMzU1IDEzNC43NDNDMTgwLjU4MiAxNDYuMDQ0IDE3Mi4wOTcgMTU2LjIwOSAxNjAuMjE4IDE1OS40OTJDMTQ5LjM2NSAxNjIuNTAyIDEzNy41MzIgMTYxLjMwMyAxMjcuMDQ5IDE1Ni4xMjVDMTE1LjI3NyAxNTAuNDA0IDEwNS4wMzYgMTQxLjMzIDk3Ljg1OTcgMTI5Ljc5MUM4OC45MTA1IDExNS45NzcgODQuMzQ1MSA5OS44MTM5IDg1LjIxNDYgODMuMzU3NkM4Ni4xNjE0IDY1LjMyOTcgOTQuOTI5IDQ4LjQ3NjIgMTA5Ljc4NiAzNi44MjU5QzEyNC44NjEgMjUuMDAxIDE0NC42MTUgMTkuNDQ3MSAxNjQuMDI4IDIxLjQxNjJDMTc3Ljk3NCAyMi44Nzc5IDE5MS4xNjYgMjkuOTU4NSAyMDAuMzU0IDQxLjk0MzZDMjA5LjM4IDUzLjczMDggMjEzLjU3IDY4Ljc3MzYgMjEyLjE1IDgzLjU3MTJDMjEwLjUzMyAxMDAuOTQ2IDIwMi40OTIgMTE3LjY1NSAxODkuOTIgMTI5LjM2M0MxODYuNjg1IDEzMi4zNjQgMTgzLjExNyAxMzQuOTQ2IDE3OS4zMDUgMTM3LjA0M0MxODEuMTA5IDEzNi4xMjcgMTgyLjY3MiAxMzUuNTI0IDE4Mi4zNTUgMTM0Ljc0M1oiIGZpbGw9IiNFQkVERUMiLz4KPHBhdGggZD0iTTEyNi44NTUgNzQuNTY5OUMxMjkuNjQyIDc2Ljg3NzYgMTMxLjMxNSA4MC41Njk1IDEzMC43NzIgODQuMjU2NkMxMzAuMjY4IDg3LjY5NjEgMTI3LjkyOCA5MC41MzkxIDEyNC43OTUgOTEuNDg2OUMxMjEuNDMyIDkyLjUwOTUgMTE3LjcxNyA5MS42MzE5IDExNC45NTIgODkuMjQxQzExMi4xNjUgODYuOTMzMyAxMTAuNDkyIDgzLjIzNDIgMTExLjAzNiA3OS41NDcxQzExMS41NCA3Ni4xMDc2IDExMy44OCA3My4yNjQ2IDExNy4wMTMgNzIuMzE2OEMxMjAuMzc2IDcxLjI5NDIgMTI0LjA5MSA3Mi4xNzE4IDEyNi44NTUgNzQuNTY5OVoiIGZpbGw9IiM0Mjg1RjQiLz4KPHBhdGggZD0iTTEwMi4zMjggOTguNzgwM0MxMDQuMDk1IDEwMS4zODkgMTA1Ljc2NiAxMDQuNDUxIDEwNS4wNzQgMTA3LjU5N0MxMDQuNDMxIDExMC41MDMgMTAyLjM4MSAxMTIuOTc0IDk5LjYzOTcgMTE0LjE3NkM5Ni42NTMzIDExNS40NzUgOTMuMTQ0MiAxMTUuMTU0IDkwLjQxNTMgMTEzLjMzNEM4Ny42NDgzIDExMS40ODkgODUuOTc3MSAxMDguNDI3IDg2LjY2OTMgMTA1LjI4MUM4Ny4zMTI0IDEwMi4zNzUgODkuMzYyNCA5OS45MDQ0IDkyLjEwMzcgOTguNzAyM0M5NS4wODk3IDk3LjQwMzcgOTguNTk4NyA5Ny43MjUxIDEwMS4zMjggOTkuNTQ1M1oiIGZpbGw9IiMzNEE4NTMiLz4KPC9zdmc+',
+                        source: 'scan'
                     },
                     {
                         id: generateId(),
@@ -1044,7 +1212,8 @@
                         fileType: 'image/png',
                         size: '1.8 MB',
                         uploadDate: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-                        dataUrl: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiByeD0iMTIiIGZpbGw9IiNFQkVERUMiLz4KPHBhdGggZD0iTTE0MCA2MEg2MEM1NS41ODE3IDYwIDUyIDYzLjU4MTcgNTIgNjhWMTMyQzUyIDEzNi40MTggNTUuNTgxNyAxNDAgNjAgMTQwSDE0MEMxNDQuNDE4IDE0MCAxNDggMTM2LjQxOCAxNDggMTMyVjY4QzE0OCA2My41ODE3IDE0NC40MTggNjAgMTQwIDYwWiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTY0IDk2QzY0IDg3LjE2MzQgNzEuMTYzNCA4MCA4MCA4MEM4OC44MzY2IDgwIDk2IDg3LjE2MzQgOTYgOTZDMTA0IDk2IDk2IDEwNCA5NiAxMTJDNjQgMTEyIDY0IDk2IDY0IDk2WiIgZmlsbD0iI0VBNDMzNSIvPgo8cGF0aCBkPSJNMTA0IDk2SDEzNkMxMzYgMTA0IDE0NCAxMDQgMTQ0IDk2QzE0NCA4Ny4xNjM0IDEzNi44MzcgODAgMTI4IDgwQzExOS4xNjMgODAgMTEyIDg3LjE2MzQgMTEyIDk2QzExMiAxMDQgMTA0IDEwNCAxMDQgOTZaIiBmaWxsPSIjRUE0MzM1Ii8+CjxwYXRoIGQ9Ik04MCAxMjhDODguODM2NiAxMjggOTYgMTM1LjE2NCA5NiAxNDRIMTYwVjE1Mkg5NkM5NiAxNjAuODM2IDg4LjgzNjYgMTY4IDgwIDE2OEM3MS4xNjM0IDE2OCA2NCAxNjAuODM2IDY0IDE1Mkg0MFYxNDRINjRDNjQgMTM1LjE2NCA3MS4xNjM0IDEyOCA4MCAxMjhaIiBmaWxsPSIjNDI4NUY0Ii8+Cjwvc3ZnPgo='
+                        dataUrl: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiByeD0iMTIiIGZpbGw9IiNFQkVERUMiLz4KPHBhdGggZD0iTTE0MCA2MEg2MEM1NS41ODE3IDYwIDUyIDYzLjU4MTcgNTIgNjhWMTMyQzUyIDEzNi40MTggNTUuNTgxNyAxNDAgNjAgMTQwSDE0MEMxNDQuNDE4IDE0MCAxNDggMTM2LjQxOCAxNDggMTMyVjY4QzE0OCA2My41ODE3IDE0NC40MTggNjAgMTQwIDYwWiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTY0IDk2QzY0IDg3LjE2MzQgNzEuMTYzNCA4MCA4MCA4MEM4OC44MzY2IDgwIDk2IDg3LjE2MzQgOTYgOTZDMTA0IDk2IDk2IDEwNCA5NiAxMTJDNjQgMTEyIDY0IDk2IDY0IDk2WiIgZmlsbD0iI0VBNDMzNSIvPgo8cGF0aCBkPSJNMTA0IDk2SDEzNkMxMzYgMTA0IDE0NCAxMDQgMTQ0IDk2QzE0NCA4Ny4xNjM0IDEzNi44MzcgODAgMTI4IDgwQzExOS4xNjMgODAgMTEyIDg3LjE2MzQgMTEyIDk2QzExMiAxMDQgMTA0IDEwNCAxMDQgOTZaIiBmaWxsPSIjRUE0MzM1Ii8+CjxwYXRoIGQ9Ik04MCAxMjhDODguODM2NiAxMjggOTYgMTM1LjE2NCA5NiAxNDRIMTYwVjE1Mkg5NkM5NiAxNjAuODM2IDg4LjgzNjYgMTY4IDgwIDE2OEM3MS4xNjM0IDE2OCA2NCAxNjAuODM2IDY0IDE1Mkg0MFYxNDRINjRDNjQgMTM1LjE2NCA3MS4xNjM0IDEyOCA4MCAxMjhaIiBmaWxsPSIjNDI4NUY0Ii8+Cjwvc3ZnPgo=',
+                        source: 'upload'
                     },
                     {
                         id: generateId(),
@@ -1053,7 +1222,8 @@
                         fileType: 'application/pdf',
                         size: '3.2 MB',
                         uploadDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-                        dataUrl: null
+                        dataUrl: null,
+                        source: 'download'
                     },
                     {
                         id: generateId(),
@@ -1062,7 +1232,8 @@
                         fileType: 'image/png',
                         size: '1.5 MB',
                         uploadDate: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
-                        dataUrl: null
+                        dataUrl: null,
+                        source: 'email'
                     },
                     {
                         id: generateId(),
@@ -1071,7 +1242,8 @@
                         fileType: 'application/pdf',
                         size: '0.8 MB',
                         uploadDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-                        dataUrl: null
+                        dataUrl: null,
+                        source: 'upload'
                     },
                     {
                         id: generateId(),
@@ -1080,7 +1252,8 @@
                         fileType: 'image/jpeg',
                         size: '1.2 MB',
                         uploadDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-                        dataUrl: null
+                        dataUrl: null,
+                        source: 'scan'
                     },
                     {
                         id: generateId(),
@@ -1089,7 +1262,8 @@
                         fileType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                         size: '0.5 MB',
                         uploadDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-                        dataUrl: null
+                        dataUrl: null,
+                        source: 'upload'
                     },
                     {
                         id: generateId(),
@@ -1098,7 +1272,8 @@
                         fileType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                         size: '2.1 MB',
                         uploadDate: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(),
-                        dataUrl: null
+                        dataUrl: null,
+                        source: 'download'
                     }
                 ];
                 
@@ -1139,6 +1314,18 @@
                 uploadModal.classList.remove('active');
                 uploadForm.reset();
                 fileName.textContent = 'No file selected';
+                documentUrl.value = '';
+                
+                // Reset source type to default
+                document.querySelectorAll('.source-option').forEach(option => {
+                    option.classList.remove('selected');
+                });
+                document.querySelector('.source-option[data-source="upload"]').classList.add('selected');
+                documentSource.value = 'upload';
+                fileUploadSection.style.display = 'block';
+                urlInputSection.style.display = 'none';
+                fileInput.required = true;
+                documentUrl.required = false;
             }
 
             // Handle Document Upload
@@ -1147,29 +1334,53 @@
                 
                 const documentName = document.getElementById('documentName').value;
                 const category = document.getElementById('documentCategory').value;
+                const source = documentSource.value;
                 const file = fileInput.files[0];
+                const url = documentUrl.value;
                 
-                if (!documentName || !category || !file) {
-                    alert('Please fill all fields and select a file');
+                // Validation
+                if (!documentName || !category || !source) {
+                    alert('Please fill all required fields');
                     return;
                 }
                 
-                // Generate file preview (data URL for images)
-                let dataUrl = null;
-                if (file.type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        dataUrl = e.target.result;
-                        saveDocument(documentName, category, file, dataUrl);
-                    };
-                    reader.readAsDataURL(file);
+                if (source === 'upload' && !file) {
+                    alert('Please select a file to upload');
+                    return;
+                }
+                
+                if (source !== 'upload' && !url) {
+                    alert('Please enter a URL for the document');
+                    return;
+                }
+                
+                // Handle file upload
+                if (source === 'upload' && file) {
+                    // Generate file preview (data URL for images)
+                    let dataUrl = null;
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            dataUrl = e.target.result;
+                            saveDocument(documentName, category, file, source, dataUrl);
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        saveDocument(documentName, category, file, source, dataUrl);
+                    }
                 } else {
-                    saveDocument(documentName, category, file, dataUrl);
+                    // For URL-based sources, create a mock file object
+                    const mockFile = {
+                        name: documentName,
+                        type: getFileTypeFromUrl(url),
+                        size: getRandomFileSize()
+                    };
+                    saveDocument(documentName, category, mockFile, source, null, url);
                 }
             }
 
             // Save Document to LocalStorage
-            function saveDocument(name, category, file, dataUrl) {
+            function saveDocument(name, category, file, source, dataUrl = null, url = null) {
                 const newDocument = {
                     id: generateId(),
                     name: name,
@@ -1177,7 +1388,9 @@
                     fileType: file.type,
                     size: formatFileSize(file.size),
                     uploadDate: new Date().toISOString(),
-                    dataUrl: dataUrl
+                    dataUrl: dataUrl,
+                    source: source,
+                    url: url || null
                 };
                 
                 documents.unshift(newDocument);
@@ -1190,6 +1403,28 @@
                 closeModal();
                 
                 showNotification('Document uploaded successfully!');
+            }
+
+            // Get file type from URL
+            function getFileTypeFromUrl(url) {
+                const extension = url.split('.').pop().toLowerCase();
+                const typeMap = {
+                    'jpg': 'image/jpeg',
+                    'jpeg': 'image/jpeg',
+                    'png': 'image/png',
+                    'pdf': 'application/pdf',
+                    'doc': 'application/msword',
+                    'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                    'xls': 'application/vnd.ms-excel',
+                    'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                };
+                return typeMap[extension] || 'application/octet-stream';
+            }
+
+            // Get random file size for demo
+            function getRandomFileSize() {
+                const sizes = [1024 * 500, 1024 * 1200, 1024 * 2400, 1024 * 3200];
+                return sizes[Math.floor(Math.random() * sizes.length)];
             }
 
             // Format File Size
@@ -1259,7 +1494,13 @@
                 filteredDocuments.forEach(doc => {
                     const documentCard = document.createElement('div');
                     documentCard.className = 'document-card';
+                    
+                    // Get source badge class
+                    const sourceClass = `source-${doc.source}`;
+                    const sourceLabel = getSourceLabel(doc.source);
+                    
                     documentCard.innerHTML = `
+                        <div class="source-badge ${sourceClass}">${sourceLabel}</div>
                         <div class="document-preview">
                             ${getFilePreview(doc)}
                         </div>
@@ -1303,6 +1544,17 @@
                 });
             }
 
+            // Get Source Label
+            function getSourceLabel(source) {
+                const labels = {
+                    'upload': 'Upload',
+                    'scan': 'Scan',
+                    'download': 'Download',
+                    'email': 'Email'
+                };
+                return labels[source] || source;
+            }
+
             // Get File Preview
             function getFilePreview(doc) {
                 if (doc.dataUrl) {
@@ -1329,6 +1581,9 @@
                     if (doc.dataUrl) {
                         // For images, open in new tab
                         window.open(doc.dataUrl, '_blank');
+                    } else if (doc.url) {
+                        // For URL-based documents
+                        window.open(doc.url, '_blank');
                     } else {
                         // For other files, show a message
                         alert(`Cannot preview ${doc.fileType} files directly. Please download to view.`);
@@ -1350,9 +1605,12 @@
                         document.body.appendChild(link);
                         link.click();
                         document.body.removeChild(link);
+                    } else if (doc.url) {
+                        // Open URL in new tab for download
+                        window.open(doc.url, '_blank');
                     } else {
                         // For demo purposes, show a message
-                        alert(`Downloading ${doc.name}...\n\n(In a real application, this would download the actual file)`);
+                        alert(`Downloading ${doc.name}...\n\nSource: ${getSourceLabel(doc.source)}\n\n(In a real application, this would download the actual file)`);
                     }
                 }
             }
@@ -1385,7 +1643,8 @@
                 if (searchTerm) {
                     filtered = filtered.filter(doc => 
                         doc.name.toLowerCase().includes(searchTerm) || 
-                        doc.category.toLowerCase().includes(searchTerm)
+                        doc.category.toLowerCase().includes(searchTerm) ||
+                        doc.source.toLowerCase().includes(searchTerm)
                     );
                 }
                 
@@ -1417,18 +1676,6 @@
                 const notification = document.createElement('div');
                 notification.className = 'notification';
                 notification.textContent = message;
-                notification.style.cssText = `
-                    position: fixed;
-                    top: 20px;
-                    right: 20px;
-                    background-color: var(--primary);
-                    color: white;
-                    padding: 12px 24px;
-                    border-radius: 8px;
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-                    z-index: 10000;
-                    animation: slideIn 0.3s ease-out;
-                `;
                 
                 document.body.appendChild(notification);
                 
@@ -1439,23 +1686,6 @@
                         document.body.removeChild(notification);
                     }, 300);
                 }, 3000);
-                
-                // Add animation keyframes
-                if (!document.querySelector('#notification-styles')) {
-                    const style = document.createElement('style');
-                    style.id = 'notification-styles';
-                    style.textContent = `
-                        @keyframes slideIn {
-                            from { transform: translateX(100%); opacity: 0; }
-                            to { transform: translateX(0); opacity: 1; }
-                        }
-                        @keyframes slideOut {
-                            from { transform: translateX(0); opacity: 1; }
-                            to { transform: translateX(100%); opacity: 0; }
-                        }
-                    `;
-                    document.head.appendChild(style);
-                }
             }
         });
     </script>
