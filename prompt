@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Vault Pro</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Hide element utility for JS toggling */
+        .hidden-element {
+            display: none !important;
+        }
+    </style>
+</head>
+<body class="bg-[#0f172a] text-slate-200 font-sans selection:bg-indigo-500/30 min-h-screen">
+    
+    <!-- Premium Background Effects -->
+    <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-indigo-600/20 blur-[120px]"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-blue-600/20 blur-[120px]"></div>
+    </div>
+
+    <div class="relative z-10 max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 flex flex-col gap-8 min-h-screen">
+        
+        <!-- Header Section -->
+        <header class="flex items-center justify-between pt-4 pb-2 border-b border-white/10">
+            <div class="flex items-center gap-3">
+                <div class="p-2.5 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-xl shadow-lg shadow-indigo-500/20">
+                    <i data-lucide="file-text" class="w-6 h-6 text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-slate-400">
+                        Text Vault Pro
+                    </h1>
+                    <p class="text-sm text-slate-400">Secure & simple text manager</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Input Section -->
+        <section class="bg-white/[0.03] border border-white/10 rounded-3xl p-5 sm:p-6 backdrop-blur-xl shadow-2xl">
+            <h2 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                <i data-lucide="sparkles" class="w-5 h-5 text-indigo-400"></i>
+                Navin Text Add Kara
+            </h2>
+            <div class="relative">
+                <textarea
+                    id="text-input"
+                    placeholder="Tumcha motha text ithe paste kara..."
+                    class="w-full bg-black/20 border border-white/10 rounded-2xl p-4 sm:p-5 min-h-[160px] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/50 transition-all resize-y custom-scrollbar text-base sm:text-lg"
+                ></textarea>
+            </div>
+            <div class="mt-4 flex justify-end">
+                <button
+                    id="save-btn"
+                    class="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white px-6 py-3 rounded-xl font-medium transition-all transform hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-lg shadow-indigo-500/25"
+                >
+                    <i data-lucide="plus" class="w-5 h-5"></i>
+                    Save Kara
+                </button>
+            </div>
+        </section>
+
+        <!-- Dashboard / List Section -->
+        <section class="flex-1 pb-10">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                <div class="flex items-center gap-2 bg-white/[0.05] p-1.5 rounded-xl border border-white/10 w-fit">
+                    <button
+                        id="tab-pending"
+                        class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all bg-indigo-500 text-white shadow-lg"
+                    >
+                        <i data-lucide="list" class="w-4 h-4"></i>
+                        Pending (<span id="pending-count">0</span>)
+                    </button>
+                    <button
+                        id="tab-done"
+                        class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all text-slate-400 hover:text-slate-200 hover:bg-white/5"
+                    >
+                        <i data-lucide="check-circle" class="w-4 h-4"></i>
+                        Done (<span id="done-count">0</span>)
+                    </button>
+                </div>
+                
+                <span class="bg-indigo-500/20 text-indigo-300 py-1.5 px-4 rounded-full text-sm font-medium border border-indigo-500/20 w-fit" id="total-count-display">
+                    Total Texts: 0
+                </span>
+            </div>
+
+            <!-- Empty State -->
+            <div id="empty-state" class="bg-white/[0.02] border border-white/5 rounded-3xl p-12 flex flex-col items-center justify-center text-center backdrop-blur-sm hidden-element">
+                <div class="w-16 h-16 bg-white/[0.05] rounded-full flex items-center justify-center mb-4" id="empty-icon-container">
+                    <i data-lucide="file-text" class="w-8 h-8 text-slate-500" id="empty-icon-pending"></i>
+                    <i data-lucide="check-circle" class="w-8 h-8 text-emerald-500/50 hidden-element" id="empty-icon-done"></i>
+                </div>
+                <p class="text-slate-400 text-lg" id="empty-text">Ajun kontahi pending text nahi.</p>
+                <p class="text-slate-500 text-sm mt-1" id="empty-subtext">Varil box madhe text paste karun Save kara.</p>
+            </div>
+
+            <!-- List Container -->
+            <div id="list-container" class="grid grid-cols-1 gap-3 sm:gap-4">
+                <!-- Items will be generated here by JavaScript -->
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // --- State Management ---
+        let savedTexts = [];
+        let showDone = false;
+
+        // --- DOM Elements ---
+        const textInput = document.getElementById('text-input');
+        const saveBtn = document.getElementById('save-btn');
+        const tabPending = document.getElementById('tab-pending');
+        const tabDone = document.getElementById('tab-done');
+        const listContainer = document.getElementById('list-container');
+        const emptyState = document.getElementById('empty-state');
+        
+        // --- Initialization ---
+        function init() {
+            // Load from localStorage
+            const saved = localStorage.getItem('premium_texts');
+            if (saved) {
+                savedTexts = JSON.parse(saved);
+            }
+            
+            // Event Listeners
+            saveBtn.addEventListener('click', handleSaveText);
+            textInput.addEventListener('input', () => {
+                saveBtn.disabled = !textInput.value.trim();
+            });
+            
+            tabPending.addEventListener('click', () => {
+                showDone = false;
+                updateTabsUI();
+                renderList();
+            });
+            
+            tabDone.addEventListener('click', () => {
+                showDone = true;
+                updateTabsUI();
+                renderList();
+            });
+
+            // Initial disable check
+            saveBtn.disabled = !textInput.value.trim();
+
+            renderList();
+            lucide.createIcons();
+        }
+
+        // --- Core Functions ---
+        function saveToStorage() {
+            localStorage.setItem('premium_texts', JSON.stringify(savedTexts));
+        }
+
+        function handleSaveText() {
+            const text = textInput.value;
+            if (!text.trim()) return;
+            
+            const newEntry = {
+                id: crypto.randomUUID(),
+                text: text,
+                timestamp: new Date().toISOString(),
+                isDone: false
+            };
+            
+            savedTexts.unshift(newEntry); // Add to beginning (like React [newEntry, ...savedTexts])
+            saveToStorage();
+            textInput.value = '';
+            saveBtn.disabled = true;
+            renderList();
+        }
+
+        window.handleCopyText = function(id, btnElement) {
+            // Find the item
+            const item = savedTexts.find(t => t.id === id);
+            if (!item) return;
+
+            // Robust copy function using document.execCommand
+            const textArea = document.createElement("textarea");
+            textArea.value = item.text;
+            textArea.style.position = "absolute";
+            textArea.style.left = "-999999px";
+            document.body.appendChild(textArea);
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+                
+                // Change UI to Copied instantly
+                btnElement.className = "flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-all bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
+                btnElement.innerHTML = `<i data-lucide="check" class="w-4 h-4 sm:w-5 sm:h-5"></i><span class="hidden sm:inline">Copied!</span>`;
+                lucide.createIcons();
+
+                // Wait 800ms, mark as done, and re-render
+                setTimeout(() => {
+                    item.isDone = true;
+                    saveToStorage();
+                    renderList();
+                }, 800); 
+
+            } catch (err) {
+                console.error('Copy failed', err);
+                alert("Copy failed. Please try again.");
+            }
+            
+            textArea.remove();
+        };
+
+        window.handleDelete = function(id) {
+            savedTexts = savedTexts.filter(item => item.id !== id);
+            saveToStorage();
+            renderList();
+        };
+
+        // --- Rendering & UI Updates ---
+        function updateTabsUI() {
+            if (showDone) {
+                tabDone.className = "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all bg-emerald-500 text-white shadow-lg";
+                tabPending.className = "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all text-slate-400 hover:text-slate-200 hover:bg-white/5";
+            } else {
+                tabPending.className = "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all bg-indigo-500 text-white shadow-lg";
+                tabDone.className = "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all text-slate-400 hover:text-slate-200 hover:bg-white/5";
+            }
+        }
+
+        function renderList() {
+            // Calculate Serials
+            const textsWithSerials = savedTexts.map((item, index) => ({
+                ...item,
+                displaySerial: savedTexts.length - index
+            }));
+
+            // Filter
+            const pendingTexts = textsWithSerials.filter(item => !item.isDone);
+            const doneTexts = textsWithSerials.filter(item => item.isDone);
+            const displayedTexts = showDone ? doneTexts : pendingTexts;
+
+            // Update Counters
+            document.getElementById('total-count-display').innerText = `Total Texts: ${savedTexts.length}`;
+            document.getElementById('pending-count').innerText = pendingTexts.length;
+            document.getElementById('done-count').innerText = doneTexts.length;
+
+            // Handle Empty State
+            if (displayedTexts.length === 0) {
+                listContainer.classList.add('hidden-element');
+                emptyState.classList.remove('hidden-element');
+                
+                if (showDone) {
+                    document.getElementById('empty-icon-done').classList.remove('hidden-element');
+                    document.getElementById('empty-icon-pending').classList.add('hidden-element');
+                    document.getElementById('empty-text').innerText = "Ajun kontahi text copy kelela (Done) nahi.";
+                    document.getElementById('empty-subtext').classList.add('hidden-element');
+                } else {
+                    document.getElementById('empty-icon-pending').classList.remove('hidden-element');
+                    document.getElementById('empty-icon-done').classList.add('hidden-element');
+                    document.getElementById('empty-text').innerText = "Ajun kontahi pending text nahi.";
+                    document.getElementById('empty-subtext').classList.remove('hidden-element');
+                }
+            } else {
+                listContainer.classList.remove('hidden-element');
+                emptyState.classList.add('hidden-element');
+                
+                // Build HTML for items
+                let htmlContent = '';
+                displayedTexts.forEach(item => {
+                    const serialFormatted = item.displaySerial.toString().padStart(2, '0');
+                    const hiddenTextMsg = showDone ? '••• Copied Content •••' : '••• Hidden Content •••';
+                    
+                    const copyBtnClass = showDone 
+                        ? 'bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10'
+                        : 'bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 border border-indigo-500/20 hover:border-indigo-500/40';
+                    const copyBtnText = showDone ? 'Copy Again' : 'Copy Text';
+
+                    htmlContent += `
+                    <div class="group bg-white/[0.03] hover:bg-white/[0.05] border border-white/5 hover:border-white/10 rounded-2xl p-4 sm:p-5 flex items-center justify-between transition-all backdrop-blur-sm shadow-sm">
+                        <!-- Left Side: Serial Number Only -->
+                        <div class="flex items-center gap-4 sm:gap-6">
+                            <div class="flex flex-col">
+                                <span class="text-xs text-slate-500 font-medium uppercase tracking-wider">Sr. No.</span>
+                                <span class="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-br from-white to-slate-500">
+                                    #${serialFormatted}
+                                </span>
+                            </div>
+                            <div class="h-10 w-px bg-white/10 hidden sm:block"></div>
+                            <div class="hidden sm:block text-slate-400 text-sm italic">
+                                ${hiddenTextMsg}
+                            </div>
+                        </div>
+
+                        <!-- Right Side: Actions -->
+                        <div class="flex items-center gap-2 sm:gap-3">
+                            <button
+                                onclick="handleCopyText('${item.id}', this)"
+                                class="flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-all ${copyBtnClass}"
+                            >
+                                <i data-lucide="copy" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                                <span class="hidden sm:inline">${copyBtnText}</span>
+                            </button>
+                            
+                            <button
+                                onclick="handleDelete('${item.id}')"
+                                class="p-2.5 sm:p-3 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-xl border border-transparent hover:border-red-500/20 transition-all"
+                                title="Delete this text"
+                            >
+                                <i data-lucide="trash-2" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                            </button>
+                        </div>
+                    </div>`;
+                });
+                
+                listContainer.innerHTML = htmlContent;
+                // Re-initialize icons for newly added elements
+                lucide.createIcons();
+            }
+        }
+
+        // Run initialization when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
