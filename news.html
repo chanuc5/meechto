@@ -5,10 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AK20 News Marathi | ताजी बातमी</title>
 
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Tiro+Devanagari+Marathi:ital@0;1&display=swap" rel="stylesheet">
     
+    <!-- Tailwind CSS (CDN) -->
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <!-- Lucide Icons (CDN) -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
@@ -31,26 +34,32 @@
 </head>
 <body class="font-sans text-black bg-white min-h-screen pb-16 md:pb-0 relative">
 
+    <!-- TOAST NOTIFICATION -->
     <div id="toast" class="fixed top-24 left-1/2 transform -translate-x-1/2 z-[100] bg-gray-900 text-white px-6 py-3 rounded-full shadow-2xl flex items-center space-x-2 transition-all duration-300 opacity-0 pointer-events-none marathi-text hidden">
         <i data-lucide="check-circle-2" class="text-green-400 w-5 h-5"></i>
         <span id="toast-msg" class="font-medium text-[15px]"></span>
     </div>
 
+    <!-- BREAKING NEWS TICKER -->
     <div class="ticker-wrap flex items-center h-10 border-b border-gray-800 relative z-50">
         <div class="bg-[#FF0000] text-white font-bold px-4 py-2 h-full flex items-center absolute left-0 z-10 uppercase text-xs tracking-wider">
             ब्रेकिंग न्यूज
         </div>
         <div class="ticker text-sm font-medium marathi-text mt-1" id="ticker-content">
-            </div>
+            <!-- Populated by JS -->
+        </div>
     </div>
 
+    <!-- HEADER -->
     <header class="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16 md:h-20">
+                <!-- Mobile Menu Button -->
                 <button class="md:hidden p-2 text-gray-600 hover:text-[#FF0000]" onclick="toggleMobileMenu()">
                     <i data-lucide="menu" id="menu-icon" class="w-6 h-6"></i>
                 </button>
 
+                <!-- Logo -->
                 <div class="flex-shrink-0 flex flex-col items-center justify-center cursor-pointer" onclick="setCategory('सर्व')">
                     <span class="text-3xl font-extrabold tracking-tighter leading-none">
                         AK20<span class="text-[#FF0000]">NEWS</span>
@@ -60,9 +69,12 @@
                     </span>
                 </div>
 
+                <!-- Desktop Nav -->
                 <nav class="hidden md:flex space-x-8 h-full items-center marathi-text mt-1" id="desktop-nav">
-                    </nav>
+                    <!-- Populated by JS -->
+                </nav>
 
+                <!-- Search & User -->
                 <div class="flex items-center space-x-4">
                     <button onclick="showToast('सर्च फीचर लवकरच येत आहे!')" class="text-gray-600 hover:text-[#FF0000]"><i data-lucide="search" class="w-5 h-5"></i></button>
                     <button onclick="showToast('प्रोफाईल लॉगिन उपलब्ध नाही.')" class="hidden md:block text-gray-600 hover:text-[#FF0000]"><i data-lucide="user" class="w-5 h-5"></i></button>
@@ -70,26 +82,32 @@
             </div>
         </div>
 
+        <!-- Mobile Nav Dropdown -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-gray-200 marathi-text absolute w-full shadow-lg">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3" id="mobile-nav-items">
-                </div>
+                <!-- Populated by JS -->
+            </div>
         </div>
     </header>
 
+    <!-- MAIN CONTENT -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div class="flex flex-col lg:flex-row gap-8">
             
             <div class="w-full lg:w-3/4">
                 
+                <!-- NEWS GRID -->
                 <section class="mb-12">
                     <div class="flex items-center justify-between mb-4 border-b-2 border-black pb-2 marathi-text">
                         <h2 id="category-title" class="text-2xl font-bold tracking-tight text-gray-900">आजची मोठी बातमी</h2>
                     </div>
                     
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="stories-grid">
-                        </div>
+                        <!-- Populated by JS -->
+                    </div>
                 </section>
 
+                <!-- VIDEO HUB -->
                 <section class="mb-12">
                     <div class="flex items-center justify-between mb-4 border-b-2 border-black pb-2 marathi-text">
                         <h2 class="text-2xl font-bold tracking-tight flex items-center text-gray-900">
@@ -100,12 +118,15 @@
                         </a>
                     </div>
                     
+                    <!-- Video Scroll Container -->
                     <div class="flex overflow-x-auto hide-scrollbar gap-4 pb-4 snap-x" id="video-hub">
-                        </div>
+                        <!-- Populated by JS -->
+                    </div>
                 </section>
 
             </div>
 
+            <!-- SIDEBAR -->
             <aside class="w-full lg:w-1/4">
                 <div class="sticky top-24 space-y-8">
                     
@@ -119,16 +140,12 @@
                         </div>
                         
                         <div id="live-updates-container" class="space-y-6 relative before:absolute before:inset-0 before:ml-1.5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-gray-300 before:to-transparent">
-                            </div>
+                            <!-- Populated by JS -->
+                        </div>
                         
                         <button id="load-more-btn" onclick="loadMoreUpdates()" class="w-full mt-6 py-2 border-2 border-black text-black font-bold uppercase hover:bg-black hover:text-white transition-all marathi-text text-sm active:scale-95">
                             अधिक बातम्या वाचा
                         </button>
-                    </div>
-
-                    <div class="w-full h-[250px] bg-gray-100 flex flex-col items-center justify-center text-gray-400 text-sm font-medium border border-gray-200">
-                        <span>[ AdSense Banner ]</span>
-                        <span>300x250 Medium Rectangle</span>
                     </div>
 
                 </div>
@@ -137,6 +154,7 @@
         </div>
     </main>
 
+    <!-- VIDEO LIGHTBOX MODAL -->
     <div id="video-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-2 md:p-4 backdrop-blur-sm hidden">
         <button onclick="closeVideo()" class="absolute top-4 right-4 md:top-8 md:right-8 text-white hover:text-[#FF0000] bg-white/10 rounded-full p-2 transition-colors z-50 shadow-lg">
             <i data-lucide="x" class="w-8 h-8"></i>
@@ -147,6 +165,7 @@
         </div>
     </div>
 
+    <!-- FLOATING CTA -->
     <div class="fixed bottom-20 md:bottom-8 right-4 z-40 flex flex-col gap-3">
         <button onclick="showToast('WhatsApp उघडत आहे...')" class="bg-[#25D366] text-white p-3 rounded-full shadow-lg hover:scale-110 active:scale-95 transition-all flex items-center group relative">
             <i data-lucide="message-circle" class="w-6 h-6"></i>
@@ -162,6 +181,7 @@
         </button>
     </div>
 
+    <!-- MOBILE BOTTOM NAVIGATION -->
     <nav class="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-50 flex justify-around items-center h-16 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
         <button onclick="setCategory('सर्व'); window.scrollTo(0,0);" class="flex flex-col items-center justify-center w-full h-full text-gray-500 hover:text-black hover:text-[#FF0000]">
             <i data-lucide="home" class="w-6 h-6 mb-1"></i>
@@ -181,6 +201,7 @@
         </button>
     </nav>
 
+    <!-- FOOTER -->
     <footer class="bg-black text-white pt-16 pb-8 md:pb-16 mt-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12 border-b border-gray-800 pb-12">
@@ -196,7 +217,8 @@
                 <div>
                     <h4 class="text-lg font-bold uppercase mb-4 tracking-wider marathi-text">कॅटेगरीज</h4>
                     <ul class="space-y-2 text-sm text-gray-400 marathi-text text-[15px]" id="footer-categories">
-                        </ul>
+                        <!-- Populated by JS -->
+                    </ul>
                 </div>
                 <div>
                     <h4 class="text-lg font-bold uppercase mb-4 tracking-wider marathi-text">आमच्याबद्दल</h4>
@@ -227,6 +249,7 @@
         </div>
     </footer>
 
+    <!-- JAVASCRIPT LOGIC -->
     <script>
         // --- DATA ---
         const categories = ['सर्व', 'महाराष्ट्र', 'राजकारण', 'मनोरंजन', 'क्रीडा', 'शेती व व्यवसाय'];
@@ -258,22 +281,22 @@
         ];
 
         // --- तुमची YouTube Videos List ---
-        // इथे तुम्ही दिलेल्या लिंक्स मधून काढलेले IDs टाकले आहेत
+        // इथे तुम्ही दिलेल्या बरोबर लिंक्सचे IDs टाकले आहेत!
         const videos = [
             { 
-                id: 'L373r7O5gH0', 
-                title: 'AK20 News Marathi: विशेष बातमी आणि घडामोडी', 
-                thumb: 'https://img.youtube.com/vi/L373r7O5gH0/hqdefault.jpg' 
+                id: '7P7O3d_3HGA', 
+                title: 'Video 1 - AK20 News Marathi', 
+                thumb: 'https://img.youtube.com/vi/7P7O3d_3HGA/hqdefault.jpg' 
             },
             { 
-                id: 'aif_7OhwW68', 
-                title: 'तर बहीणींच्या रकमेत वाढ होईल: मुख्यमंत्री यांची मोठी घोषणा', 
-                thumb: 'https://img.youtube.com/vi/aif_7OhwW68/hqdefault.jpg' 
+                id: 'qam1o3NPOMs', 
+                title: 'Video 2 - AK20 News Marathi', 
+                thumb: 'https://img.youtube.com/vi/qam1o3NPOMs/hqdefault.jpg' 
             },
             { 
-                id: '3vLzJ4Z4cM8', 
-                title: 'AK20 News Marathi: सविस्तर वृत्तांत', 
-                thumb: 'https://img.youtube.com/vi/3vLzJ4Z4cM8/hqdefault.jpg' 
+                id: '49Nuk2xV23M', 
+                title: 'Video 3 - AK20 News Marathi', 
+                thumb: 'https://img.youtube.com/vi/49Nuk2xV23M/hqdefault.jpg' 
             }
         ];
 
@@ -300,21 +323,4 @@
                 toast.classList.remove('opacity-100');
                 toast.classList.add('opacity-0');
                 setTimeout(() => toast.classList.add('hidden'), 300); // Wait for transition
-            }, 3000);
-        }
-
-        // Ticker
-        function renderTicker() {
-            const container = document.getElementById('ticker-content');
-            let content = '';
-            breakingNews.forEach(news => {
-                content += `<span class="mr-12"><span class="text-[#FF0000] mr-2">●</span> ${news}</span>`;
-            });
-            container.innerHTML = content;
-        }
-
-        // Navigation
-        function renderNav() {
-            const desktopNav = document.getElementById('desktop-nav');
-            const mobileNav = document.getElementById('mobile-nav-items');
-            const footerNav 
+            }, 3000
