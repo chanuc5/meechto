@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy | CHANU - Create Habits And Never Undo</title>
+    <title>Privacy Policy | CHANU Habit Tracker</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
     <style>
-        /* --- CSS Section --- */
+        /* --- Modern UI CSS --- */
         :root {
-            --primary-color: #1e293b;
-            --accent-color: #3b82f6;
+            --primary-color: #0f172a;
+            --accent-color: #2563eb;
             --text-color: #334155;
-            --bg-color: #f1f5f9;
+            --light-bg: #f8fafc;
         }
 
         * {
@@ -24,128 +24,121 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-color);
+            background-color: var(--light-bg);
             color: var(--text-color);
-            line-height: 1.6;
+            line-height: 1.7;
         }
 
         header {
             background-color: var(--primary-color);
             color: white;
-            padding: 40px 20px;
+            padding: 60px 20px;
             text-align: center;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
         .brand-name {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             font-weight: 700;
             letter-spacing: 2px;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
         }
 
         .tagline {
             font-weight: 300;
-            font-size: 1rem;
-            opacity: 0.9;
+            font-size: 1.1rem;
+            opacity: 0.8;
+            letter-spacing: 1px;
         }
 
         .container {
-            max-width: 900px;
-            margin: -40px auto 50px;
+            max-width: 850px;
+            margin: -50px auto 60px;
             background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.07);
         }
 
         h1 {
             color: var(--primary-color);
-            border-bottom: 3px solid var(--accent-color);
-            display: inline-block;
-            margin-bottom: 20px;
-            padding-bottom: 5px;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .last-updated {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+            display: block;
+            font-style: italic;
         }
 
         h2 {
-            margin-top: 30px;
+            margin-top: 35px;
             color: var(--primary-color);
-            font-size: 1.3rem;
-            display: flex;
-            align-items: center;
-        }
-
-        h2::before {
-            content: "▹";
-            color: var(--accent-color);
-            margin-right: 10px;
-            font-weight: bold;
+            font-size: 1.4rem;
+            border-left: 4px solid var(--accent-color);
+            padding-left: 15px;
+            margin-bottom: 15px;
         }
 
         p {
-            margin-bottom: 15px;
-            font-size: 0.95rem;
+            margin-bottom: 18px;
+            text-align: justify;
         }
 
-        ul {
-            margin-left: 25px;
-            margin-bottom: 15px;
+        .offline-badge {
+            display: inline-block;
+            background: #dcfce7;
+            color: #166534;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            margin-bottom: 20px;
         }
 
-        li {
-            margin-bottom: 8px;
-        }
-
-        .highlight-box {
-            background-color: #eff6ff;
-            border-left: 4px solid var(--accent-color);
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 0 8px 8px 0;
-        }
-
-        .contact-info {
-            background: #f8fafc;
-            border: 1px dashed #cbd5e1;
-            padding: 20px;
+        .contact-card {
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 25px;
             text-align: center;
-            border-radius: 10px;
-            margin-top: 40px;
+            margin-top: 50px;
+            border: 1px solid #e2e8f0;
         }
 
-        .contact-info a {
+        .contact-card a {
             color: var(--accent-color);
             text-decoration: none;
-            font-weight: 600;
+            font-weight: 700;
+            font-size: 1.1rem;
         }
 
         footer {
             text-align: center;
-            padding: 30px;
+            padding-bottom: 40px;
             font-size: 0.85rem;
-            color: #64748b;
+            color: #94a3b8;
         }
 
-        /* Back to Top Button */
-        #btn-top {
+        #scroll-top {
             display: none;
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 30px;
+            right: 30px;
             background: var(--accent-color);
             color: white;
             border: none;
-            padding: 12px 15px;
-            border-radius: 50px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.4);
+            font-size: 20px;
         }
 
-        #btn-top:hover { background: var(--primary-color); }
-
         @media (max-width: 600px) {
-            .container { margin: 10px; padding: 20px; }
+            .container { margin: 10px; padding: 25px; margin-top: -30px; }
             .brand-name { font-size: 2rem; }
         }
     </style>
@@ -158,74 +151,54 @@
     </header>
 
     <div class="container">
+        <div class="offline-badge">✓ Offline-First App</div>
         <h1>Privacy Policy</h1>
-        <p><strong>Effective Date:</strong> April 07, 2026</p>
+        <span class="last-updated">Last Updated: April 7, 2026</span>
 
-        <p>This privacy policy applies to the <strong>CHANU</strong> mobile application (hereinafter referred to as "the App"). CHANU is a habit-tracking application designed to help users build and maintain positive routines.</p>
+        <p>At <strong>CHANU Habit Tracker</strong>, accessible from the Google Play Store, one of our main priorities is the privacy of our users. This Privacy Policy document contains types of information that is collected and recorded by CHANU Habit Tracker and how we use it.</p>
 
         <h2>1. Information Collection and Use</h2>
-        <p>The App collects information to provide a personalized experience. This includes:</p>
-        <ul>
-            <li><strong>Habit Data:</strong> Names of habits, frequency, and completion logs created by you.</li>
-            <li><strong>Personal Information:</strong> If you sign up, we may collect your name and email address to sync your data across devices.</li>
-            <li><strong>Usage Information:</strong> We may collect non-personal data like device type and OS version to improve app stability.</li>
-        </ul>
+        <p>CHANU Habit Tracker is an <strong>offline-first application</strong>. We do <strong>NOT</strong> collect, store, or transmit any personal identification information (PII), habit data, or usage statistics to any external servers or third parties.</p>
+        <p>All data you enter into the app, such as habit names and completion status, is stored strictly on your local device using <strong>SharedPreferences</strong>. This ensures that your personal growth journey remains private to you.</p>
 
-        <h2>2. Data Storage & Security</h2>
-        <p>Your habit data is stored securely. We prioritize your privacy and take all necessary technical measures to protect your information from unauthorized access.</p>
-        <div class="highlight-box">
-            <strong>Note:</strong> We do NOT sell, trade, or rent your personal habit data to any third-party marketing companies.
-        </div>
+        <h2>2. Log Data</h2>
+        <p>We want to inform you that whenever you use our Service, in a case of an error in the app, we do <strong>not</strong> collect data and information on your phone. We do not use crash reporting tools that send your device data to us.</p>
 
-        <h2>3. Third-Party Services (Google Play)</h2>
-        <p>The App may use third-party services that collect information used to identify you. These may include:</p>
-        <ul>
-            <li>Google Play Services</li>
-            <li>Google Analytics for Firebase (to track app performance)</li>
-        </ul>
+        <h2>3. Third-Party Access</h2>
+        <p>Since the app is offline and does not require an internet connection for its core features, no third-party companies or individuals have access to your data. We do <strong>not</strong> show ads (AdMob) or use any third-party analytics (Firebase) in the current version of the app.</p>
 
-        <h2>4. "Never Undo" Policy</h2>
-        <p>In line with our brand philosophy, <strong>Create Habits And Never Undo</strong>, the App provides reminders and notifications. You have full control over these notifications through the App settings.</p>
+        <h2>4. Permissions</h2>
+        <p>The app does not require any sensitive permissions such as Camera, Microphone, or Location. It operates with minimal system requirements to ensure your privacy is maintained.</p>
 
-        <h2>5. Children's Privacy</h2>
-        <p>The App does not address anyone under the age of 13. We do not knowingly collect personally identifiable information from children under 13.</p>
+        <h2>5. Children’s Privacy</h2>
+        <p>These Services do not address anyone under the age of 13. We do not knowingly collect personally identifiable information from children under 13. Since no data is transmitted to our servers, we ensure a safe environment for all users.</p>
 
-        <h2>6. Changes to This Policy</h2>
-        <p>We may update our Privacy Policy from time to time. You are advised to review this page periodically for any changes. Changes are effective immediately after they are posted on this page.</p>
+        <h2>6. Changes to This Privacy Policy</h2>
+        <p>We may update our Privacy Policy from time to time. Thus, you are advised to review this page periodically for any changes. We will notify you of any changes by posting the new Privacy Policy on this page.</p>
 
-        <div class="contact-info">
-            <h2>Contact Us</h2>
+        <div class="contact-card">
+            <h2>7. Contact Us</h2>
             <p>If you have any questions or suggestions about our Privacy Policy, do not hesitate to contact us at:</p>
             <p>📧 Email: <a href="mailto:support.chanu@gmail.com">support.chanu@gmail.com</a></p>
         </div>
     </div>
 
     <footer>
-        &copy; 2026 CHANU App - Create Habits And Never Undo. All Rights Reserved.
+        &copy; 2026 CHANU Habit Tracker. Built for your privacy.
     </footer>
 
-    <button id="btn-top" onclick="scrollToTop()">↑ Top</button>
+    <button id="scroll-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</button>
 
     <script>
-        /* --- JavaScript Section --- */
-        const topBtn = document.getElementById("btn-top");
-
-        // Show button on scroll
+        // Scroll to top button logic
+        const scrollBtn = document.getElementById("scroll-top");
         window.onscroll = function() {
-            if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
-                topBtn.style.display = "block";
+            if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                scrollBtn.style.display = "block";
             } else {
-                topBtn.style.display = "none";
+                scrollBtn.style.display = "none";
             }
         };
-
-        // Smooth Scroll to Top
-        function scrollToTop() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        }
     </script>
 </body>
 </html>
