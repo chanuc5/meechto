@@ -5,198 +5,256 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privacy Policy | CHANU Habit Tracker</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Poppins & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
 
     <style>
-        /* --- Modern UI CSS --- */
+        /* --- Premium UI/UX Design System --- */
         :root {
-            --primary-color: #0f172a;
-            --accent-color: #2563eb;
-            --text-color: #334155;
-            --light-bg: #f8fafc;
+            --bg-color: #0f172a;        /* Deep Navy */
+            --card-bg: #1e293b;        /* Lighter Navy */
+            --accent-purple: #8b5cf6;  /* Electric Purple */
+            --accent-glow: rgba(139, 92, 246, 0.3);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --success-green: #10b981;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--light-bg);
-            color: var(--text-color);
-            line-height: 1.7;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.8;
+            overflow-x: hidden;
         }
 
+        /* --- Header Section --- */
         header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 60px 20px;
+            background: linear-gradient(180deg, rgba(15, 23, 42, 1) 0%, rgba(30, 41, 59, 1) 100%);
+            padding: 80px 20px;
             text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .brand-name {
-            font-size: 2.8rem;
-            font-weight: 700;
-            letter-spacing: 2px;
+        .brand-logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: linear-gradient(to right, #ffffff, var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin-bottom: 10px;
         }
 
         .tagline {
-            font-weight: 300;
             font-size: 1.1rem;
-            opacity: 0.8;
-            letter-spacing: 1px;
+            color: var(--text-muted);
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
+        /* --- Main Container --- */
         .container {
-            max-width: 850px;
-            margin: -50px auto 60px;
-            background: white;
-            padding: 50px;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.07);
+            max-width: 900px;
+            margin: -60px auto 100px;
+            padding: 0 20px;
+        }
+
+        .policy-card {
+            background: var(--card-bg);
+            padding: 60px;
+            border-radius: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-green);
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
         }
 
         h1 {
-            color: var(--primary-color);
-            font-size: 2rem;
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
             margin-bottom: 10px;
+            color: #ffffff;
         }
 
         .last-updated {
-            color: #64748b;
-            font-size: 0.9rem;
-            margin-bottom: 30px;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 40px;
             display: block;
-            font-style: italic;
         }
 
         h2 {
-            margin-top: 35px;
-            color: var(--primary-color);
-            font-size: 1.4rem;
-            border-left: 4px solid var(--accent-color);
-            padding-left: 15px;
-            margin-bottom: 15px;
+            font-family: 'Poppins', sans-serif;
+            margin-top: 45px;
+            font-size: 1.5rem;
+            color: var(--accent-purple);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        h2::before {
+            content: '';
+            width: 8px;
+            height: 24px;
+            background: var(--accent-purple);
+            border-radius: 4px;
+            box-shadow: 0 0 15px var(--accent-glow);
         }
 
         p {
-            margin-bottom: 18px;
-            text-align: justify;
+            margin-top: 15px;
+            color: #cbd5e1;
+            font-size: 1.05rem;
         }
 
-        .offline-badge {
-            display: inline-block;
-            background: #dcfce7;
-            color: #166534;
-            padding: 5px 15px;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 0.8rem;
-            margin-bottom: 20px;
-        }
-
-        .contact-card {
-            background: #f1f5f9;
-            border-radius: 12px;
-            padding: 25px;
+        /* --- Contact Card --- */
+        .contact-box {
+            margin-top: 60px;
+            padding: 40px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%);
+            border-radius: 24px;
+            border: 1px solid var(--accent-glow);
             text-align: center;
-            margin-top: 50px;
-            border: 1px solid #e2e8f0;
         }
 
-        .contact-card a {
-            color: var(--accent-color);
+        .contact-box a {
+            color: #ffffff;
             text-decoration: none;
-            font-weight: 700;
-            font-size: 1.1rem;
+            font-weight: 600;
+            font-size: 1.2rem;
+            transition: 0.3s;
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 25px;
+            background: var(--accent-purple);
+            border-radius: 12px;
         }
 
+        .contact-box a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px var(--accent-glow);
+        }
+
+        /* --- Footer --- */
         footer {
             text-align: center;
-            padding-bottom: 40px;
-            font-size: 0.85rem;
-            color: #94a3b8;
+            padding: 40px 20px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        #scroll-top {
-            display: none;
+        /* --- Floating Scroll Button --- */
+        #scrollTop {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: var(--accent-color);
+            bottom: 40px;
+            right: 40px;
+            background: var(--accent-purple);
             color: white;
             border: none;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
+            width: 55px;
+            height: 55px;
+            border-radius: 18px;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.4);
-            font-size: 20px;
+            display: none;
+            font-size: 1.5rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            transition: 0.3s;
+            z-index: 1000;
         }
 
-        @media (max-width: 600px) {
-            .container { margin: 10px; padding: 25px; margin-top: -30px; }
-            .brand-name { font-size: 2rem; }
+        #scrollTop:hover { transform: scale(1.1); }
+
+        @media (max-width: 768px) {
+            .policy-card { padding: 30px; border-radius: 24px; }
+            .brand-logo { font-size: 2.5rem; }
+            h1 { font-size: 1.8rem; }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="brand-name">CHANU</div>
+        <div class="brand-logo">CHANU</div>
         <div class="tagline">Create Habits And Never Undo</div>
     </header>
 
     <div class="container">
-        <div class="offline-badge">✓ Offline-First App</div>
-        <h1>Privacy Policy</h1>
-        <span class="last-updated">Last Updated: April 7, 2026</span>
+        <div class="policy-card">
+            <div class="status-badge">● Fully Secured & Offline</div>
+            <h1>Privacy Policy</h1>
+            <span class="last-updated">Effective Date: May 4, 2026</span>
 
-        <p>At <strong>CHANU Habit Tracker</strong>, accessible from the Google Play Store, one of our main priorities is the privacy of our users. This Privacy Policy document contains types of information that is collected and recorded by CHANU Habit Tracker and how we use it.</p>
+            <p>Welcome to <strong>CHANU Habit Tracker</strong>. Your privacy is not just a feature; it's our core philosophy. We believe that your personal growth and daily habits should be witnessed by only one person: <strong>You.</strong></p>
 
-        <h2>1. Information Collection and Use</h2>
-        <p>CHANU Habit Tracker is an <strong>offline-first application</strong>. We do <strong>NOT</strong> collect, store, or transmit any personal identification information (PII), habit data, or usage statistics to any external servers or third parties.</p>
-        <p>All data you enter into the app, such as habit names and completion status, is stored strictly on your local device using <strong>SharedPreferences</strong>. This ensures that your personal growth journey remains private to you.</p>
+            <h2>1. Our Privacy Manifesto</h2>
+            <p>CHANU is engineered as an <strong>offline-first application</strong>. Unlike traditional habit trackers, we do not require you to create an account, provide an email, or connect to the cloud. Your data is your property, and it stays on your device.</p>
 
-        <h2>2. Log Data</h2>
-        <p>We want to inform you that whenever you use our Service, in a case of an error in the app, we do <strong>not</strong> collect data and information on your phone. We do not use crash reporting tools that send your device data to us.</p>
+            <h2>2. Data Encryption & Storage</h2>
+            <p>All information—including habit names, streaks, and timestamps—is stored locally using secure Android storage systems (Room Database/SharedPreferences). We do <strong>not</strong> have any central server, meaning we physically cannot see, access, or sell your data.</p>
 
-        <h2>3. Third-Party Access</h2>
-        <p>Since the app is offline and does not require an internet connection for its core features, no third-party companies or individuals have access to your data. We do <strong>not</strong> show ads (AdMob) or use any third-party analytics (Firebase) in the current version of the app.</p>
+            <h2>3. Zero Third-Party Tracking</h2>
+            <p>To ensure a pure and private experience, CHANU contains:</p>
+            <ul style="margin-left: 20px; color: #cbd5e1; margin-top: 10px;">
+                <li>NO Third-party Advertisements (No AdMob)</li>
+                <li>NO Hidden Analytics (No Google Firebase/Flurry)</li>
+                <li>NO Social Media SDKs (No Facebook/Meta tracking)</li>
+            </ul>
 
-        <h2>4. Permissions</h2>
-        <p>The app does not require any sensitive permissions such as Camera, Microphone, or Location. It operates with minimal system requirements to ensure your privacy is maintained.</p>
+            <h2>4. Permissions Policy</h2>
+            <p>We only ask for essential system permissions required for the app to function (like Notifications for your habit reminders). We will <strong>never</strong> ask for sensitive access like your GPS location, Contacts, or Microphone.</p>
 
-        <h2>5. Children’s Privacy</h2>
-        <p>These Services do not address anyone under the age of 13. We do not knowingly collect personally identifiable information from children under 13. Since no data is transmitted to our servers, we ensure a safe environment for all users.</p>
+            <h2>5. Data Deletion & Control</h2>
+            <p>Since all data is local, you have absolute control. If you clear the app cache or uninstall the application, all your data is permanently wiped from your device. We do not keep any hidden backups.</p>
 
-        <h2>6. Changes to This Privacy Policy</h2>
-        <p>We may update our Privacy Policy from time to time. Thus, you are advised to review this page periodically for any changes. We will notify you of any changes by posting the new Privacy Policy on this page.</p>
+            <h2>6. Children’s Online Privacy</h2>
+            <p>CHANU does not collect any data, making it safe for users of all ages, including children under 13. We strictly comply with global privacy standards by maintaining a zero-data-collection environment.</p>
 
-        <div class="contact-card">
-            <h2>7. Contact Us</h2>
-            <p>If you have any questions or suggestions about our Privacy Policy, do not hesitate to contact us at:</p>
-            <p>📧 Email: <a href="mailto:support.chanu@gmail.com">support.chanu@gmail.com</a></p>
+            <div class="contact-box">
+                <h2>Questions?</h2>
+                <p>If you need more clarity on our privacy standards, our team is ready to help.</p>
+                <a href="mailto:support.chanu@gmail.com">Contact Support</a>
+            </div>
         </div>
     </div>
 
     <footer>
-        &copy; 2026 CHANU Habit Tracker. Built for your privacy.
+        &copy; 2026 CHANU Habit Tracker. <br> 
+        Designed with 💜 for Discipline & Privacy.
     </footer>
 
-    <button id="scroll-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</button>
+    <button id="scrollTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</button>
 
     <script>
-        // Scroll to top button logic
-        const scrollBtn = document.getElementById("scroll-top");
+        const btn = document.getElementById("scrollTop");
         window.onscroll = function() {
-            if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
-                scrollBtn.style.display = "block";
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                btn.style.display = "block";
             } else {
-                scrollBtn.style.display = "none";
+                btn.style.display = "none";
             }
         };
     </script>
