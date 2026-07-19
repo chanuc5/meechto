@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Primary SEO Metadata -->
+    <title>ReelTick — Master Your Digital Focus | Premium Screen Time Tracker</title>
+    <meta name="description" content="Take control of your short-form video habits. ReelTick uses secure, on-device Accessibility Services to track Instagram Reels and YouTube Shorts scrolling seamlessly without external data tracking.">
+    <meta name="keywords" content="ReelTick, Digital Wellbeing, Track Instagram Reels, Stop Scrolling Shorts, Accessibility Service Tracker, Offline Screen Time, Privacy First Tracker, Android Focus App">
+    <link rel="canonical" href="https://reeltick.com/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://reeltick.com/">
+    <meta property="og:title" content="ReelTick — Master Your Digital Focus">
+    <meta property="og:description" content="Handcrafted offline-first Android application designed to elegantly balance your digital lifestyle. Zero ads, zero tracking, total privacy.">
+    <meta property="og:image" content="https://reeltick.com/og-image.png">
+
+    <!-- Twitter Card -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://reeltick.com/">
+    <meta property="twitter:title" content="ReelTick — Master Your Digital Focus">
+    <meta property="twitter:description" content="Handcrafted offline-first Android application designed to elegantly balance your digital lifestyle. Zero ads, zero tracking, total privacy.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "ReelTick",
+      "operatingSystem": "Android",
+      "applicationCategory": "Digital Wellbeing",
+      "offers": {
+        "@type": "Offer",
+        "price": "0.00",
+        "priceCurrency": "USD"
+      },
+      "description": "Premium, privacy-centric Android application to monitor short-form media scrolling habits locally via Accessibility APIs."
+    }
+    </script>
+
+    <style>
+        /* --- DESIGN SYSTEM CORE & VARIABLES --- */
+        :root {
+            --primary: #5B5FEF;
+            --secondary: #8B7BFF;
+            --accent: #5CE1C6;
+            --bg: #F6F7FB;
+            --card: rgba(255, 255, 255, 0.75);
+            --card-border: rgba(255, 255, 255, 0.6);
+            --text: #111827;
+            --text-muted: #6B7280;
+            --danger: #FF6B6B;
+            --success: #22C55E;
+            --shadow: rgba(91, 95, 239, 0.08);
+            --blur: 20px;
+            --glass-glow: rgba(255, 255, 255, 0.4);
+        }
+
+        [data-theme="dark"] {
+            --bg: #0F1118;
+            --card: rgba(27, 31, 42, 0.7);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text: #F9FAFB;
+            --text-muted: #9CA3AF;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --glass-glow: rgba(27, 31, 42, 0.2);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Manrope', sans-serif;
+            scroll-behavior: smooth;
+            transition: background-color 0.4s ease, border-color 0.4s ease, transform 0.2s ease;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- GLOBAL LAYOUT REUSABLES --- */
+        .container {
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .section-title {
+            font-size: 2.75rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--text) 40%, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Glassmorphism Preset */
+        .glass-panel {
+            background: var(--card);
+            backdrop-filter: blur(var(--blur));
+            -webkit-backdrop-filter: blur(var(--blur));
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px 0 var(--shadow);
+        }
+
+        /* --- NAVIGATION --- */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            border-bottom: 1px solid var(--card-border);
+            background: rgba(246, 247, 25B, 0.7);
+        }
+        [data-theme="dark"] .navbar {
+            background: rgba(15, 17, 24, 0.7);
+        }
+
+        .nav-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 80px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 900;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary);
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        /* Premium Toggle Switch */
+        .theme-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+            position: relative;
+        }
+        
+        .theme-toggle:hover {
+            background: var(--card-border);
+        }
+
+        /* --- BUTTONS --- */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.875rem 2rem;
+            font-weight: 700;
+            border-radius: 14px;
+            text-decoration: none;
+            cursor: pointer;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(91, 95, 239, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(91, 95, 239, 0.6);
+        }
+
+        .btn-secondary {
+            background: var(--card);
+            color: var(--text);
+            border: 1px solid var(--card-border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--card-border);
+            transform: translateY(-2px);
+        }
+
+        /* --- SPA VIEW SHELLS --- */
+        .view-section {
+            display: none;
+            padding-top: 120px;
+        }
+
+        .view-section.active-view {
+            display: block;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            position: relative;
+            padding: 160px 0 100px;
+            overflow: hidden;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-title {
+            font-size: 4.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.04em;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-title span {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-tagline {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            max-width: 560px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+
+        /* Luxury Decorative Assets */
+        .blob-bg {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: linear-gradient(135deg, rgba(91,95,239,0.15), rgba(139,123,255,0.15));
+            filter: blur(80px);
+            border-radius: 50%;
+            top: -10%;
+            right: -10%;
+            z-index: -1;
+            animation: floatBlob 12s infinite alternate ease-in-out;
+        }
+
+        @keyframes floatBlob {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-60px, 40px) scale(1.15); }
+        }
+
+        /* Interactive Phone Mockup Layout */
+        .phone-mockup-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .phone-frame {
+            width: 310px;
+            height: 630px;
+            border: 12px solid #111827;
+            border-radius: 44px;
+            background: #000;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phone-island {
+            width: 110px;
+            height: 25px;
+            background: #111827;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 18px;
+            z-index: 10;
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: #0F1118;
+            padding: 35px 20px 20px;
+            display: flex;
+            flex-direction: column;
+            color: white;
+            font-family: system-ui, sans-serif;
+        }
+
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .app-pill {
+            background: rgba(255,255,255,0.08);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .app-chart-container {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .chart-value {
+            font-size: 2.25rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin-top: 5px;
+        }
+
+        .app-log-card {
+            background: rgba(255,255,255,0.04);
+            border-radius: 14px;
+            padding: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+        }
+
+        .floating-glass-badge {
+            position: absolute;
+            padding: 1rem;
+            border-radius: 18px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            animation: badgeFloat 4s infinite alternate ease-in-out;
+        }
+
+        .badge-1 { top: 20%; left: -40px; background: rgba(91, 95, 239, 0.2); backdrop-filter: blur(10px); color: var(--text); }
+        .badge-2 { bottom: 25%; right: -30px; background: rgba(92, 225, 198, 0.2); backdrop-filter: blur(10px); color: var(--text); animation-delay: 2s; }
+
+        @keyframes badgeFloat {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-15px); }
+        }
+
+        /* --- FEATURES GRID --- */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .feature-card {
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--primary);
+        }
+
+        .feature-icon-wrapper {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            background: rgba(91, 95, 239, 0.1);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* --- HOW IT WORKS TIMELINE --- */
+        .timeline {
+            position: relative;
+            max-width: 900px;
+            margin: 4rem auto 0;
+            padding: 2rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--accent));
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--bg);
+            border: 4px solid var(--primary);
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+        }
+
+        .timeline-content {
+            width: 45%;
+            padding: 2rem;
+        }
+
+        /* --- ACCESSIBILITY TRANSPARENCY PANEL --- */
+        .disclosure-panel {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3.5rem;
+            position: relative;
+        }
+
+        .disclosure-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 2.5rem;
+        }
+
+        .disclosure-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .disclosure-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-weight: 500;
+        }
+
+        .disclosure-list.secure li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: 800;
+        }
+
+        .disclosure-list.never li::before {
+            content: '✕';
+            color: var(--danger);
+            font-weight: 800;
+        }
+
+        /* --- DATA SAFETY COMPARISON --- */
+        .table-wrapper {
+            overflow-x: auto;
+            margin-top: 3rem;
+            border-radius: 16px;
+            border: 1px solid var(--card-border);
+        }
+
+        .safety-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            background: var(--card);
+        }
+
+        .safety-table th, .safety-table td {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--card-border);
+            font-size: 0.95rem;
+        }
+
+        .safety-table th {
+            background: rgba(91, 95, 239, 0.05);
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .safety-table td span {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .status-negative { background: rgba(255, 107, 107, 0.15); color: var(--danger); }
+        .status-positive { background: rgba(34, 197, 94, 0.15); color: var(--success); }
+
+        /* --- LEGAL / TEXT RICH VIEWS (Privacy & Terms) --- */
+        .legal-frame {
+            max-width: 800px;
+            margin: 0 auto 6rem;
+            padding: 4rem;
+        }
+
+        .legal-meta {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+
+        .legal-block {
+            margin-bottom: 2.5rem;
+        }
+
+        .legal-block h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .legal-block p {
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        /* --- FAQ SECTION --- */
+        .faq-accordion {
+            max-width: 840px;
+            margin: 4rem auto 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .faq-item {
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--card-border);
+        }
+
+        .faq-trigger {
+            width: 100%;
+            padding: 1.5rem;
+            background: var(--card);
+            border: none;
+            color: var(--text);
+            text-align: left;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-panel {
+            max-height: 0;
+            overflow: hidden;
+            background: var(--card);
+            transition: max-height 0.3s cubic-bezier(0, 1, 0, 1);
+        }
+
+        .faq-panel p {
+            padding: 0 1.5rem 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .faq-item.open .faq-panel {
+            max-height: 1000px;
+            transition: max-height 0.3s cubic-bezier(1, 0, 1, 0);
+        }
+
+        /* --- CONTACT CARDS --- */
+        .contact-card {
+            max-width: 600px;
+            margin: 4rem auto 0;
+            padding: 3rem;
+            text-align: center;
+        }
+
+        .email-link {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            margin: 1.5rem 0;
+            display: inline-block;
+        }
+
+        /* --- FOOTER --- */
+        .footer {
+            margin-top: 8rem;
+            border-top: 1px solid var(--card-border);
+            padding: 4rem 0 2rem;
+            background: var(--card);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 3rem;
+            justify-content: flex-end;
+            list-style: none;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--card-border);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* --- RESPONSIVE ADAPTABILITY ENGINE --- */
+        @media (max-width: 1024px) {
+            .hero-title { font-size: 3.5rem; }
+            .hero-grid { grid-template-columns: 1fr; text-align: center; }
+            .hero-tagline { margin: 0 auto 2.5rem; }
+            .hero-buttons { justify-content: center; }
+            .timeline::before { left: 20px; }
+            .timeline-item { flex-direction: row !important; }
+            .timeline-dot { left: 20px; transform: none; }
+            .timeline-content { width: calc(100% - 60px); margin-left: 60px; padding: 1rem 0; }
+            .disclosure-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; text-align: center; }
+            .footer-links { justify-content: center; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .section-title { font-size: 2.25rem; }
+            .hero-title { font-size: 2.75rem; }
+            .disclosure-panel { padding: 2rem; }
+            .legal-frame { padding: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- GLOBAL PREMIUM NAVBAR SYSTEM -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a onclick="switchView('main')" class="logo-area" href="#home">
+                <div class="logo-icon">R</div>
+                <span>ReelTick</span>
+            </a>
+            <ul class="nav-links">
+                <li><a onclick="switchView('main')" href="#features" class="nav-link">Features</a></li>
+                <li><a onclick="switchView('main')" href="#disclosure" class="nav-link">Transparency</a></li>
+                <li><a onclick="switchView('main')" href="#faq" class="nav-link">FAQ</a></li>
+                <li><a onclick="switchView('privacy')" class="nav-link">Privacy Policy</a></li>
+                <li><a onclick="switchView('terms')" class="nav-link">Terms</a></li>
+            </ul>
+            <div class="controls">
+                <button class="theme-toggle" id="themeBtn" aria-label="Toggle Theme">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707-.707M12 7a5 5 0 100 10 5 5 0 000-10z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                </button>
+                <a onclick="switchView('main')" href="#download" class="btn btn-primary" style="padding: 0.6rem 1.2rem; font-size: 0.85rem;">Get App</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ====================================== -->
+    <!-- VIEW A: MAIN COMPANY PLATFORM          -->
+    <!-- ====================================== -->
+    <main id="mainView" class="view-section active-view">
+        
+        <!-- HERO COMPONENT -->
+        <section class="hero" id="home">
+            <div class="blob-bg"></div>
+            <div class="container hero-grid">
+                <div>
+                    <h1 class="hero-title">Break the Scroll. <span>Reclaim Time.</span></h1>
+                    <p class="hero-tagline">ReelTick cleanly tracks your continuous Instagram Reels and YouTube Shorts usage locally using native Android engine mechanics. Zero accounts. Zero tracking clouds.</p>
+                    <div class="hero-buttons">
+                        <a href="#download" class="btn btn-primary">Download APK</a>
+                        <a onclick="switchView('privacy')" class="btn btn-secondary">Read Privacy</a>
+                    </div>
+                </div>
+                <div class="phone-mockup-wrapper">
+                    <div class="badge-1 floating-glass-badge">⚡ On-Device Logging</div>
+                    <div class="badge-2 floating-glass-badge">🔒 0 Data Collection</div>
+                    <div class="phone-frame">
+                        <div class="phone-island"></div>
+                        <div class="phone-screen">
+                            <div class="app-header">
+                                <span style="font-weight: 800; font-size: 1rem;">ReelTick</span>
+                                <span class="app-pill">Live Monitoring</span>
+                            </div>
+                            <div class="app-chart-container">
+                                <div style="font-size: 0.8rem; color: #9CA3AF; text-transform: uppercase;">Today's Shorts Habit</div>
+                                <div class="chart-value">42 Mins</div>
+                            </div>
+                            <div class="app-log-card">
+                                <span>Instagram Reels</span>
+                                <span style="color: var(--danger); font-weight:700;">28m 14s</span>
+                            </div>
+                            <div class="app-log-card">
+                                <span>YouTube Shorts</span>
+                                <span style="color: var(--danger); font-weight:700;">13m 46s</span>
+                            </div>
+                            <div style="margin-top: auto; font-size: 0.7rem; text-align: center; color: #6B7280;">
+                                Device Protection Status: Secure Active
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PREMIUM FEATURES CONTAINER -->
+        <section class="container" id="features" style="padding: 6rem 2rem;">
+            <div class="section-header">
+                <h2 class="section-title">Designed for Digital Freedom</h2>
+                <p class="section-subtitle">A simple, powerful architecture built explicitly to curb modern scrolling mechanics without monitoring your personal life.</p>
+            </div>
+            <div class="features-grid">
+                <div class="glass-panel feature-card">
+                    <div class="feature-icon-wrapper">📊</div>
+                    <h3>Daily Counter</h3>
+                    <p style="color: var(--text-muted);">Real-time tracking loops that capture exact timestamp distributions for vertical media panels.</p>
+                </div>
+                <div class="glass-panel feature-card">
+                    <div class="feature-icon-wrapper">📅</div>
+                    <h3>Weekly Profiles</h3>
+                    <p style="color: var(--text-muted);">Aggregated systemic focus breakdowns to see long term attention pattern changes cleanly.</p>
+                </div>
+                <div class="glass-panel feature-card">
+                    <div class="feature-icon-wrapper">🎯</div>
+                    <h3>Goal Structuring</h3>
+                    <p style="color: var(--text-muted);">Configurable soft alerts that dynamically warn you when structural usage exceeds safe parameters.</p>
+                </div>
+                <div class="glass-panel feature-card">
+                    <div class="feature-icon-wrapper">📡</div>
+                    <h3>100% Offline</h3>
+                    <p style="color: var(--text-muted);">Operates completely inside your hardware space. Absolutely no cloud network code built in.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ACCESSIBILITY DISCLOSURE AND TRANSPARENCY MODULE -->
+        <section id="disclosure" style="padding: 6rem 0; background: rgba(91, 95, 239, 0.02);">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Accessibility Transparency</h2>
+                    <p class="section-subtitle">We believe in explicit developer clarity. Here is precisely how the engine runs inside your phone environment.</p>
+                </div>
+                <div class="glass-panel disclosure-panel">
+                    <h3>Why Accessibility Permission is Required:</h3>
+                    <p style="color: var(--text-muted); margin-top: 0.5rem;">ReelTick relies exclusively on the Android Accessibility Service API to capture structural window-state changes. This layer is what allows the system to detect if the package running in focus is displaying an Instagram Reel or YouTube Shorts view layout.</p>
+                    <div class="disclosure-grid">
+                        <div>
+                            <h4 style="margin-bottom: 1rem; color: var(--danger);">What We NEVER Do:</h4>
+                            <ul class="disclosure-list never">
+                                <li>Never parse text chats or target direct profiles.</li>
+                                <li>Never monitor structural keyboard entries or passphrases.</li>
+                                <li>Never harvest contacts or visual screen pixels.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 style="margin-bottom: 1rem; color: var(--success);">What We Strictly Capture:</h4>
+                            <ul class="disclosure-list secure">
+                                <li>Active window package identifiers (App identification).</li>
+                                <li>Internal layout view change triggers (Scroll engagement).</li>
+                                <li>Total milliseconds active inside targeting views.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TIMELINE COMPONENT: HOW IT WORKS -->
+        <section class="container" style="padding: 6rem 2rem;">
+            <div class="section-header">
+                <h2 class="section-title">Zero Friction Setup</h2>
+                <p class="section-subtitle">Get running in seconds. No complex sign-ups, no platform identity checks.</p>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="glass-panel timeline-content">
+                        <h4>1. Clean Installation</h4>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Deploy the optimized application package directly to your Android device system framework.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="glass-panel timeline-content">
+                        <h4>2. Toggle Accessibility</h4>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Authorize the local monitoring parameter toggle inside your native Android System Settings.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="glass-panel timeline-content">
+                        <h4>3. Scroll Intelligently</h4>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Interact with media platforms standardly. ReelTick tracks structural durations automatically in background space.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- COMPREHENSIVE DATA SAFETY VERIFICATION MATRIX -->
+        <section class="container" style="padding: 6rem 2rem;">
+            <div class="section-header">
+                <h2 class="section-title">Data Safety Specification</h2>
+                <p class="section-subtitle">Formal architecture comparison indicating complete local encapsulation of information logs.</p>
+            </div>
+            <div class="table-wrapper">
+                <table class="safety-table">
+                    <thead>
+                        <tr>
+                            <th>Data Classification</th>
+                            <th>Collection Protocol</th>
+                            <th>Sharing Profile</th>
+                            <th>Storage Matrix</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Scroll Timestamps</strong></td>
+                            <td><span class="status-positive">Local Processing Only</span></td>
+                            <td><span class="status-negative">Zero External Sharing</span></td>
+                            <td>Isolated SQLite Device Storage</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Application Packages Names</strong></td>
+                            <td><span class="status-positive">Local Processing Only</span></td>
+                            <td><span class="status-negative">Zero External Sharing</span></td>
+                            <td>Isolated SQLite Device Storage</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Device Network Details</strong></td>
+                            <td><span class="status-negative">Not Collected</span></td>
+                            <td><span class="status-negative">Zero External Sharing</span></td>
+                            <td>None (No System Cloud Interface)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Personal Information</strong></td>
+                            <td><span class="status-negative">Not Collected</span></td>
+                            <td><span class="status-negative">Zero External Sharing</span></td>
+                            <td>None (No Identity Profile Fields)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 10 QUESTION ACCORDION ENGINE (FAQ) -->
+        <section class="container" id="faq" style="padding: 6rem 2rem;">
+            <div class="section-header">
+                <h2 class="section-title">Frequently Asked Questions</h2>
+                <p class="section-subtitle">Clear technical structural insights concerning ReelTick operations.</p>
+            </div>
+            <div class="faq-accordion">
+                <div class="faq-item">
+                    <button class="faq-trigger">Why exactly does ReelTick require the Accessibility Service? <span>+</span></button>
+                    <div class="faq-panel"><p>Android sandboxes distinct application containers securely. To detect when you navigate precisely into short-form content elements within third-party environments like Instagram or YouTube, an Accessibility event stream provides structural UI package updates to determine context reliably without system level modification.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-trigger">Is my recorded scroll tracking data uploaded to external systems? <span>+</span></button>
+                    <div class="faq-panel"><p>Absolutely not. The app logic explicitly does not incorporate any external server networking libraries or telemetry systems. Your metric database lives entirely inside your phone's physical flash storage partition.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-trigger">Does the application actively track private chat screens? <span>+</span></button>
+                    <div class="faq-panel"><p>No. The code filters only specific activity structures associated with feed player interfaces. Any chat panels, stories, or standard user profiles are ignored entirely by the logic pipeline.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-trigger">Is an internet network link required to function? <span>+</span></button>
+                    <div class="faq-panel"><p>No. ReelTick operates without network permissions configured in its manifest. You can track habits offline indefinitely.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-trigger">How do I purge compiled metric databases entirely? <span>+</span></button>
+                    <div class="faq-panel"><p>You can execute a complete data purge directly via the local application settings dashboard or clear the application cache directly from your standard Android Apps System Storage panel.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-trigger">Does using Accessibility monitoring reduce modern battery runtimes? <span>+</span></button>
+                    <div class="faq-panel"><p>Our parsing listener algorithms are completely passive and react purely to interface layout shifts. There are zero background computational threads hammering your core processor loop.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-trigger">Does ReelTick display promotional advertisement blocks? <span>+</span></button>
+                    <div class="faq-panel"><p>No. ReelTick is entirely distraction-free and completely avoids ad network tracking frameworks.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-trigger">Is an app registration account mandatory? <span>+</span></button>
+                    <div class="faq-panel"><p>No. There are no profiles, email entries, or third-party authentication tokens needed. Open the application package and track immediately.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-trigger">Can I track standard browser site tabs? <span>+</span></button>
+                    <div class="faq-panel"><p>The system is specifically engineered to target native application platforms where addictive infinite scroll interfaces are most acute. Web browser content streams are currently excluded.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-trigger">How can I confirm data safety claims are valid? <span>+</span></button>
+                    <div class="faq-panel"><p>You can audit the application permissions manifest layout within your Android settings platform to verify that zero network communications capabilities are allocated to the package environment.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- LUXURY CONTACT ARCHITECTURE -->
+        <section class="container" id="download" style="padding: 6rem 2rem;">
+            <div class="glass-panel contact-card">
+                <h2>Deploy ReelTick Today</h2>
+                <p style="color: var(--text-muted); margin-top: 1rem;">Have operational support inquiries or interface suggestions? Drop a line directly to our structural service node.</p>
+                <a href="mailto:support.chanu@gmail.com" class="email-link">support.chanu@gmail.com</a>
+                <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Expected Resolution Response: 24-48 Hours</div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ====================================== -->
+    <!-- VIEW B: PRIVACY POLICY PLATFORM        -->
+    <!-- ====================================== -->
+    <div id="privacyView" class="view-section container">
+        <div class="glass-panel legal-frame">
+            <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">Official Privacy Policy</h1>
+            <div class="legal-meta">Effective Revision Tracking: July 19, 2026</div>
+            <hr style="border: 0; border-top: 1px solid var(--card-border); margin-bottom: 2rem;">
+            
+            <div class="legal-block">
+                <h3>1. Overview & Operational Principles</h3>
+                <p>This privacy declaration outlines the systematic architecture governing the <strong>ReelTick</strong> mobile application ecosystem. Developed entirely as an offline-first privacy implementation, the application is systematically restricted from harvesting, transmitting, or retaining user identity metadata across external networks.</p>
+            </div>
+
+            <div class="legal-block">
+                <h3>2. Android Accessibility Service Usage Scope</h3>
+                <p>To accurately capture short-form media interaction sequences across digital platforms, ReelTick leverages Android's <code>AccessibilityService</code> API structure. This technical permission is strictly constrained to reading window state changed actions to detect if target application UI hierarchies are active.</p>
+                <p><strong>Explicit Verification:</strong> The tracking engine never logs alphanumeric string entry values, structural communication blocks, keystrokes, personal details, or media view pixels. All received event packets are evaluated natively on internal device threads and purged immediately from system volatile memory loops upon interface focus modification.</p>
+            </div>
+
+            <div class="legal-block">
+                <h3>3. Network Communication & Analytics Data</h3>
+                <p>The application completely omits internet connectivity flags (<code>android.permission.INTERNET</code>) within its compilation profile manifest. Consequently, zero transactional metrics, crash reports, behavioral patterns, or usage trends are transmitted to external hosting nodes or developer entities.</p>
+            </div>
+
+            <div class="legal-block">
+                <h3>4. Third-Party Software Development Kits (SDKs)</h3>
+                <p>ReelTick does not employ advertising frameworks, identity attribution structures, or tracking trackers curated by corporate marketing aggregators. The codebase is purely native, maintaining full structural encapsulation.</p>
+            </div>
+
+            <div class="legal-block">
+                <h3>5. Complete User Autonomy</h3>
+                <p>Because all metric entries sit locally within an isolated application database partition, users retain full operational authority. Database rows can be completely cleared at any chosen point directly via system management tools without consulting developer servers.</p>
+            </div>
+
+            <div class="legal-block">
+                <h3>6. Contact Authority</h3>
+                <p>For administrative transparency or deep technical clarification, address direct communication inquiries to: <a href="mailto:support.chanu@gmail.com" style="color:var(--primary); font-weight:700;">support.chanu@gmail.com</a>.</p>
+            </div>
+            
+            <a onclick="switchView('main')" class="btn btn-primary" style="margin-top: 2rem;">← Back to Platform</a>
+        </div>
+    </div>
+
+    <!-- ====================================== -->
+    <!-- VIEW C: TERMS & CONDITIONS PLATFORM    -->
+    <!-- ====================================== -->
+    <div id="termsView" class="view-section container">
+        <div class="glass-panel legal-frame">
+            <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">Terms & Conditions</h1>
+            <div class="legal-meta">Effective Revision Tracking: July 19, 2026</div>
+            <hr style="border: 0; border-top: 1px solid var(--card-border); margin-bottom: 2rem;">
+
+            <div class="legal-block">
+                <h3>1. User Acceptance Agreement</h3>
+                <p>By executing deployment procedures or configuring operational layers inside the ReelTick product asset, you formally agree to obey the governance policies outlined within this operational license framework.</p>
+            </div>
+
+            <div class="legal-block">
+                <h3>2. Technical Usage License</h3>
+                <p>Permission is granted to install and utilize single application binaries on individual personal communication platforms strictly for internal digital wellbeing optimization routines. Reverse compilation, architectural cloning, or server redistribution configurations are completely restricted unless written permission is granted by the legal author.</p>
+            </div>
+
+            <div class="legal-block">
+                <h3>3. No Warranty Limitations</h3>
+                <p>ReelTick is provided "As-Is" without structural guarantees concerning feature reliability, operational persistence, or accurate processing of alternative third-party layouts. The developer absorbs zero legal or structural accountability for data processing abnormalities originating from third-party application architectural transformations.</p>
+            </div>
+
+            <div class="legal-block">
+                <h3>4. Modifications</h3>
+                <p>The developer reserves the exclusive structural right to alter functional pathways or deprecate operational iterations without prior individual notice schedules.</p>
+            </div>
+            
+            <a onclick="switchView('main')" class="btn btn-primary" style="margin-top: 2rem;">← Back to Platform</a>
+        </div>
+    </div>
+
+    <!-- PREMIUM FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="logo-area" style="margin-bottom: 1rem;">
+                        <div class="logo-icon">R</div>
+                        <span>ReelTick</span>
+                    </div>
+                    <p style="color: var(--text-muted); max-width: 360px;">Elegant, client-side attention tools engineered to restore real-life focus vectors safely.</p>
+                </div>
+                <div>
+                    <ul class="footer-links">
+                        <li><a onclick="switchView('main')" href="#features" class="nav-link">Features</a></li>
+                        <li><a onclick="switchView('privacy')" class="nav-link">Privacy Policy</a></li>
+                        <li><a onclick="switchView('terms')" class="nav-link">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div>&copy; 2026 ReelTick. All rights reserved.</div>
+                <div>Handcrafted with ❤️ for absolute individual focus.</div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ====================================== -->
+    <!-- HIGH PERFORMANCE VANILLA SCRIPT ENGINE -->
+    <!-- ====================================== -->
+    <script>
+        // --- SECURE THEME SWITCHER LOGIC ---
+        const themeBtn = document.getElementById('themeBtn');
+        const currentTheme = localStorage.getItem('reeltick-theme') || 'light';
+        
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        updateThemeIcon(currentTheme);
+
+        themeBtn.addEventListener('click', () => {
+            let theme = document.documentElement.getAttribute('data-theme');
+            let nextTheme = (theme === 'dark') ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', nextTheme);
+            localStorage.setItem('reeltick-theme', nextTheme);
+            updateThemeIcon(nextTheme);
+        });
+
+        function updateThemeIcon(theme) {
+            if(theme === 'dark') {
+                themeBtn.innerHTML = `<svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+            } else {
+                themeBtn.innerHTML = `<svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707-.707M12 7a5 5 0 100 10 5 5 0 000-10z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
+            }
+        }
+
+        // --- SPA ENGINE: VIEW MANIPULATION ROUTINES ---
+        function switchView(viewId) {
+            // Deactivate all core view shells
+            document.getElementById('mainView').classList.remove('active-view');
+            document.getElementById('privacyView').classList.remove('active-view');
+            document.getElementById('termsView').classList.remove('active-view');
+            
+            // Activate designated layout view
+            if(viewId === 'main') {
+                document.getElementById('mainView').classList.add('active-view');
+            } else if(viewId === 'privacy') {
+                document.getElementById('privacyView').classList.add('active-view');
+                window.scrollTo(0, 0);
+            } else if(viewId === 'terms') {
+                document.getElementById('termsView').classList.add('active-view');
+                window.scrollTo(0, 0);
+            }
+
+            // Sync navigation highlights
+            const links = document.querySelectorAll('.nav-link');
+            links.forEach(l => l.classList.remove('active'));
+            event?.target?.classList.add('active');
+        }
+
+        // --- ACCORDION EXPANSION MECHANICS ---
+        const faqTriggers = document.querySelectorAll('.faq-trigger');
+        faqTriggers.forEach(trigger => {
+            trigger.addEventListener('click', () => {
+                const parent = trigger.parentElement;
+                const isOpen = parent.classList.contains('open');
+                
+                // Close active nodes globally
+                document.querySelectorAll('.faq-item').forEach(item => item.classList.remove('open'));
+                
+                // Open selected node state if closed previously
+                if(!isOpen) {
+                    parent.classList.add('open');
+                }
+            });
+        });
+
+        // --- LIGHTHOUSE ENGINE: ASSURE 60FPS LAZY SCROLL TRACKING ---
+        const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+        const scrollObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.style.opacity = "1";
+                    entry.target.style.transform = "translateY(0)";
+                    scrollObserver.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.feature-card, .timeline-content, .disclosure-panel').forEach(el => {
+            el.style.opacity = "0";
+            el.style.transform = "translateY(30px)";
+            el.style.transition = "opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)";
+            scrollObserver.observe(el);
+        });
+    </script>
+</body>
+</html>
